@@ -10,6 +10,33 @@ public class SceneFadeInOut : MonoBehaviour
     float time = 0f;
     float frameTime = 1f;
 
+     public static SceneFadeInOut instance = null;
+     private void Awake()
+     {
+         if (instance == null)
+         {
+             instance = this; 
+             DontDestroyOnLoad(gameObject);
+         }
+         else
+         {
+             if (instance != this) 
+                 Destroy(this.gameObject); 
+         }
+     }
+
+     void Strat()
+     {
+         if (instance!= null)
+         {
+             DestroyImmediate(this.gameObject);
+             return;
+
+         }
+         instance = this;
+         DontDestroyOnLoad(gameObject);
+     }
+     
     public void Fade()
     {
         StartCoroutine(FadeFlow());
@@ -30,7 +57,7 @@ public class SceneFadeInOut : MonoBehaviour
         }
         time = 0f;
         yield return new WaitForSeconds(0.5f);
-      //  SceneManager.LoadScene("Map2");
+        SceneManager.LoadScene("Map2");
         yield return new WaitForSeconds(0.5f);
         while (alpha.a > 0f)
         {
