@@ -739,3 +739,4 @@ Received Import Request.
   path: Assets/Map
   artifactKey: Guid(8bdbc0c1b912f6a4aa2de1e6a9da47b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
 Start importing Assets/Map using Guid(8bdbc0c1b912f6a4aa2de1e6a9da47b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3e941a6ef1abf9447546275b26346b26') in 0.005575 seconds 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
