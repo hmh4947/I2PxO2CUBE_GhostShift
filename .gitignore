@@ -2,13 +2,13 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
-GhostShift/[Ll]ibrary/
-GhostShift/[Tt]emp/
-GhostShift/[Oo]bj/
-GhostShift/[Bb]uild/
-GhostShift/[Bb]uilds/
-GhostShift/[Ll]ogs/
-GhostShift/[Uu]ser[Ss]ettings/
+**GhostShift/[Ll]ibrary/
+**GhostShift/[Tt]emp/
+**GhostShift/[Oo]bj/
+**GhostShift/[Bb]uild/
+**GhostShift/[Bb]uilds/
+**GhostShift/[Ll]ogs/
+**GhostShift/[Uu]ser[Ss]ettings/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
