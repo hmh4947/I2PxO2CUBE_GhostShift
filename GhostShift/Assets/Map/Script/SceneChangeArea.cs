@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class SceneChangeArea : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D collider2D)
