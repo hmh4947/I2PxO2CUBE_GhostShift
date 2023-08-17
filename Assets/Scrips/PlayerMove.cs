@@ -15,7 +15,7 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
-
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -33,10 +33,12 @@ public class PlayerMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+
     }
 
     private void Update()
     {
+   
         //Jump
         if (Input.GetButtonDown("Jump")&& !anim.GetBool("isJumping"))
         {
@@ -44,12 +46,17 @@ public class PlayerMove : MonoBehaviour
             {
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
                 anim.SetBool("isJumping", true);
+
+               
             }
+
             
         }
         //Stop Speed
         if (Input.GetButtonUp("Horizontal")){
             rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
+
+        
         }
 
         //Direction Sprite
@@ -86,6 +93,8 @@ public class PlayerMove : MonoBehaviour
                 rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
             else if (rigid.velocity.x < maxSpeed * (-1)) // Left Max Speed
                 rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
+
+            
         }
 
 
