@@ -272,9 +272,13 @@ Camera:
   field of view: 60
   orthographic: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   orthographic size: 7.8
 =======
   orthographic size: 7.3
+>>>>>>> Stashed changes
+=======
+  orthographic size: 7.8
 >>>>>>> Stashed changes
   m_Depth: -1
   m_CullingMask:
@@ -5135,7 +5139,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   speed: 0
 =======
   speed: 0.1
+>>>>>>> Stashed changes
+=======
+  speed: 0
 >>>>>>> Stashed changes
