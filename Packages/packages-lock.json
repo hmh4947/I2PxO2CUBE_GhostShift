@@ -1,5 +1,6 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "com.unity.2d.animation": {
       "version": "5.2.6",
       "depth": 0,
@@ -72,6 +73,8 @@
       "source": "builtin",
       "dependencies": {}
     },
+=======
+>>>>>>> master
     "com.unity.collab-proxy": {
       "version": "2.0.0",
       "depth": 0,
@@ -111,6 +114,7 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+<<<<<<< HEAD
     "com.unity.mathematics": {
       "version": "1.1.0",
       "depth": 1,
@@ -118,6 +122,8 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+=======
+>>>>>>> master
     "com.unity.test-framework": {
       "version": "1.1.33",
       "depth": 0,

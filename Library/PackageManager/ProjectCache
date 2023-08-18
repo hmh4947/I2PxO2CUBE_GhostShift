@@ -5,21 +5,32 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
+<<<<<<< HEAD
       ticks: 638279515539538418
     m_Hash: 3150658781
+=======
+      ticks: 638279562567243110
+    m_Hash: 168740447
+>>>>>>> master
   m_LockFileStatus:
     m_FilePath: C:/GitHub/I2PxO2CUBE_GhostShift/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
+<<<<<<< HEAD
       ticks: 638279515539625117
     m_Hash: 1749099198
+=======
+      ticks: 638279562596281086
+    m_Hash: 1375520461
+>>>>>>> master
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
   m_Packages:
     m_ResolvedPackages:
+<<<<<<< HEAD
     - packageId: com.unity.2d.animation@5.2.6
       testable: 0
       isDirectDependency: 1
@@ -714,6 +725,8 @@ m_PackageAssets:
         url: 
         revision: 
         path: 
+=======
+>>>>>>> master
     - packageId: com.unity.collab-proxy@2.0.0
       testable: 0
       isDirectDependency: 1
@@ -3545,6 +3558,7 @@ m_PackageAssets:
         url: https://github.cds.internal.unity3d.com/unity/com.unity.ext.nunit.git
         revision: 29ea4d6504a5f58fb3a6934db839aa80ae6d9d88
         path: 
+<<<<<<< HEAD
     - packageId: com.unity.mathematics@1.1.0
       testable: 0
       isDirectDependency: 0
@@ -3815,6 +3829,8 @@ m_PackageAssets:
         url: https://github.cds.internal.unity3d.com/unity/2d.git
         revision: c016f0f10972606d85ccfbf9de2033ad5384d6c4
         path: 
+=======
+>>>>>>> master
   m_LocalPackages:
     m_LocalFileStatus: []
 m_ProjectPath: C:/GitHub/I2PxO2CUBE_GhostShift/Packages
