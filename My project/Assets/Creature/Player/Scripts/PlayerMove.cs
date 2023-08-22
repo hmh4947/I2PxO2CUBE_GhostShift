@@ -6,11 +6,12 @@ using UnityEngine.EventSystems;
 
 public class PlayerMove : MonoBehaviour
 {
-    [SerializeField] public float maxSpeed;
+    public float maxSpeed;
+    public float dashSpeed;
+    public bool isDashing;
+
     [SerializeField] float jumpPower;
-    [SerializeField] public float dashSpeed;
     [SerializeField] float dashDuration;
-    [SerializeField] public bool isDashing;
     [SerializeField] bool isAbleDash;
     [SerializeField] bool isStickTo; //달라붙고 있는지 확인하는 bool 변수
 
