@@ -721,7 +721,7 @@ Animator:
   m_GameObject: {fileID: 386232949}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 272f0986dd29be849b25a9c36bb0c729, type: 2}
+  m_Controller: {fileID: 9100000, guid: 060a7176b113bee4298d3c5602e61372, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -745,8 +745,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.9, y: 0.9}
-  m_Direction: 0
+  m_Size: {x: 1.1, y: 1}
+  m_Direction: 1
 --- !u!212 &386232954
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -787,7 +787,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5316638980176660024, guid: 8592bf7cecfbd9b4dbcf4ce8eea0b17a, type: 3}
+  m_Sprite: {fileID: -2926875637438206344, guid: 226a3379cf3a7cb4bac652ef270d8deb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -6237,6 +6237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e0c015df37b9ed4dae8e8b11561cbfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HP: 0
+  numOfHearts: 0
   hearts:
   - {fileID: 794835020}
   - {fileID: 544731930}
@@ -6270,10 +6272,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 0
-  jumpPower: 0
   dashSpeed: 0
-  dashDuration: 0
   isDashing: 0
+  jumpPower: 0
+  dashDuration: 0
   isAbleDash: 0
   isStickTo: 0
   player: {fileID: 1615324416}
@@ -6684,9 +6686,6 @@ GameObject:
   - component: {fileID: 1615324422}
   - component: {fileID: 1615324420}
   - component: {fileID: 1615324419}
-  - component: {fileID: 1615324418}
-  - component: {fileID: 1615324417}
-  - component: {fileID: 1615324424}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -6694,47 +6693,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1615324417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615324416}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e0c015df37b9ed4dae8e8b11561cbfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hearts:
-  - {fileID: 794835020}
-  - {fileID: 544731930}
-  - {fileID: 1137490935}
-  - {fileID: 1951970745}
-  - {fileID: 874426052}
-  fulltHeart: {fileID: -5390123095117124330, guid: 74f8b4d56cb24724abef2f7c526fd9ca, type: 3}
-  emptyHeart: {fileID: -8880520576215733831, guid: 74f8b4d56cb24724abef2f7c526fd9ca, type: 3}
---- !u!114 &1615324418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615324416}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bc32e248950b47499e1862609a13b7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxSpeed: 0
-  jumpPower: 0
-  dashSpeed: 0
-  dashDuration: 0
-  isDashing: 0
-  isAbleDash: 0
-  isStickTo: 0
-  player: {fileID: 1615324416}
-  playerShield: {fileID: 386232949}
 --- !u!95 &1615324419
 Animator:
   serializedVersion: 5
@@ -6836,18 +6794,6 @@ Transform:
   m_Father: {fileID: 1140041015}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1615324424
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1615324416}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d0057f044d05094f9156497915cf88c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1624007436
 GameObject:
   m_ObjectHideFlags: 0

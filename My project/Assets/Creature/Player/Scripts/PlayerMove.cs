@@ -14,8 +14,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] float dashDuration;
     [SerializeField] bool isAbleDash;
     [SerializeField] bool isStickTo; //달라붙고 있는지 확인하는 bool 변수
+    [SerializeField] bool isPossesing;
 
-    public GameObject player;
+    public GameObject playerGhost;
     public GameObject playerShield;
 
     Rigidbody2D rigid;
@@ -40,12 +41,7 @@ public class PlayerMove : MonoBehaviour
         isAbleDash = true;
 
         rigid = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        anim = GetComponentInChildren<Animator>();
-        playerCollider = GetComponentInChildren<CapsuleCollider2D>();
-
-        player.SetActive(true);
-        playerShield.SetActive(false);
+        Init();
     }
 
     private void Update()
@@ -89,9 +85,16 @@ public class PlayerMove : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(1))
             {
-                player.SetActive(false);
-                playerShield.SetActive(true);
-                playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+                if (isStickTo)
+                {
+                    isStickTo = false;
+                    playerGhost.SetActive(false);
+                    playerShield.SetActive(true);
+                    playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+                    anim = GetComponentInChildren<Animator>();
+                    spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+                }
+               
             }
         }
 
@@ -101,6 +104,7 @@ public class PlayerMove : MonoBehaviour
         else
             anim.SetBool("isWalking", true);
     }
+
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -154,15 +158,8 @@ public class PlayerMove : MonoBehaviour
                     healthScr.Damaged(1);
                 }
             }
-            
         }
-        if(collision.gameObject.tag == "Finish")
-        {
-            if (gameObject.TryGetComponent<Health>(out Health healthScr) == true)
-            {
-                healthScr.Healed(1);
-            }
-        }
+
     }
 
     //Dash
@@ -210,23 +207,33 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
+    public void Init()
+    {
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        anim = GetComponentInChildren<Animator>();
+        playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+
+
+        playerGhost.SetActive(true);
+        playerShield.SetActive(false);
+    }
     //달라붙기
-    private IEnumerator StickTo()
+    public IEnumerator StickTo()
     {
         isDashing = false;
         isAbleDash = true;
         rigid.gravityScale = 0f;
         rigid.velocity = new Vector2(0, 0);
 
-        yield return new WaitForSeconds(2.0f);
-        isStickTo = false;
+        //달라붙기가 종료될 때까지 대기
+        yield return new WaitUntil(() => isStickTo == false);
         rigid.gravityScale = 8.0f;
     }
 
     /*
     private IEnumerator Possesion()
     {
-
+        
     }
     */
 }
