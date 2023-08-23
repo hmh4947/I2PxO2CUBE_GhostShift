@@ -32,6 +32,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     private void Update()
     {
+
         if (Input.GetKeyDown(KeyCode.Q))
         {
             Debug.Log(anim);
@@ -42,28 +43,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
         }
         //Jump
-        if (Input.GetButtonDown("Jump")&& !anim.GetBool("isJumping"))
-        {
-            if(isDashing == false && isStickTo == false && isAbleDash && true)
-            {
-                rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-                anim.SetBool("isJumping", true);
-            }
-            
-        }
-
-
-        //Stop Speed
-
-        if (Input.GetButtonUp("Horizontal")){
-            rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
-        }
-
-        //Direction Sprite
-        if (Input.GetButton("Horizontal"))
-        {
-            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
-        }
+        Jump();
 
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
         if (!EventSystem.current.IsPointerOverGameObject())
