@@ -22,34 +22,36 @@ public class Background : MonoBehaviour
     // Update is called once per frame
    void Update()
     {
-         
-        if (Input.GetMouseButton(0))
+        if (GameObject.Find("Player").GetComponent<PlayerMove>().isDashing == true)
         {
-            Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(playerObject.position);
-            Vector2 mouseScreenPosition = Input.mousePosition;
-            Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
-
-            //대쉬할 때 마우스 위치에 따라 회전
-            if (playerToMouseVector.x > 0)
+            if (Input.GetMouseButton(0))
             {
-                offset += Time.deltaTime * 0.5f;
-                render.material.mainTextureOffset = new Vector2(offset, 0);
- 
-            }
-            if((playerToMouseVector.x < 0))
-            {
-                offset += Time.deltaTime * -0.5f;
-                render.material.mainTextureOffset = new Vector2(offset, 0);
+                Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(playerObject.position);
+                Vector2 mouseScreenPosition = Input.mousePosition;
+                Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
+
+                //대쉬할 때 마우스 위치에 따라 회전
+                if (playerToMouseVector.x > 0)
+                {
+                    offset += Time.deltaTime * 0.5f;
+                    render.material.mainTextureOffset = new Vector2(offset, 0);
+
+                }
+                if ((playerToMouseVector.x < 0))
+                {
+                    offset += Time.deltaTime * -0.5f;
+                    render.material.mainTextureOffset = new Vector2(offset, 0);
 
 
+                }
+                else
+                {
+                    offset += Time.deltaTime * 0f;
+                    render.material.mainTextureOffset = new Vector2(offset, 0);
+
+                }
+
             }
-            else
-            {
-                offset += Time.deltaTime *0f;
-                render.material.mainTextureOffset = new Vector2(offset, 0);
-                
-            }
-     
         }
        KeyCheck();
     }
