@@ -14,8 +14,9 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     public bool isAbleDash { get; set; }
 
     public bool isPossesing { get; set; }
-    public bool isStickTo { get; set; }
+    public bool isSticking { get; set; }
 
+    public float animSpeed { get; set; }
     public Rigidbody2D rigid { get; set; }
     public SpriteRenderer spriteRenderer { get; set; }
     public Animator anim { get; set; }
@@ -38,10 +39,11 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             Debug.Log(anim);
             Debug.Log(rigid);
             Debug.Log($"Dashing: {isDashing}" );
-            Debug.Log($"isStickTo: {isStickTo}");
+            Debug.Log($"isSticking: {isSticking}");
             Debug.Log($"isAbleDash: { isAbleDash}");
 
         }
+
         //Jump
         Jump();
 
@@ -51,9 +53,9 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             if (Input.GetMouseButtonDown(0))
             {
                 // 달라붙은 상태일경우 달라붙기를 해제하고 대쉬
-                if (isStickTo)
+                if (isSticking)
                 {
-                    isStickTo = false;
+                    isSticking = false;
                     rigid.gravityScale = 8.0f;
                     StopCoroutine(StickTo());
                 }
@@ -71,9 +73,9 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             if (Input.GetMouseButtonDown(1))
             {
                 // 달라붙기, 빙의 중이 아닐 경우 빙의
-                if (isStickTo && !isPossesing)
+                if (isSticking && !isPossesing)
                 {
-                    isStickTo = false;
+                    isSticking = false;
                     isPossesing = true;
 
                     ChangePlayer();
@@ -100,7 +102,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         {
             if (isDashing)
             {
-                isStickTo = true;
+                isSticking = true;
                 this.transform.position = collision.transform.position;
                 StopCoroutine(Dash());
                 StartCoroutine(StickTo());
@@ -124,13 +126,13 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         playerShield.SetActive(false);
 
         //Move Variable
-        MaxSpeed = 7.5f;
+        MaxSpeed = 14.0f;
 
         //Jump Variable
-        jumpPower = 22f;
+        jumpPower = 22.0f;
 
         //Dash Variable
-        DashSpeed = 30f;
+        DashSpeed = 30.0f;
         DashDuration = 0.2f;
         isDashing = false;
         isAbleDash = true;
@@ -138,7 +140,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
         //Possession Variable
         isPossesing = false;
-        isStickTo = false;
+        isSticking = false;
     }
 
     //기본 세팅2
@@ -171,8 +173,9 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     {
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
         {
-            if (isDashing == false && isStickTo == false && isAbleDash == true)
+            if (isDashing == false && isSticking == false && isAbleDash == true)
             {
+                anim.speed = 1.0f;
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
                 anim.SetBool("isJumping", true);
             }
@@ -182,7 +185,29 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     public void Move()
     {
-        if (isDashing == false && isStickTo == false)
+
+        //Animation
+        if (Mathf.Abs(rigid.velocity.x) < 0.5)
+        {
+            anim.SetBool("isWalking", false);
+            anim.speed = 1.0f;
+        }
+
+        else
+        {
+            anim.SetBool("isWalking", true);
+            if (!isDashing)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                {
+                    animSpeed = Random.Range(0.2f, 0.5f);
+                    anim.speed = animSpeed;
+                }
+
+            }
+        }
+
+        if (isDashing == false && isSticking == false)
         {
             float h = Input.GetAxisRaw("Horizontal");
             rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
@@ -205,11 +230,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         }
 
 
-        //Animation
-        if (Mathf.Abs(rigid.velocity.x) < 0.5)
-            anim.SetBool("isWalking", false);
-        else
-            anim.SetBool("isWalking", true);
+        Debug.Log(anim.speed);
     }
 
     //대쉬
@@ -218,11 +239,12 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         //대쉬가 가능할 경우
         if (isAbleDash)
         {
+            anim.speed = 1.0f;
             anim.SetBool("isJumping", false);
             anim.SetBool("isDashing", true);
             isDashing = true;
             isAbleDash = false;
-            isStickTo = false;
+            isSticking = false;
             var originalGravityScale = rigid.gravityScale;
             rigid.gravityScale = 0f;
 
@@ -251,7 +273,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
 
             //적에게 달라붙은 상태일 경우 바로 코루틴 종료
-            if (isStickTo) 
+            if (isSticking) 
                 yield break;
 
             isDashing = false;
@@ -264,14 +286,19 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     //달라붙기
     public IEnumerator StickTo()
     {
+        animSpeed = 1.0f;
+        anim.SetBool("isSticking", true);
         isDashing = false;
         isAbleDash = true;
         rigid.gravityScale = 0f;
         rigid.velocity = new Vector2(0, 0);
 
         //달라붙기가 종료될 때까지 대기
-        yield return new WaitUntil(() => isStickTo == false);
+        yield return new WaitUntil(() => isSticking == false);
+        anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
+        var fx_hit = GetComponentInChildren<ParticleSystem>();
+        fx_hit.Play();
     }
 
     //쉴드 캐릭터로 변경
