@@ -23,6 +23,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     public CapsuleCollider2D playerCollider { get; set; }
 
     public GameObject playerShield;
+    public GameObject hitEffect;
 
     // Start is called before the first frame update
     private void Start()
@@ -200,7 +201,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             {
                 if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 {
-                    animSpeed = Random.Range(0.2f, 0.5f);
+                    animSpeed = Random.Range(0.2f, 1.5f);
                     anim.speed = animSpeed;
                 }
 
@@ -273,7 +274,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
 
             //적에게 달라붙은 상태일 경우 바로 코루틴 종료
-            if (isSticking) 
+            if (isSticking)  
                 yield break;
 
             isDashing = false;
@@ -295,10 +296,12 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
         //달라붙기가 종료될 때까지 대기
         yield return new WaitUntil(() => isSticking == false);
+        GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
+        Destroy(hitflash, 0.2f);
         anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
         var fx_hit = GetComponentInChildren<ParticleSystem>();
-        fx_hit.Play();
+
     }
 
     //쉴드 캐릭터로 변경
