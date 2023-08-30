@@ -29,8 +29,6 @@ public class CameraShake : MonoBehaviour
     }
    public void OnShakeCamera(float shakeTime=0.5f, float shakeIntensity=0.3f)
     {
-
-       
         this.shakeTime = shakeTime;
         this.shakeIntensity = shakeIntensity;
         StopCoroutine("ShakeByPosition");

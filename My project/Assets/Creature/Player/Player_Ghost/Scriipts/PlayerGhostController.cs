@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerGhostController : MonoBehaviour, IPlayerController
 {
-    public float MaxSpeed { get; set; }
+    [SerializeField]public float MaxSpeed { get; set; }
     public float DashSpeed { get; set; }
     public bool isDashing { get; set; }
     public float jumpPower { get; set; }
@@ -229,9 +229,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         {
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
         }
-
-
-        Debug.Log(anim.speed);
     }
 
     //´ë½¬
