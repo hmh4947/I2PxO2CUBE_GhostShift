@@ -339,6 +339,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
         Destroy(hitflash, 0.2f);
         isPossesing = false;
+        CameraShake.Instance.OnShakeCamera();
         StartCoroutine(Dash());
     }
 

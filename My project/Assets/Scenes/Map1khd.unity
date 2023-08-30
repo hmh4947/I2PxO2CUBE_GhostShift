@@ -910,7 +910,6 @@ GameObject:
   - component: {fileID: 470033256}
   - component: {fileID: 470033257}
   - component: {fileID: 470033258}
-  - component: {fileID: 470033259}
   m_Layer: 0
   m_Name: PlayerGhost
   m_TagString: Untagged
@@ -970,18 +969,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &470033259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 470033255}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b8f592454ebdf049bd0592545628ec8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &544731928
 GameObject:
   m_ObjectHideFlags: 0
@@ -7469,8 +7456,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb892e099665fe942b73402fe655274b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minX: -3.9
-  maxX: 3.9
+  minX: -3.3
+  maxX: 3.3
   minY: -1.65
   maxY: 1.65
 --- !u!1 &2114998535
