@@ -107,7 +107,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                 this.transform.position = collision.transform.position;
                 StopCoroutine(Dash());
                 StartCoroutine(StickTo());
-                Destroy(collision.gameObject);   
+                Destroy(collision.gameObject);
             }
             else
             {
@@ -300,7 +300,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         Destroy(hitflash, 0.2f);
         anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
-        var fx_hit = GetComponentInChildren<ParticleSystem>();
+
 
     }
 
@@ -317,6 +317,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     public void ChangePlayerToGhost()
     {
+        GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
+        Destroy(hitflash, 0.2f);
         isPossesing = false;
         StartCoroutine(Dash());
     }
