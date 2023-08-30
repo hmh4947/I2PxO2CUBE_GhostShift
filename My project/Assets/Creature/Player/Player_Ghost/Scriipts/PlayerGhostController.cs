@@ -23,8 +23,11 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     public CapsuleCollider2D playerCollider { get; set; }
 
     public GameObject playerShield;
+    public GameObject playerGoggles;
     public GameObject hitEffect;
 
+    [SerializeField]
+    private EnemyType enemyType;
     // Start is called before the first frame update
     private void Start()
     {
@@ -79,7 +82,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                     isSticking = false;
                     isPossesing = true;
 
-                    ChangePlayer();
+                    ChangePlayer(enemyType);
                 }
                
             }
@@ -103,11 +106,16 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         {
             if (isDashing)
             {
-                isSticking = true;
-                this.transform.position = collision.transform.position;
-                StopCoroutine(Dash());
-                StartCoroutine(StickTo());
-                Destroy(collision.gameObject);
+                if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                {
+                    enemyType = enemy.EnemyType;
+                    isSticking = true;
+                    this.transform.position = collision.transform.position;
+                    StopCoroutine(Dash());
+                    StartCoroutine(StickTo());
+                    Destroy(collision.gameObject);
+                }
+                
             }
             else
             {
@@ -293,23 +301,37 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
         //달라붙기가 종료될 때까지 대기
         yield return new WaitUntil(() => isSticking == false);
+        anim.SetBool("isSticking", false);
         GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
         Destroy(hitflash, 0.2f);
-        anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
 
 
     }
 
     //쉴드 캐릭터로 변경
-    public void ChangePlayer()
+    public void ChangePlayer(EnemyType enemyType)
     {
         Init();
         rigid.gravityScale = 8.0f;
-        playerShield.transform.position = this.transform.position;
-        this.gameObject.SetActive(false);
 
-        playerShield.SetActive(true);
+        switch(enemyType){
+            case EnemyType.None:
+                return;
+            case EnemyType.Shield:
+                playerShield.transform.position = this.transform.position;
+                this.gameObject.SetActive(false);
+                playerShield.SetActive(true);
+                return;
+            case EnemyType.Goggles:
+                playerGoggles.transform.position = this.transform.position;
+                this.gameObject.SetActive(false);
+                playerGoggles.SetActive(true);
+                return;
+
+        }
+        
+
     }
 
     public void ChangePlayerToGhost()

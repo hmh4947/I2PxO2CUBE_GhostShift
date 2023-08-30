@@ -17,7 +17,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     public GameObject playerGhost;
     public GameObject tileMap;
     public GameObject background;
-    public Material originalBackground;
+    private Material originalBackground;
     public Material NVDBackground;
 
     PlayerGhostController playerGhostControllerScr;
@@ -26,7 +26,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     // Start is called before the first frame update
     private void Start()
     {
-
+        originalBackground = background.GetComponent<MeshRenderer>().material;
         Init();
         SetBasicComponent();
     }

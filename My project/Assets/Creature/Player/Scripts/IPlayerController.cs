@@ -25,7 +25,5 @@ public interface IPlayerController
     //점프
     public void Jump();
     //대쉬
-
-    public void ChangePlayer();
 }
 
