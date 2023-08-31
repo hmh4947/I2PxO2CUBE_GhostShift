@@ -19,6 +19,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
 
     public GameObject playerGhost;
     PlayerGhostController playerGhostControllerScr;
+    public GameObject shield;
 
     // Start is called before the first frame update
     private void Start()
@@ -102,6 +103,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         parryingDuration = 0.25f;
 
         isDefending = false;
+        shield.SetActive(false);
     }
 
     //기본 세팅2
@@ -178,21 +180,25 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         anim.SetBool("isParrying", true);
         isParrying = true;
+        shield.SetActive(true);
 
         yield return new WaitForSeconds(parryingDuration);
         isParrying = false;
         anim.SetBool("isParrying", false);
+        shield.SetActive(false);
     }
 
     public IEnumerator Defending()
     {
         anim.SetBool("isDefending", true);
         isDefending = true;
+        shield.SetActive(true);
 
         yield return new WaitUntil(() => isDefending == false);
 
         anim.SetBool("isDefending", false);
         isDefending = false;
+        shield.SetActive(false);
 
     }
     //유령 캐릭터로 변경
@@ -206,6 +212,4 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         playerGhostControllerScr.ChangePlayerToGhost();
         gameObject.SetActive(false);
     }
-
-
 }
