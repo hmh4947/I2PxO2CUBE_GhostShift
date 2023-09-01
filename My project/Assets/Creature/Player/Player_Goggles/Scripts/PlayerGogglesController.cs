@@ -39,9 +39,6 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
             Debug.Log(curAniTime);
         }
 
-        //Jump
-        Jump();
-
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -85,7 +82,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     }
 
     //기본 세팅
-    public virtual void Init()
+    public  void Init()
     {
         //Move Variable
         MaxSpeed = 7.5f;
@@ -103,7 +100,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     }
 
     //기본 세팅2
-    public virtual void SetBasicComponent()
+    public  void SetBasicComponent()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -111,7 +108,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
         playerCollider = GetComponentInChildren<CapsuleCollider2D>();
     }
     //중력
-    public virtual void Gravity()
+    public  void Gravity()
     {
         if (rigid.velocity.y < 0)
         {
@@ -128,7 +125,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
         }
     }
     //점프
-    public virtual void Jump()
+    public  void Jump()
     {
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
         {
