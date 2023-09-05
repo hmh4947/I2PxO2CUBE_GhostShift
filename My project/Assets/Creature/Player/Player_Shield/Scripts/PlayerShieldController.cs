@@ -12,6 +12,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
 
     public bool isDefending { get; set; }
 
+    public bool defended;
     public Rigidbody2D rigid { get; set; }
     public SpriteRenderer spriteRenderer { get; set; }
     public Animator anim { get; set; }
@@ -21,13 +22,16 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     PlayerGhostController playerGhostControllerScr;
     public GameObject shield;
 
+    private AudioSource audio;
+
+    public AudioClip parryingSfx;
+    public AudioClip swingSfx;
+
     // Start is called before the first frame update
     private void Start()
     {
-        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
-        playerGhostControllerScr.isPossesing = true;
-
         Init();
+
         SetBasicComponent();
     }
 
@@ -53,8 +57,20 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
             // 마우스 우클릭 이벤트
             if (Input.GetMouseButtonDown(1))
             {
-                if (!isParrying) 
+                if (!isParrying)
+                {
                     StartCoroutine(Parrying());
+                    if (defended)
+                    {
+                        audio.PlayOneShot(parryingSfx);
+                        defended = false;
+                    }
+                    else
+                    {
+                        audio.PlayOneShot(swingSfx);
+                    }
+                }
+                    
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
@@ -104,6 +120,10 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
 
         isDefending = false;
         shield.SetActive(false);
+
+        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
+        playerGhostControllerScr.isPossesing = true;
+        audio = GetComponent<AudioSource>();
     }
 
     //기본 세팅2
@@ -167,6 +187,16 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         if (Input.GetButton("Horizontal"))
         {
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
+            if(Input.GetAxisRaw("Horizontal") == 1)
+            {
+                spriteRenderer.flipX = true;
+                shield.transform.localPosition = new Vector3(0.4263f, 0, 0);
+            }
+            else
+            {
+                spriteRenderer.flipX = false;
+                shield.transform.localPosition = new Vector3(-0.4263f, 0, 0);
+            }
         }
 
         //Animation
@@ -181,8 +211,8 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         anim.SetBool("isParrying", true);
         isParrying = true;
         shield.SetActive(true);
-
         yield return new WaitForSeconds(parryingDuration);
+
         isParrying = false;
         anim.SetBool("isParrying", false);
         shield.SetActive(false);
@@ -195,7 +225,6 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         shield.SetActive(true);
 
         yield return new WaitUntil(() => isDefending == false);
-
         anim.SetBool("isDefending", false);
         isDefending = false;
         shield.SetActive(false);
