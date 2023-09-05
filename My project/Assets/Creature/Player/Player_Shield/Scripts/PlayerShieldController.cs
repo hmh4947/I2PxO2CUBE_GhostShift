@@ -25,7 +25,6 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     private AudioSource audio;
 
     public AudioClip swingSfx;
-    public AudioClip jumpSfx;
     // Start is called before the first frame update
     private void Start()
     {

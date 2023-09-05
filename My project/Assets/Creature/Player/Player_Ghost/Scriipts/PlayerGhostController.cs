@@ -28,6 +28,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     [SerializeField]
     private EnemyType enemyType;
+    private Enemy enemyScr;
+
     private AudioSource audio;
 
     public AudioClip jumpSfx;
@@ -40,6 +42,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     {
         Init();
         SetBasicComponent();
+
+        enemyScr = GameObject.Find("Enemy").GetComponent<Enemy>();
     }
 
     private void Update()
@@ -120,7 +124,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                     this.transform.position = collision.transform.position;
                     StopCoroutine(Dash());
                     StartCoroutine(StickTo());
-                    Destroy(collision.gameObject);
                 }
                 
             }
@@ -313,6 +316,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         isAbleDash = true;
         rigid.gravityScale = 0f;
         rigid.velocity = new Vector2(0, 0);
+
 
         //달라붙기가 종료될 때까지 대기
         yield return new WaitUntil(() => isSticking == false);
