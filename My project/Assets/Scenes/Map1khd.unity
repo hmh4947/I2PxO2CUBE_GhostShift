@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 470033256}
   - component: {fileID: 470033257}
   - component: {fileID: 470033258}
+  - component: {fileID: 470033259}
   m_Layer: 0
   m_Name: PlayerGhost
   m_TagString: Untagged
@@ -949,6 +950,10 @@ MonoBehaviour:
   playerGoggles: {fileID: 1365336671}
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
   enemyType: 0
+  jumpSfx: {fileID: 8300000, guid: c1982e8ffb4229c47b874e841d4ea9d3, type: 3}
+  dashSfx: {fileID: 8300000, guid: cfdd0838cd74d654abffbca8fbc4593d, type: 3}
+  attack1Sfx: {fileID: 8300000, guid: 3ba8d34aeee5cfc4a902b042b0dd234d, type: 3}
+  attack2Sfx: {fileID: 8300000, guid: cf7a6b86b0c621b4ab536344d0a76f54, type: 3}
 --- !u!50 &470033258
 Rigidbody2D:
   serializedVersion: 4
@@ -970,6 +975,102 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!82 &470033259
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470033255}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &544731928
 GameObject:
   m_ObjectHideFlags: 0
@@ -1095,8 +1196,8 @@ MonoBehaviour:
   defended: 0
   playerGhost: {fileID: 470033255}
   shield: {fileID: 821726706}
-  parryingSfx: {fileID: 8300000, guid: 3ef9450b871ad5d438d79347b2b4b230, type: 3}
   swingSfx: {fileID: 8300000, guid: 2cfae31f3d8919f4884f351e374f85fe, type: 3}
+  jumpSfx: {fileID: 8300000, guid: c1982e8ffb4229c47b874e841d4ea9d3, type: 3}
 --- !u!50 &619479681
 Rigidbody2D:
   serializedVersion: 4
@@ -1635,6 +1736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
+  parryingSfx: {fileID: 8300000, guid: 3ef9450b871ad5d438d79347b2b4b230, type: 3}
 --- !u!61 &821726709
 BoxCollider2D:
   m_ObjectHideFlags: 0

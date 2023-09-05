@@ -24,9 +24,8 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
 
     private AudioSource audio;
 
-    public AudioClip parryingSfx;
     public AudioClip swingSfx;
-
+    public AudioClip jumpSfx;
     // Start is called before the first frame update
     private void Start()
     {
@@ -43,9 +42,6 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
             Debug.Log(curAniTime);
         }
 
-        //Jump
-        Jump();
-
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -60,15 +56,6 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
                 if (!isParrying)
                 {
                     StartCoroutine(Parrying());
-                    if (defended)
-                    {
-                        audio.PlayOneShot(parryingSfx);
-                        defended = false;
-                    }
-                    else
-                    {
-                        audio.PlayOneShot(swingSfx);
-                    }
                 }
                     
             }
@@ -151,19 +138,6 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
             }
         }
     }
-    //점프
-    public virtual void Jump()
-    {
-        if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
-        {
-            if (!isParrying && !isDefending)
-            {
-                rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-                anim.SetBool("isJumping", true);
-            }
-
-        }
-    }
     //이동
     public virtual void Move()
     {
@@ -211,6 +185,8 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         anim.SetBool("isParrying", true);
         isParrying = true;
         shield.SetActive(true);
+        audio.clip = swingSfx;
+        audio.Play();
         yield return new WaitForSeconds(parryingDuration);
 
         isParrying = false;

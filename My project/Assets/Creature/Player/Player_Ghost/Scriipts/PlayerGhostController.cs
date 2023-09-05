@@ -28,6 +28,13 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     [SerializeField]
     private EnemyType enemyType;
+    private AudioSource audio;
+
+    public AudioClip jumpSfx;
+    public AudioClip dashSfx;
+    public AudioClip attack1Sfx;
+    public AudioClip attack2Sfx;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -150,6 +157,9 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         //Possession Variable
         isPossesing = false;
         isSticking = false;
+
+        //Audio Variable
+        audio = GetComponent<AudioSource>();
     }
 
     //기본 세팅2
@@ -184,6 +194,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         {
             if (isDashing == false && isSticking == false && isAbleDash == true)
             {
+                audio.PlayOneShot(jumpSfx);
                 anim.speed = 1.0f;
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
                 anim.SetBool("isJumping", true);
@@ -248,6 +259,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             anim.speed = 1.0f;
             anim.SetBool("isJumping", false);
             anim.SetBool("isDashing", true);
+            audio.PlayOneShot(dashSfx);
             isDashing = true;
             isAbleDash = false;
             isSticking = false;
@@ -279,8 +291,11 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
 
             //적에게 달라붙은 상태일 경우 바로 코루틴 종료
-            if (isSticking)  
+            if (isSticking)
+            {
+                audio.Stop();
                 yield break;
+            }
 
             isDashing = false;
             rigid.gravityScale = originalGravityScale;

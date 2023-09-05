@@ -6,12 +6,13 @@ public class ShieldController : MonoBehaviour
 {
     public GameObject hitEffect;
     private PlayerShieldController playerShieldControllerScr;
-
+    public AudioClip parryingSfx;
+    private AudioSource audio;
     // Start is called before the first frame update
     void Start()
     {
         playerShieldControllerScr = gameObject.GetComponentInParent<PlayerShieldController>();
-
+        audio = GetComponentInParent<AudioSource>();
     }
     // Update is called once per frame
     void Update()
@@ -23,7 +24,8 @@ public class ShieldController : MonoBehaviour
     {
         if(collision.tag == "Bullet")
         {
-            playerShieldControllerScr.defended = true;
+            audio.clip = parryingSfx;
+            audio.Play();
             GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
             Destroy(hitflash, 0.2f);
             CameraShake.Instance.OnShakeCamera();

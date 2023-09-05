@@ -22,8 +22,6 @@ public interface IPlayerController
     public void Gravity();
     //이동
     public void Move();
-    //점프
-    public void Jump();
     //대쉬
 }
 
