@@ -30,6 +30,7 @@ public class ShieldController : MonoBehaviour
             Destroy(hitflash, 0.2f);
             CameraShake.Instance.OnShakeCamera();
             Destroy(collision.gameObject);
+            playerShieldControllerScr.setDefended(true);
         }
     }
 }

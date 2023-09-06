@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+    public GameObject blockedBulletPrefab;
+    public float bulletSpeed;
     // Start is called before the first frame update
     void Start()
     {
         Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-        rigidbody.AddForce(new Vector2(-150.0f, 0.0f));
+        rigidbody.AddForce(new Vector2(bulletSpeed, 0.0f));
     }
 
     // Update is called once per frame
@@ -17,5 +19,9 @@ public class BulletController : MonoBehaviour
         Destroy(this.gameObject, 5.0f);
     }
 
-
+    public void generateBlockedBullet()
+    {
+        Instantiate(blockedBulletPrefab, transform.position, transform.rotation);
+        Destroy(this.gameObject);
+    }
 }

@@ -5,14 +5,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 public class PlayerGogglesController : MonoBehaviour, IPlayerController
 {
-    public float MaxSpeed { get; set; }
-    public float jumpPower { get; set; }
-    public bool isInNVDModes { get; set; } // NVD: Night Vision Device
+    [SerializeField]
+    private float maxSpeed;
+    [SerializeField]
+    private float jumpPower;
+    [SerializeField]
+    private bool isInNVDModes; // NVD: Night Vision Device
 
-    public Rigidbody2D rigid { get; set; }
-    public SpriteRenderer spriteRenderer { get; set; }
-    public Animator anim { get; set; }
-    public CapsuleCollider2D playerCollider { get; set; }
+    public Rigidbody2D rigid;
+    public SpriteRenderer spriteRenderer;
+    public Animator anim;
+    public CapsuleCollider2D playerCollider;
 
     public GameObject playerGhost;
     public GameObject tileMap;
@@ -85,7 +88,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     public  void Init()
     {
         //Move Variable
-        MaxSpeed = 7.5f;
+        maxSpeed = 7.5f;
 
         //Jump Variable
         jumpPower = 22f;
@@ -93,7 +96,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
         isInNVDModes = false;
 
         playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
-        playerGhostControllerScr.isPossesing = true;
+        playerGhostControllerScr.setPossesing(true);
 
         tileMapSpr = tileMap.GetComponent<Tilemap>();
         ChangeColorToWhite();
@@ -145,10 +148,10 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
             float h = Input.GetAxisRaw("Horizontal");
             rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
 
-            if (rigid.velocity.x > MaxSpeed) // Right Max Speed
-                rigid.velocity = new Vector2(MaxSpeed, rigid.velocity.y);
-            else if (rigid.velocity.x < MaxSpeed * (-1)) // Left Max Speed
-                rigid.velocity = new Vector2(MaxSpeed * (-1), rigid.velocity.y);
+            if (rigid.velocity.x > maxSpeed) // Right Max Speed
+                rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
+            else if (rigid.velocity.x < maxSpeed * (-1)) // Left Max Speed
+                rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
         }
 
         if (Input.GetButtonUp("Horizontal"))

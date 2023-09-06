@@ -5,26 +5,34 @@ using UnityEngine.EventSystems;
 
 public class PlayerGhostController : MonoBehaviour, IPlayerController
 {
-    [SerializeField]public float MaxSpeed { get; set; }
-    public float DashSpeed { get; set; }
-    public bool isDashing { get; set; }
-    public float jumpPower { get; set; }
-    public float DashDuration { get; set; }
+    [SerializeField]
+    private float maxSpeed;
+    [SerializeField]
+    private float dashSpeed;
+    [SerializeField]
+    private bool isDashing;
+    [SerializeField]
+    private float jumpPower;
+    [SerializeField]
+    private float dashDuration;
+    [SerializeField]
+    private bool isAbleDash;
+    [SerializeField]
+    private bool isPossesing;
+    [SerializeField]
+    private bool isSticking;
+    [SerializeField]
+    private float animSpeed;
 
-    public bool isAbleDash { get; set; }
-
-    public bool isPossesing { get; set; }
-    public bool isSticking { get; set; }
-
-    public float animSpeed { get; set; }
-    public Rigidbody2D rigid { get; set; }
-    public SpriteRenderer spriteRenderer { get; set; }
-    public Animator anim { get; set; }
-    public CapsuleCollider2D playerCollider { get; set; }
+    public Rigidbody2D rigid;
+    public SpriteRenderer spriteRenderer;
+    public Animator anim;
+    public CapsuleCollider2D playerCollider;
 
     public GameObject playerShield;
     public GameObject playerGoggles;
     public GameObject hitEffect;
+    private GameObject enemyObject;
 
     [SerializeField]
     private EnemyType enemyType;
@@ -70,6 +78,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                 // 달라붙은 상태일경우 달라붙기를 해제하고 대쉬
                 if (isSticking)
                 {
+                    Destroy(enemyObject);
                     isSticking = false;
                     rigid.gravityScale = 8.0f;
                     StopCoroutine(StickTo());
@@ -90,6 +99,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                 // 달라붙기, 빙의 중이 아닐 경우 빙의
                 if (isSticking && !isPossesing)
                 {
+                    Destroy(enemyObject);
                     isSticking = false;
                     isPossesing = true;
 
@@ -111,17 +121,19 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collider.gameObject.tag == "Enemy")
         {
             if (isDashing)
             {
-                if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
                 {
-                    enemyType = enemy.EnemyType;
+                    enemyObject = collider.gameObject;
+                    enemy.Died();
+;                   enemyType = enemy.EnemyType;
                     isSticking = true;
-                    this.transform.position = collision.transform.position;
+                    this.transform.position = new Vector3(collider.transform.position.x, collider.transform.position.y + 0.5f, this.transform.position.z);
                     StopCoroutine(Dash());
                     StartCoroutine(StickTo());
                 }
@@ -145,14 +157,14 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         playerShield.SetActive(false);
 
         //Move Variable
-        MaxSpeed = 14.0f;
+        maxSpeed = 14.0f;
 
         //Jump Variable
         jumpPower = 22.0f;
 
         //Dash Variable
-        DashSpeed = 30.0f;
-        DashDuration = 0.2f;
+        dashSpeed = 30.0f;
+        dashDuration = 0.2f;
         isDashing = false;
         isAbleDash = true;
 
@@ -235,10 +247,10 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             float h = Input.GetAxisRaw("Horizontal");
             rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
 
-            if (rigid.velocity.x > MaxSpeed) // Right Max Speed
-                rigid.velocity = new Vector2(MaxSpeed, rigid.velocity.y);
-            else if (rigid.velocity.x < MaxSpeed * (-1)) // Left Max Speed
-                rigid.velocity = new Vector2(MaxSpeed * (-1), rigid.velocity.y);
+            if (rigid.velocity.x > maxSpeed) // Right Max Speed
+                rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
+            else if (rigid.velocity.x < maxSpeed * (-1)) // Left Max Speed
+                rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
         }
 
         if (Input.GetButtonUp("Horizontal"))
@@ -284,10 +296,10 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                 if (spriteRenderer.flipX == true)
                     spriteRenderer.flipX = false;
             }
-            rigid.velocity = playerToMouseVector * DashSpeed;
+            rigid.velocity = playerToMouseVector * dashSpeed;
 
             // 충돌체크
-            yield return new WaitForSeconds(DashDuration);
+            yield return new WaitForSeconds(dashDuration);
 
             anim.SetBool("isJumping", true);
             anim.SetBool("isDashing", false);
@@ -362,4 +374,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         StartCoroutine(Dash());
     }
 
+    public bool IsPossesing() { return isPossesing; }
+    public void setPossesing(bool isPossesing) { this.isPossesing = isPossesing; }
 }

@@ -5,21 +5,26 @@ using UnityEngine.EventSystems;
 
 public class PlayerShieldController : MonoBehaviour, IPlayerController
 {
-    public float MaxSpeed { get; set; }
-    public float jumpPower { get; set; }
-    public bool isParrying { get; set; }
-    public float parryingDuration { get; set; }
+    [SerializeField]
+    private float maxSpeed;
+    [SerializeField]
+    private float jumpPower;
+    [SerializeField]
+    private bool isParrying;
+    [SerializeField]
+    private float parryingDuration;
+    [SerializeField]
+    private bool isDefending;
+    [SerializeField]
+    private bool defended;
 
-    public bool isDefending { get; set; }
-
-    public bool defended;
-    public Rigidbody2D rigid { get; set; }
-    public SpriteRenderer spriteRenderer { get; set; }
-    public Animator anim { get; set; }
-    public CapsuleCollider2D playerCollider { get; set; }
+    private Rigidbody2D rigid;
+    private SpriteRenderer spriteRenderer;
+    private Animator anim;
+    private CapsuleCollider2D playerCollider;
 
     public GameObject playerGhost;
-    PlayerGhostController playerGhostControllerScr;
+    private PlayerGhostController playerGhostControllerScr;
     public GameObject shield;
 
     private AudioSource audio;
@@ -80,14 +85,27 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collider.gameObject.tag == "Enemy")
         {
             Health healthScr = gameObject.GetComponentInParent<Health>();
             {
                 healthScr.Damaged(1);
             }
+        }
+
+        if(collider.gameObject.tag == "Bullet")
+        {
+            if (!defended)
+            {
+                Health healthScr = gameObject.GetComponentInParent<Health>();
+                {
+                    Debug.Log("관통해서 들어옮.");
+                    healthScr.Damaged(1);
+                }
+            }
+           
         }
 
     }
@@ -96,7 +114,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     public virtual void Init()
     {
         //Move Variable
-        MaxSpeed = 7.5f;
+        maxSpeed = 7.5f;
 
         //Jump Variable
         jumpPower = 22f;
@@ -108,8 +126,10 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         shield.SetActive(false);
 
         playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
-        playerGhostControllerScr.isPossesing = true;
+        playerGhostControllerScr.setPossesing(true);
         audio = GetComponent<AudioSource>();
+
+        defended = false;
     }
 
     //기본 세팅2
@@ -145,10 +165,10 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
             float h = Input.GetAxisRaw("Horizontal");
             rigid.AddForce(Vector2.right * h, ForceMode2D.Impulse);
 
-            if (rigid.velocity.x > MaxSpeed) // Right Max Speed
-                rigid.velocity = new Vector2(MaxSpeed, rigid.velocity.y);
-            else if (rigid.velocity.x < MaxSpeed * (-1)) // Left Max Speed
-                rigid.velocity = new Vector2(MaxSpeed * (-1), rigid.velocity.y);
+            if (rigid.velocity.x > maxSpeed) // Right Max Speed
+                rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
+            else if (rigid.velocity.x < maxSpeed * (-1)) // Left Max Speed
+                rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
         }
 
         if (Input.GetButtonUp("Horizontal"))
@@ -183,14 +203,17 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         anim.SetBool("isParrying", true);
         isParrying = true;
-        shield.SetActive(true);
         audio.clip = swingSfx;
         audio.Play();
+        shield.SetActive(true);
+
         yield return new WaitForSeconds(parryingDuration);
 
         isParrying = false;
         anim.SetBool("isParrying", false);
         shield.SetActive(false);
+        if (defended)
+            defended = false;
     }
 
     public IEnumerator Defending()
@@ -202,7 +225,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         yield return new WaitUntil(() => isDefending == false);
         anim.SetBool("isDefending", false);
         isDefending = false;
-        shield.SetActive(false);
+
 
     }
     //유령 캐릭터로 변경
@@ -216,4 +239,11 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         playerGhostControllerScr.ChangePlayerToGhost();
         gameObject.SetActive(false);
     }
+
+    public void setDefended(bool defended)
+    {
+        this.defended = defended;
+    }
+
+
 }

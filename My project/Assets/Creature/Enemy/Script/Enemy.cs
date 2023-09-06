@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField]
     public EnemyType EnemyType;
+    private Animator anim;
 
-    public Sprite diedSprite;
     private PlayerGhostController playerGhostControllerScr;
+
+    [SerializeField]
+    private bool isDied;
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
+        isDied = false;
         playerGhostControllerScr = GameObject.Find("PlayerGhost").GetComponent<PlayerGhostController>();
     }
 
@@ -21,19 +25,12 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "Player")
-        {
-            if (playerGhostControllerScr.isSticking)
-            {
-                gameObject.GetComponent<SpriteRenderer>().sprite = diedSprite;
-            }
-        }
-    }
-
     public void Died()
     {
-        Destroy(gameObject);
+        anim.SetBool("isDied", true);
+        isDied = true;
     }
+
+    public bool IsDied() { return this.isDied; }
+
 }
