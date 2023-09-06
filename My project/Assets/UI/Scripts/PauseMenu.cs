@@ -8,10 +8,15 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
 
+    private new AudioSource audio;
+
+    public AudioClip selectedAudio;
+    public AudioClip clickedAudio;
+
     // Start is called before the first frame update
     void Start()
     {
-
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -28,6 +33,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        audio.PlayOneShot(clickedAudio);
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -43,14 +49,17 @@ public class PauseMenu : MonoBehaviour
 
     public void Option()
     {
+        audio.PlayOneShot(clickedAudio);
         Debug.Log("옵션창 출력");
     }
     public void StageExit()
     {
+        audio.PlayOneShot(clickedAudio);
         Debug.Log("스테이지를 나갑니다..");
     }
     public void QuitGame()
     {
+        audio.PlayOneShot(clickedAudio);
         Debug.Log("게임을 종료합니다..");
     }
     
