@@ -14,8 +14,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     [SerializeField]
     private float jumpPower;
     [SerializeField]
-    private float dashDuration;
-    [SerializeField]
     private bool isAbleDash;
     [SerializeField]
     private bool isPossesing;
@@ -24,9 +22,15 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     [SerializeField]
     private float animSpeed;
 
+    private float dashDuration;
+
+    [HideInInspector]
     public Rigidbody2D rigid;
+    [HideInInspector]
     public SpriteRenderer spriteRenderer;
+    [HideInInspector]
     public Animator anim;
+    [HideInInspector]
     public CapsuleCollider2D playerCollider;
 
     public GameObject playerShield;
@@ -56,17 +60,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     private void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log(anim);
-            Debug.Log(rigid);
-            Debug.Log($"Dashing: {isDashing}" );
-            Debug.Log($"isSticking: {isSticking}");
-            Debug.Log($"isAbleDash: { isAbleDash}");
-
-        }
-
         //Jump
         Jump();
 
