@@ -12,10 +12,11 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     [SerializeField]
     private bool isInNVDModes; // NVD: Night Vision Device
 
-    public Rigidbody2D rigid;
-    public SpriteRenderer spriteRenderer;
-    public Animator anim;
-    public CapsuleCollider2D playerCollider;
+    private Rigidbody2D rigid;
+    private SpriteRenderer spriteRenderer;
+    private Animator anim;
+    private CapsuleCollider2D playerCollider;
+    private Transform tr;
 
     public GameObject playerGhost;
     public GameObject tileMap;
@@ -31,7 +32,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     {
         originalBackground = background.GetComponent<MeshRenderer>().material;
         Init();
-        SetBasicComponent();
+        SetCashComponent();
     }
 
     private void Update()
@@ -95,20 +96,19 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
 
         isInNVDModes = false;
 
-        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
-        playerGhostControllerScr.setPossesing(true);
-
-        tileMapSpr = tileMap.GetComponent<Tilemap>();
         ChangeColorToWhite();
     }
 
     //기본 세팅2
-    public  void SetBasicComponent()
+    public  void SetCashComponent()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();
         playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+
+        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
+        tileMapSpr = tileMap.GetComponent<Tilemap>();
     }
     //중력
     public  void Gravity()
@@ -203,7 +203,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     {
         Init();
         rigid.gravityScale = 8.0f;
-        playerGhost.transform.position = this.transform.position;
+        playerGhost.transform.position = tr.position;
 
         playerGhost.SetActive(true);
         playerGhostControllerScr.ChangePlayerToGhost();

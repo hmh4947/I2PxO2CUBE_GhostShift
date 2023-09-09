@@ -5,38 +5,42 @@ using UnityEngine.EventSystems;
 
 public class PlayerGhostController : MonoBehaviour, IPlayerController
 {
-    [SerializeField]
-    private float maxSpeed;
-    [SerializeField]
-    private float dashSpeed;
+    /*
+     * 상태 디자인 패턴 기획중.
+    public enum State
+    {
+        IDLE,
+        MOVE,
+        DASH,
+        JUMP,
+        STICKING
+    }
+    */
+
+    public float maxSpeed;
+    public float dashSpeed;
+    public float dashDuration;
+    public float jumpPower;
+
     [SerializeField]
     private bool isDashing;
     [SerializeField]
-    private float jumpPower;
-    [SerializeField]
     private bool isAbleDash;
     [SerializeField]
-    private bool isPossesing;
-    [SerializeField]
     private bool isSticking;
-    [SerializeField]
-    private float animSpeed;
 
-    private float dashDuration;
-
-    [HideInInspector]
-    public Rigidbody2D rigid;
-    [HideInInspector]
-    public SpriteRenderer spriteRenderer;
-    [HideInInspector]
-    public Animator anim;
-    [HideInInspector]
-    public CapsuleCollider2D playerCollider;
+    private Rigidbody2D rigid;
+    private SpriteRenderer spriteRenderer;
+    private Animator anim;
+    private CapsuleCollider2D playercollider;
+    private Transform tr;
 
     public GameObject playerShield;
     public GameObject playerGoggles;
     public GameObject hitEffect;
+
     private GameObject enemyObject;
+    private Health healthScr;
 
     [SerializeField]
     private EnemyType enemyType;
@@ -53,9 +57,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     private void Start()
     {
         Init();
-        SetBasicComponent();
-
-        enemyScr = GameObject.Find("Enemy").GetComponent<Enemy>();
+        SetCashComponent();
     }
 
     private void Update()
@@ -63,46 +65,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         //Jump
         Jump();
 
-        // 일시정지 메뉴 클릭할 시에 되는걸 방지
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                // 달라붙은 상태일경우 달라붙기를 해제하고 대쉬
-                if (isSticking)
-                {
-                    Destroy(enemyObject);
-                    isSticking = false;
-                    rigid.gravityScale = 8.0f;
-                    audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
-                    StopCoroutine(StickTo());
-                }
-                // 빙의중일 경우 빙의를 해제하고 대쉬
-                else if (isPossesing)
-                {
-                    isPossesing = false;
-                    Init();
-                    StartCoroutine(Dash());
-                }
-                // 아닐경우 그냥 대쉬
-                StartCoroutine(Dash());
-            }
-            // 마우스 우클릭 이벤트
-            if (Input.GetMouseButtonDown(1))
-            {
-                // 달라붙기, 빙의 중이 아닐 경우 빙의
-                if (isSticking && !isPossesing)
-                {
-                    Destroy(enemyObject);
-                    isSticking = false;
-                    isPossesing = true;
-
-                    ChangePlayer(enemyType);
-                }
-               
-            }
-
-        }
+        HandleMouseInput();
+        
     }
 
     // Update is called once per frame
@@ -115,19 +79,18 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collider.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             if (isDashing)
             {
-                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
                 {
-                    enemyObject = collider.gameObject;
+                    enemyObject = collision.gameObject;
                     enemy.Died();
 ;                   enemyType = enemy.EnemyType;
-                    isSticking = true;
-                    this.transform.position = new Vector3(collider.transform.position.x, collider.transform.position.y + 0.5f, this.transform.position.z);
+                    tr.position = new Vector2(collision.transform.position.x, collision.transform.position.y + 0.5f);
                     StopCoroutine(Dash());
                     StartCoroutine(StickTo());
                 }
@@ -135,21 +98,20 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             }
             else
             {
-                Health healthScr = gameObject.GetComponentInParent<Health>();
-                {
-                    healthScr.Damaged(1);
-                }
+                healthScr.Damaged(1);
             }
         }
 
+        if(collision.gameObject.tag == "Bullet")
+        {
+            healthScr.Damaged(1);
+            Destroy(collision.gameObject);
+        }
     }
 
     //기본 세팅
     public void Init()
     {
-        this.gameObject.SetActive(true);
-        playerShield.SetActive(false);
-
         //Move Variable
         maxSpeed = 14.0f;
 
@@ -159,26 +121,40 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         //Dash Variable
         dashSpeed = 30.0f;
         dashDuration = 0.2f;
-        isDashing = false;
-        isAbleDash = true;
 
-
-        //Possession Variable
-        isPossesing = false;
-        isSticking = false;
-
-        //Audio Variable
-        audio = GetComponent<AudioSource>();
+        SetPlayerStates();
     }
 
-    //기본 세팅2
-    public void SetBasicComponent()
+    //메모리 소모를 줄이기 위한 캐쉬 세팅
+    public void SetCashComponent()
     {
+        // 플레이어 컴포넌트 캐쉬 처리
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();
-        playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+        playercollider= GetComponentInChildren<CapsuleCollider2D>();
+        tr = GetComponent<Transform>();
+        audio = GetComponent<AudioSource>();
+
+        //Script 캐쉬 처리
+        healthScr = gameObject.GetComponentInParent<Health>();
+        enemyScr = GameObject.Find("Enemy").GetComponent<Enemy>();
     }
+
+
+    private void SetPlayerStates(bool isDashing = false, bool isAbleDash = false, bool isSticking = false)
+    {
+        this.isDashing = isDashing;
+        this.isAbleDash = isAbleDash;
+        this.isSticking = isSticking;
+    }
+
+    /*
+    private void SetPlayerAnimation()
+    {
+
+    }
+    */
 
     public void Gravity()
     {
@@ -190,22 +166,22 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             {
                 if (rayHit.distance < 1.0f)
                 {
-                    isAbleDash = true;
+                    SetPlayerStates(isAbleDash: true);
                     anim.SetBool("isJumping", false);
                 }
 
             }
         }
     }
+
     public void Jump()
     {
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
         {
             if (isDashing == false && isSticking == false && isAbleDash == true)
             {
-                audio.PlayOneShot(jumpSfx);
-                anim.speed = 1.0f;
                 rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+                audio.PlayOneShot(jumpSfx);
                 anim.SetBool("isJumping", true);
             }
 
@@ -219,21 +195,11 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         if (Mathf.Abs(rigid.velocity.x) < 0.5)
         {
             anim.SetBool("isWalking", false);
-            anim.speed = 1.0f;
         }
 
         else
         {
             anim.SetBool("isWalking", true);
-            if (!isDashing)
-            {
-                if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
-                {
-                    animSpeed = Random.Range(0.2f, 1.5f);
-                    anim.speed = animSpeed;
-                }
-
-            }
         }
 
         if (isDashing == false && isSticking == false)
@@ -259,19 +225,89 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         }
     }
 
+    // 마우스 이벤트
+    public void HandleMouseInput()
+    {
+        // 일시정지 메뉴 클릭할 시에 되는걸 방지
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // 달라붙은 상태일경우 달라붙기를 해제하고 대쉬
+                if (isSticking)
+                {
+                    Destroy(enemyObject);
+                    SetPlayerStates(isSticking: false, isAbleDash: true);
+                    rigid.gravityScale = 8.0f;
+                    audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
+                    StopCoroutine(StickTo());
+                }
+                // 아닐경우 그냥 대쉬
+                StartCoroutine(Dash());
+            }
+            // 마우스 우클릭 이벤트
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (isSticking)
+                {
+                    if(enemyType != EnemyType.None)
+                    {
+                        Destroy(enemyObject);
+                        SetPlayerStates();
+                        ChangePlayer(enemyType);
+                    }
+                }
+            }
+        }
+    }
+
+
+    //쉴드 캐릭터로 변경
+    public void ChangePlayer(EnemyType enemyType)
+    {
+        Init();
+        rigid.gravityScale = 8.0f;
+
+        switch(enemyType){
+            case EnemyType.None:
+                return;
+            case EnemyType.Shield:
+                playerShield.transform.position = tr.position;
+                this.gameObject.SetActive(false);
+                playerShield.SetActive(true);
+                return;
+            case EnemyType.Goggles:
+                playerGoggles.transform.position = tr.position;
+                this.gameObject.SetActive(false);
+                playerGoggles.SetActive(true);
+                return;
+
+        }
+    }
+
+    public void ChangePlayerToGhost()
+    {
+        SetPlayerStates(isAbleDash: true);
+        // 플레이어를 다시 유령으로 변경시 이펙트 생성과 함께 대쉬하기.
+        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
+        Destroy(hitflash, 0.2f);
+        CameraShake.Instance.OnShakeCamera();
+        StartCoroutine(Dash());
+        Debug.Log("정상 작동");
+    }
+
+    // Coroutine
+
     //대쉬
     public IEnumerator Dash()
     {
         //대쉬가 가능할 경우
         if (isAbleDash)
         {
-            anim.speed = 1.0f;
             anim.SetBool("isJumping", false);
             anim.SetBool("isDashing", true);
             audio.PlayOneShot(dashSfx);
-            isDashing = true;
-            isAbleDash = false;
-            isSticking = false;
+            SetPlayerStates(isDashing: true);
             var originalGravityScale = rigid.gravityScale;
             rigid.gravityScale = 0f;
 
@@ -306,68 +342,28 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                 yield break;
             }
 
-            isDashing = false;
+            SetPlayerStates();
             rigid.gravityScale = originalGravityScale;
         }
     }
 
-    
+
 
     //달라붙기
     public IEnumerator StickTo()
     {
-        animSpeed = 1.0f;
         anim.SetBool("isSticking", true);
-        isDashing = false;
-        isAbleDash = true;
+        SetPlayerStates(isSticking: true, isAbleDash: true);
         rigid.gravityScale = 0f;
         rigid.velocity = new Vector2(0, 0);
 
 
         //달라붙기가 종료될 때까지 대기
         yield return new WaitUntil(() => isSticking == false);
+
         anim.SetBool("isSticking", false);
-        GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
+        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
         Destroy(hitflash, 0.2f);
         rigid.gravityScale = 8.0f;
-
-
     }
-
-    //쉴드 캐릭터로 변경
-    public void ChangePlayer(EnemyType enemyType)
-    {
-        Init();
-        rigid.gravityScale = 8.0f;
-
-        switch(enemyType){
-            case EnemyType.None:
-                return;
-            case EnemyType.Shield:
-                playerShield.transform.position = this.transform.position;
-                this.gameObject.SetActive(false);
-                playerShield.SetActive(true);
-                return;
-            case EnemyType.Goggles:
-                playerGoggles.transform.position = this.transform.position;
-                this.gameObject.SetActive(false);
-                playerGoggles.SetActive(true);
-                return;
-
-        }
-        
-
-    }
-
-    public void ChangePlayerToGhost()
-    {
-        GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
-        Destroy(hitflash, 0.2f);
-        isPossesing = false;
-        CameraShake.Instance.OnShakeCamera();
-        StartCoroutine(Dash());
-    }
-
-    public bool IsPossesing() { return isPossesing; }
-    public void setPossesing(bool isPossesing) { this.isPossesing = isPossesing; }
 }

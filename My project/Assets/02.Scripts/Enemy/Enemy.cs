@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     public EnemyType EnemyType;
     private Animator anim;
-
+    private CapsuleCollider2D coll;
     private PlayerGhostController playerGhostControllerScr;
 
     [SerializeField]
@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        coll = GetComponent<CapsuleCollider2D>();
         isDied = false;
         playerGhostControllerScr = GameObject.Find("PlayerGhost").GetComponent<PlayerGhostController>();
     }
@@ -29,6 +30,7 @@ public class Enemy : MonoBehaviour
     {
         anim.SetBool("isDied", true);
         isDied = true;
+        coll.isTrigger = true;
     }
 
     public bool IsDied() { return this.isDied; }

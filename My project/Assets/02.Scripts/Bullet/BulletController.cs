@@ -22,6 +22,7 @@ public class BulletController : MonoBehaviour
     public void generateBlockedBullet()
     {
         Instantiate(blockedBulletPrefab, transform.position, transform.rotation);
+        blockedBulletPrefab.GetComponent<Rigidbody2D>().AddForce(new Vector2(-bulletSpeed, 0.0f));
         Destroy(this.gameObject);
     }
 }

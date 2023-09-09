@@ -5,26 +5,28 @@ using UnityEngine.EventSystems;
 
 public class PlayerShieldController : MonoBehaviour, IPlayerController
 {
-    [SerializeField]
-    private float maxSpeed;
+    public float parryingDuration;
+    public float maxSpeed;
+
     [SerializeField]
     private bool isParrying;
-    [SerializeField]
-    private float parryingDuration;
     [SerializeField]
     private bool isDefending;
     [SerializeField]
     private bool defended;
+    // 쉴드 콜라이더 생성 포지션
+    private Vector2 shieldPosition;
 
     private Rigidbody2D rigid;
     private SpriteRenderer spriteRenderer;
     private Animator anim;
     private CapsuleCollider2D playerCollider;
+    private Transform tr;
+    private Health healthScr;
 
     public GameObject playerGhost;
-    private PlayerGhostController playerGhostControllerScr;
     public GameObject shield;
-
+    private PlayerGhostController playerGhostControllerScr;
     private AudioSource audio;
 
     public AudioClip swingSfx;
@@ -33,7 +35,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         Init();
 
-        SetBasicComponent();
+        SetCashComponent();
     }
 
     private void Update()
@@ -87,21 +89,14 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         if (collider.gameObject.tag == "Enemy")
         {
-            Health healthScr = gameObject.GetComponentInParent<Health>();
-            {
-                healthScr.Damaged(1);
-            }
+            healthScr.Damaged(1);
         }
 
         if(collider.gameObject.tag == "Bullet")
         {
             if (!defended)
             {
-                Health healthScr = gameObject.GetComponentInParent<Health>();
-                {
-                    Debug.Log("관통해서 들어옮.");
-                    healthScr.Damaged(1);
-                }
+                healthScr.Damaged(1);
             }
            
         }
@@ -120,21 +115,27 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         isDefending = false;
         shield.SetActive(false);
 
-        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
-        playerGhostControllerScr.setPossesing(true);
-        audio = GetComponent<AudioSource>();
-
         defended = false;
-    }
 
-    //기본 세팅2
-    public virtual void SetBasicComponent()
+        shieldPosition = new Vector3(0.4263f, 0, 0);
+}
+
+    // 메모리 소모를 줄이기 위한 캐쉬 세팅
+    public virtual void SetCashComponent()
     {
+        // 플레이어 컴포넌트 캐쉬 처리
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         anim = GetComponentInChildren<Animator>();
         playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+        tr = GetComponent<Transform>();
+
+        //Script 캐쉬 처리
+        healthScr = gameObject.GetComponentInParent<Health>();
+        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
+        audio = GetComponent<AudioSource>();
     }
+
     //중력
     public virtual void Gravity()
     {
@@ -178,12 +179,12 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
             if(Input.GetAxisRaw("Horizontal") == 1)
             {
                 spriteRenderer.flipX = true;
-                shield.transform.localPosition = new Vector3(0.4263f, 0, 0);
+                shield.transform.localPosition = shieldPosition;
             }
             else
             {
                 spriteRenderer.flipX = false;
-                shield.transform.localPosition = new Vector3(-0.4263f, 0, 0);
+                shield.transform.localPosition = shieldPosition * -1;
             }
         }
 
@@ -193,7 +194,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         else
             anim.SetBool("isWalking", true);
     }
-
+    // 패링
     public IEnumerator Parrying()
     {
         anim.SetBool("isParrying", true);
@@ -210,7 +211,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         if (defended)
             defended = false;
     }
-
+    // 방어 모드
     public IEnumerator Defending()
     {
         anim.SetBool("isDefending", true);
@@ -228,7 +229,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         Init();
         rigid.gravityScale = 8.0f;
-        playerGhost.transform.position = this.transform.position;
+        playerGhost.transform.position = tr.position;
 
         playerGhost.SetActive(true);
         playerGhostControllerScr.ChangePlayerToGhost();

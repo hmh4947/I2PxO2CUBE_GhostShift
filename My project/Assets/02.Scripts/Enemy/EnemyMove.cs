@@ -45,9 +45,12 @@ public class EnemyMove : MonoBehaviour
                 nextMove = nextMove * -1;
 
             }
-        }
-       
+        } 
+    }
 
+    private void LateUpdate()
+    {
+        rigid.velocity = new Vector2(0, 0);
     }
     private List<int> exclusionList = new List<int>() {0}; //제외할 값
     void Wait()

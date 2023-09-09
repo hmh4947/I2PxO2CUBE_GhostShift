@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
+using UnityEngine.UI;
+
 public class PauseMenu : MonoBehaviour
 {
 
@@ -10,13 +12,13 @@ public class PauseMenu : MonoBehaviour
 
     private new AudioSource audio;
 
-    public AudioClip selectedAudio;
     public AudioClip clickedAudio;
 
     // Start is called before the first frame update
     void Start()
     {
         audio = GetComponent<AudioSource>();
+        audio.playOnAwake = false;
     }
 
     // Update is called once per frame
@@ -36,8 +38,7 @@ public class PauseMenu : MonoBehaviour
         audio.PlayOneShot(clickedAudio);
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        GameIsPaused = false;
-        
+        GameIsPaused = false;     
     }
 
     void Pause()
@@ -63,4 +64,5 @@ public class PauseMenu : MonoBehaviour
         Debug.Log("게임을 종료합니다..");
     }
     
+
 }

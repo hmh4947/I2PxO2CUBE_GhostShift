@@ -10,7 +10,7 @@ public interface IPlayerController
     //기본 세팅
     void Init();
     //기본 세팅2
-    void SetBasicComponent();
+    void SetCashComponent();
     //중력
     public void Gravity();
     //이동
