@@ -47,13 +47,13 @@ public class Background : MonoBehaviour
                     //대쉬할 때 마우스 위치에 따라 회전
                     if (playerToMouseVector.x > 0)
                     {
-                        offset += Time.deltaTime * 0.05f;
+                        offset += Time.deltaTime * 0.06f;
                         render.material.mainTextureOffset = new Vector2(offset, 0);
 
                     }
                     if ((playerToMouseVector.x < 0))
                     {
-                        offset += Time.deltaTime * -0.05f;
+                        offset += Time.deltaTime * -0.06f;
                         render.material.mainTextureOffset = new Vector2(offset, 0);
 
 
@@ -80,12 +80,12 @@ public class Background : MonoBehaviour
 
             if (Input.GetKey("a"))
             {
-                offset += Time.deltaTime * -0.01f;
+                offset += Time.deltaTime * -0.03f;
                 render.material.mainTextureOffset = new Vector2(offset, 0);
             }
             if (Input.GetKey("d"))
             {
-                offset += Time.deltaTime * 0.01f;
+                offset += Time.deltaTime * 0.03f;
                 render.material.mainTextureOffset = new Vector2(offset, 0);
             }
         }
