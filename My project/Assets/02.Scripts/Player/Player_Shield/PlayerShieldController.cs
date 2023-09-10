@@ -8,8 +8,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     public float parryingDuration;
     public float maxSpeed;
 
-    [SerializeField]
-    private bool isParrying;
+    public bool isParrying;
     [SerializeField]
     private bool isDefending;
     [SerializeField]
@@ -27,15 +26,14 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     public GameObject playerGhost;
     public GameObject shield;
     private PlayerGhostController playerGhostControllerScr;
-    private AudioSource audio;
+    private new AudioSource audio;
 
     public AudioClip swingSfx;
     // Start is called before the first frame update
     private void Start()
     {
-        Init();
-
         SetCashComponent();
+        Init();
     }
 
     private void Update()
@@ -97,8 +95,8 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
             if (!defended)
             {
                 healthScr.Damaged(1);
+                Destroy(collider.gameObject);
             }
-           
         }
 
     }
@@ -240,6 +238,4 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         this.defended = defended;
     }
-
-
 }

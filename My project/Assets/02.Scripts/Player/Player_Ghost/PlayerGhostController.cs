@@ -21,9 +21,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     public float dashSpeed;
     public float dashDuration;
     public float jumpPower;
+    public bool isDashing;
 
-    [SerializeField]
-    private bool isDashing;
     [SerializeField]
     private bool isAbleDash;
     [SerializeField]
@@ -41,12 +40,13 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     private GameObject enemyObject;
     private Health healthScr;
+    private Player playerScr;
 
     [SerializeField]
     private EnemyType enemyType;
     private Enemy enemyScr;
 
-    private AudioSource audio;
+    private new AudioSource audio;
 
     public AudioClip jumpSfx;
     public AudioClip dashSfx;
@@ -56,8 +56,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     // Start is called before the first frame update
     private void Start()
     {
-        Init();
         SetCashComponent();
+        Init();
     }
 
     private void Update()
@@ -135,6 +135,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         playercollider= GetComponentInChildren<CapsuleCollider2D>();
         tr = GetComponent<Transform>();
         audio = GetComponent<AudioSource>();
+        playerScr = GetComponentInParent<Player>();
 
         //Script 캐쉬 처리
         healthScr = gameObject.GetComponentInParent<Health>();
@@ -273,11 +274,13 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                 return;
             case EnemyType.Shield:
                 playerShield.transform.position = tr.position;
+                playerScr.IsPossesing = true;
                 this.gameObject.SetActive(false);
                 playerShield.SetActive(true);
                 return;
             case EnemyType.Goggles:
                 playerGoggles.transform.position = tr.position;
+                playerScr.IsPossesing = true;
                 this.gameObject.SetActive(false);
                 playerGoggles.SetActive(true);
                 return;
@@ -288,6 +291,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     public void ChangePlayerToGhost()
     {
         SetPlayerStates(isAbleDash: true);
+        playerScr.IsPossesing = false;
         // 플레이어를 다시 유령으로 변경시 이펙트 생성과 함께 대쉬하기.
         GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
         Destroy(hitflash, 0.2f);

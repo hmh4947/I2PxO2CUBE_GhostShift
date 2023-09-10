@@ -8,7 +8,7 @@ public class ShieldController : MonoBehaviour
     private PlayerShieldController playerShieldControllerScr;
     private BulletController bulletControllerScr;
     public AudioClip parryingSfx;
-    private AudioSource audio;
+    private new AudioSource audio;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,7 +32,11 @@ public class ShieldController : MonoBehaviour
             CameraShake.Instance.OnShakeCamera();
             if(collision.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
             {
-                bulletControllerScr.generateBlockedBullet();
+                if (playerShieldControllerScr.isParrying)
+                {
+                    bulletControllerScr.generateBlockedBullet();
+                }
+                
             }
             Destroy(collision.gameObject);
             playerShieldControllerScr.setDefended(true);

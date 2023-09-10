@@ -4,10 +4,24 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    private bool isPossesing;
     private int HP;
+
+    public bool IsPossesing
+    {
+        get
+        {
+            return isPossesing;
+        }
+        set
+        {
+            this.isPossesing = value;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
+        isPossesing = false;
         HP = 5;
     }
 
@@ -25,4 +39,6 @@ public class Player : MonoBehaviour
         Debug.Log("Damaged!");
         HP -= damage;
     }
+    
+
 }

@@ -31,8 +31,8 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     private void Start()
     {
         originalBackground = background.GetComponent<MeshRenderer>().material;
-        Init();
         SetCashComponent();
+        Init();
     }
 
     private void Update()
@@ -109,6 +109,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
 
         playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
         tileMapSpr = tileMap.GetComponent<Tilemap>();
+        tr = GetComponent<Transform>();
     }
     //ม฿ทย
     public  void Gravity()
