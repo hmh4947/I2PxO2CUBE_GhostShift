@@ -102,15 +102,19 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             }
         }
 
-        if(collision.gameObject.tag == "Bullet")
+        
+    }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.tag == "Bullet")
         {
             healthScr.Damaged(1);
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
         }
-    }
 
-    //기본 세팅
-    public void Init()
+    }
+        //기본 세팅
+        public void Init()
     {
         //Move Variable
         maxSpeed = 14.0f;

@@ -21,16 +21,16 @@ public class ShieldController : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if(collision.tag == "Bullet")
+        if(collider.tag == "Bullet")
         {
             audio.clip = parryingSfx;
             audio.Play();
             GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
             Destroy(hitflash, 0.2f);
             CameraShake.Instance.OnShakeCamera();
-            if(collision.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+            if(collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
             {
                 if (playerShieldControllerScr.isParrying)
                 {
@@ -38,7 +38,7 @@ public class ShieldController : MonoBehaviour
                 }
                 
             }
-            Destroy(collision.gameObject);
+            Destroy(collider.gameObject);
             playerShieldControllerScr.setDefended(true);
         }
     }

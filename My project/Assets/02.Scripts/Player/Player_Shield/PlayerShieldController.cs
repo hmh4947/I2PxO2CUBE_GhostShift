@@ -83,19 +83,23 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnTriggerEnter2D(Collider2D collider)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collider.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             healthScr.Damaged(1);
         }
 
-        if(collider.gameObject.tag == "Bullet")
+    }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "Bullet")
         {
             if (!defended)
             {
                 healthScr.Damaged(1);
                 Destroy(collider.gameObject);
+
             }
         }
 
