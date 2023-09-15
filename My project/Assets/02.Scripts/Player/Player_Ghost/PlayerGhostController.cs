@@ -245,6 +245,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                     SetPlayerStates(isSticking: false, isAbleDash: true);
                     rigid.gravityScale = 8.0f;
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
+                    StartCoroutine(GenerateEffects());
                     StopCoroutine(StickTo());
                 }
                 // 아닐경우 그냥 대쉬
@@ -297,9 +298,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         SetPlayerStates(isAbleDash: true);
         playerScr.IsPossesing = false;
         // 플레이어를 다시 유령으로 변경시 이펙트 생성과 함께 대쉬하기.
-        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
-        Destroy(hitflash, 0.2f);
-        CameraShake.Instance.OnShakeCamera();
+        StartCoroutine(GenerateEffects());
         StartCoroutine(Dash());
         Debug.Log("정상 작동");
     }
@@ -370,8 +369,16 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         yield return new WaitUntil(() => isSticking == false);
 
         anim.SetBool("isSticking", false);
-        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
-        Destroy(hitflash, 0.2f);
         rigid.gravityScale = 8.0f;
     }
+
+    public IEnumerator GenerateEffects()
+    {
+        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
+        CameraShake.Instance.OnShakeCamera();
+        yield return new WaitForSeconds(0.2f);
+
+        Destroy(hitflash);
+    }
+
 }

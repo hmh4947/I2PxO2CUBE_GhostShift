@@ -1561,9 +1561,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 470033256}
-  targetObject: {fileID: 0}
-  targetObject1: {fileID: 0}
-  targetObject2: {fileID: 0}
+  targetObject: {fileID: 470033255}
+  targetObject1: {fileID: 619479678}
+  targetObject2: {fileID: 1365336671}
 --- !u!114 &654066856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1747,7 +1747,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 753862376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.11, y: -2.71, z: 0}
+  m_LocalPosition: {x: 5.11, y: -2.71, z: -1}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7347,7 +7347,7 @@ MonoBehaviour:
   playerGhost: {fileID: 470033255}
   tileMap: {fileID: 926214124}
   background: {fileID: 392217190}
-  NVDBackground: {fileID: 2100000, guid: 22d53b4105a88a044be4c956ca6fc4ef, type: 2}
+  NVDBackground: {fileID: 2100000, guid: 12506f432b37b734d8891e1be04fd863, type: 2}
 --- !u!50 &1365336674
 Rigidbody2D:
   serializedVersion: 4
@@ -7908,8 +7908,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb892e099665fe942b73402fe655274b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minX: -3.3
-  maxX: 3.3
+  minX: -5.3
+  maxX: 5.3
   minY: -1.65
   maxY: 1.65
 --- !u!1 &2114998535

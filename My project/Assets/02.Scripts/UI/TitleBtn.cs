@@ -16,7 +16,7 @@ public class TitleBtn : MonoBehaviour
     }
     public void StartBtn()
     {
-        SceneManager.LoadScene("Map1khd");
+        SceneManager.LoadScene("Map1");
         audio.PlayOneShot(clickedAudio);
     }
     public void OptionBtn()
