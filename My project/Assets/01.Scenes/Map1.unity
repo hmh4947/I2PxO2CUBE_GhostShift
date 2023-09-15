@@ -1561,6 +1561,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 470033256}
+  targetObject: {fileID: 470033255}
+  targetObject1: {fileID: 619479678}
+  targetObject2: {fileID: 1365336671}
 --- !u!114 &654066856
 MonoBehaviour:
   m_ObjectHideFlags: 0
