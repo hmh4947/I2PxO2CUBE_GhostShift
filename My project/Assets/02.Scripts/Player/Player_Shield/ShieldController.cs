@@ -25,21 +25,22 @@ public class ShieldController : MonoBehaviour
     {
         if(collider.tag == "Bullet")
         {
+            playerShieldControllerScr.setDefended(true);
             audio.clip = parryingSfx;
             audio.Play();
             GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
             Destroy(hitflash, 0.2f);
             CameraShake.Instance.OnShakeCamera();
-            if(collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+            if (playerShieldControllerScr.isParrying)
             {
-                if (playerShieldControllerScr.isParrying)
+                if (collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
                 {
                     bulletControllerScr.generateBlockedBullet();
                 }
-                
+
             }
             Destroy(collider.gameObject);
-            playerShieldControllerScr.setDefended(true);
+
         }
     }
 }

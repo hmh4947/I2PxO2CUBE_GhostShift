@@ -5,6 +5,9 @@ using UnityEngine.Rendering.Universal;
 public class VolumeMove : MonoBehaviour
 {
     public Transform player; // 플레이어 Transform
+    public GameObject targetObject;
+    public GameObject targetObject1;//활성화 상태 검사
+    public GameObject targetObject2;
 
     Volume volume;
     Vignette vignette;
@@ -21,6 +24,56 @@ public class VolumeMove : MonoBehaviour
 
     private void Update()
     {
+        if (targetObject.activeSelf)
+        {
+            GameObject playerObject = GameObject.Find("Player");
+
+            if (playerObject != null)
+            {
+                //자식 오브젝트를 찾음
+                Transform playerGhost = playerObject.transform.Find("PlayerGhost");
+
+                if (playerGhost != null)
+                {
+                    // 찾은 "PlayerGhost"를 새로운 player으로 설정
+                    player = playerGhost;
+                }
+            }
+        }
+        if (targetObject1.activeSelf)
+        {
+            GameObject playerObject = GameObject.Find("Player");
+
+            if (playerObject != null)
+            {
+                //자식 오브젝트를 찾음
+                Transform playerShield = playerObject.transform.Find("PlayerShield");
+
+                if (playerShield != null)
+                {
+                    // 찾은 "PlayerShield"를 새로운 player으로 설정
+                    player = playerShield;
+                }
+            }
+        }
+        if (targetObject2.activeSelf)
+        {
+            GameObject playerObject = GameObject.Find("Player");
+
+            if (playerObject != null)
+            {
+                //자식 오브젝트를 찾음
+                Transform playerGoggles = playerObject.transform.Find("PlayerGoggles");
+
+                if (playerGoggles != null)
+                {
+                    // 찾은 "PlayerGoggles"를 새로운 player으로 설정
+                    player = playerGoggles;
+                }
+            }
+        }
+
+
         if (player != null && vignette != null)
         {
             // 플레이어 위치에 따라 Vignette의 Center 값을 업데이트

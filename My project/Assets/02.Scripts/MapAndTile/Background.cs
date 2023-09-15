@@ -63,13 +63,13 @@ public class Background : MonoBehaviour
     {
         if (playerRigid.velocity.x > 0.5)
         {
-            offset += Time.deltaTime * 0.06f;
+            offset += Time.deltaTime * 0.03f;
             render.material.mainTextureOffset = new Vector2(offset, 0);
 
         }
         else if (playerRigid.velocity.x < -0.5)
         {
-            offset += Time.deltaTime * -0.06f;
+            offset += Time.deltaTime * -0.03f;
             render.material.mainTextureOffset = new Vector2(offset, 0);
         }
         else
