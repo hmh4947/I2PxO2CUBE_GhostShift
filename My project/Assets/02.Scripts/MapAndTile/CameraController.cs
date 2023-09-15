@@ -38,12 +38,12 @@ public class CameraController : MonoBehaviour
             if (playerObject != null)
             {
                //자식 오브젝트를 찾음
-                Transform playerGhoset = playerObject.transform.Find("PlayerGhoset");
+                Transform playerGhost = playerObject.transform.Find("PlayerGhost");
 
-                if (playerGhoset != null)
+                if (playerGhost != null)
                 {
-                    // 찾은 "PlayerGhoset"를 새로운 target으로 설정
-                    target = playerGhoset;
+                    // 찾은 "PlayerGhost"를 새로운 target으로 설정
+                    target = playerGhost;
                 }
             }
         }
