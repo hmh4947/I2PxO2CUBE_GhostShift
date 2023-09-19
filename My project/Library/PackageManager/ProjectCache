@@ -5,26 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-<<<<<<< Updated upstream:My project/Library/PackageManager/ProjectCache
-      ticks: 638307135356968353
-    m_Hash: 234486457
-=======
-      ticks: 638281005077775184
-    m_Hash: 2117017681
->>>>>>> Stashed changes:Library/PackageManager/ProjectCache
+      ticks: 638307266600433872
+    m_Hash: 1663042875
   m_LockFileStatus:
     m_FilePath: C:/GitHub/I2PxO2CUBE_GhostShift/My project/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-<<<<<<< Updated upstream:My project/Library/PackageManager/ProjectCache
-      ticks: 638307135357168923
-    m_Hash: 425105587
-=======
-      ticks: 638281005077785177
-    m_Hash: 1123173110
->>>>>>> Stashed changes:Library/PackageManager/ProjectCache
+      ticks: 638307266600438924
+    m_Hash: 3051711143
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
