@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PauseMenu
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: 41765848a3e19c043a0c1beab2aaf94a, type: 3}
+    - {fileID: 2800000, guid: c4b5c52aff4625446945b0a4c6f9ca5b, type: 3}
+    - {fileID: 2800000, guid: 7455481934e7d3b44af50a270a253e39, type: 3}
+    - {fileID: 2800000, guid: d35940000b09ca443b0613b5c3a480c0, type: 3}
+    - {fileID: 2800000, guid: 5d73ca81eec82b74ea6308a1daa94683, type: 3}
+    - {fileID: 2800000, guid: 874ddea9f89d1884088eedf35231f0ee, type: 3}
+    - {fileID: 2800000, guid: b8d6ec7425fffbc46861dc279d332733, type: 3}
+    - {fileID: 2800000, guid: a2bcebb3a31b6c444b180cd8786af94a, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: -2071552189582680791, guid: d35940000b09ca443b0613b5c3a480c0, type: 3}
+  - {fileID: -8646036093092266157, guid: 5d73ca81eec82b74ea6308a1daa94683, type: 3}
+  - {fileID: 2108586137638134208, guid: a2bcebb3a31b6c444b180cd8786af94a, type: 3}
+  - {fileID: 5398283193359031274, guid: b8d6ec7425fffbc46861dc279d332733, type: 3}
+  - {fileID: -7176300867611961145, guid: 41765848a3e19c043a0c1beab2aaf94a, type: 3}
+  - {fileID: -4781373940957465942, guid: 7455481934e7d3b44af50a270a253e39, type: 3}
+  - {fileID: 9121520143057728018, guid: 874ddea9f89d1884088eedf35231f0ee, type: 3}
+  - {fileID: 7667203520454579612, guid: c4b5c52aff4625446945b0a4c6f9ca5b, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - exit_pressed_0
+  - option_0
+  - quit_pressed_0
+  - quit_0
+  - continue_0
+  - exit_0
+  - option_pressed_0
+  - continue_pressed_0
+  m_RenderDataMap: {}
+  m_Tag: PauseMenu
+  m_IsVariant: 0
