@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 public class VolumeMove : MonoBehaviour
 {
@@ -8,21 +9,51 @@ public class VolumeMove : MonoBehaviour
     public GameObject targetObject;
     public GameObject targetObject1;//활성화 상태 검사
     public GameObject targetObject2;
-
+    public GameObject volumeObj;
+    
     Volume volume;
     Vignette vignette;
 
+  
     private void Start()
     {
+       
         volume = GetComponent<Volume>();
         if (volume.profile.TryGet(out vignette))
         {
             // 시작할 때 초기 Center 값을 저장
             vignette.center.value = new Vector2(0.5f, 0.5f);
         }
+
+        
     }
 
     private void Update()
+    {
+      //  string currentSceneName = SceneManager.GetActiveScene().name;
+        VolumeTarget();
+        /* if (currentSceneName == "Map2")
+         {
+             GameObject playerObject = GameObject.FindWithTag("Player");
+             if (playerObject != null)
+             {
+                // Debug.Log(SceneManager.GetActiveScene().name);
+                 volumeObj.SetActive(true);
+                 VolumeTarget();
+             }
+
+
+         }
+         else
+         {
+
+             Debug.Log(SceneManager.GetActiveScene().name);
+             volumeObj.SetActive(false);
+
+         }*/
+    }
+
+    public void VolumeTarget()
     {
         if (targetObject.activeSelf)
         {
