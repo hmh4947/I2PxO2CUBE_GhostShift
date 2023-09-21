@@ -5,15 +5,27 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private int HP;
-    [SerializeField] private int numOfHearts;
+    [SerializeField] 
+    private int HP;
+    [SerializeField] 
+    private int numOfHearts;
+
+    // 무적 상태에 돌입했는지 확인하는 bool 변수
+    private bool isInvincible;
+    // 무적시간
+    public float invincibleTime;
+    // 깜빡이는 시간
+    public float blinkingTime;
 
     public Image[] hearts;
     public Sprite fulltHeart;
     public Sprite emptyHeart;
+
+    private SpriteRenderer playerSpr;
     // Start is called before the first frame update
     void Start()
     {
+        isInvincible = false;
         HP = 4;
         numOfHearts = 5;
     }
@@ -53,12 +65,39 @@ public class Health : MonoBehaviour
     }
     public void Damaged(int damage)
     {
-        Debug.Log("Damaged!");
-        Debug.Log(HP);
-        HP -= damage;
+        if (!isInvincible)
+        {
+            HP -= damage;
+            StartCoroutine(Invincible());
+        }
+
     }
     public void Healed(int health)
     {
         HP += health;
+    }
+
+    public IEnumerator Invincible()
+    {
+        isInvincible = true;
+        StartCoroutine(Blinking());
+        yield return new WaitForSeconds(invincibleTime);
+
+        isInvincible = false;
+    }
+
+    public IEnumerator Blinking()
+    {
+        playerSpr = GetComponentInChildren<SpriteRenderer>();
+        while (isInvincible)
+        {
+            playerSpr.color = new Color32(255, 255, 255, 20);
+
+            yield return new WaitForSeconds(blinkingTime);
+
+            playerSpr.color = new Color32(255, 255, 255, 255);
+
+            yield return new WaitForSeconds(blinkingTime);
+        }
     }
 }

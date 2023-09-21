@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private bool isPossesing;
+
+
+
+
+
+    // 플레이어 HP
     private int HP;
+
+    // 플레이어 빙의 상태
+    private bool isPossesing;
 
     public bool IsPossesing
     {
@@ -28,17 +36,12 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public int getHP() {
         return HP;
     }
-    public void Damaged(int damage)
-    {
-        Debug.Log("Damaged!");
-        HP -= damage;
-    }
     
-
+    // 무적 시간
 }
