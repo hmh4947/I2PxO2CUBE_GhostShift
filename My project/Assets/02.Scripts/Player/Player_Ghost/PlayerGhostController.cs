@@ -66,7 +66,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         Jump();
 
         HandleMouseInput();
-        
     }
 
     // Update is called once per frame
@@ -165,6 +164,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     {
         if (rigid.velocity.y < 0)
         {
+            anim.SetBool("isJumping", true);
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
             if (rayHit.collider != null)
@@ -338,8 +338,8 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             // 충돌체크
             yield return new WaitForSeconds(dashDuration);
 
-            anim.SetBool("isJumping", true);
             anim.SetBool("isDashing", false);
+
 
 
             //적에게 달라붙은 상태일 경우 바로 코루틴 종료

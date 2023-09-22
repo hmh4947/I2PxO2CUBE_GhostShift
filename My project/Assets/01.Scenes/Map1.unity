@@ -6944,6 +6944,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 0
   numOfHearts: 0
+  invincibleTime: 2
+  blinkingTime: 0.2
   hearts:
   - {fileID: 794835020}
   - {fileID: 544731930}
