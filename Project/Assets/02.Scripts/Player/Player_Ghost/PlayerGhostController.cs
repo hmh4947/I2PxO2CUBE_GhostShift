@@ -44,7 +44,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
     [SerializeField]
     private EnemyType enemyType;
-    private Enemy enemyScr;
 
     private new AudioSource audio;
 
@@ -143,7 +142,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
 
         //Script 캐쉬 처리
         healthScr = gameObject.GetComponentInParent<Health>();
-        enemyScr = GameObject.Find("Enemy").GetComponent<Enemy>();
     }
 
 
