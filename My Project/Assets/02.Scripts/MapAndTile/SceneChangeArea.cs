@@ -11,6 +11,7 @@ public class SceneChangeArea : MonoBehaviour
         {
             Debug.Log("Ãæµ¹");         
             GameObject.Find("Canvas").GetComponent<SceneFadeInOut>().Fade();
+
         }
     }
     // Start is called before the first frame update

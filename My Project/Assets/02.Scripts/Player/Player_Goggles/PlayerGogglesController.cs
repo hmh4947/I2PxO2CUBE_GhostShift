@@ -3,22 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
-public class PlayerGogglesController : MonoBehaviour, IPlayerController
+public class PlayerGogglesController : PlayerController
 {
-    [SerializeField]
-    private float maxSpeed;
     [SerializeField]
     private float jumpPower;
     [SerializeField]
     private bool isInNVDModes; // NVD: Night Vision Device
 
-    private Rigidbody2D rigid;
-    private SpriteRenderer spriteRenderer;
-    private Animator anim;
-    private CapsuleCollider2D playerCollider;
-    private Transform tr;
-
-    public GameObject playerGhost;
     public GameObject tileMap;
     public GameObject background;
     private Material originalBackground;
@@ -30,6 +21,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     // Start is called before the first frame update
     private void Start()
     {
+        SetScrCash();
         originalBackground = background.GetComponent<MeshRenderer>().material;
         SetCashComponent();
         Init();
@@ -73,9 +65,9 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collider.gameObject.tag == "Enemy")
         {
             Health healthScr = gameObject.GetComponentInParent<Health>();
             {
@@ -86,7 +78,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     }
 
     //기본 세팅
-    public  void Init()
+    public  override void Init()
     {
         //Move Variable
         maxSpeed = 7.5f;
@@ -100,19 +92,16 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     }
 
     //기본 세팅2
-    public  void SetCashComponent()
+    public  override void SetCashComponent()
     {
-        rigid = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        anim = GetComponentInChildren<Animator>();
-        playerCollider = GetComponentInChildren<CapsuleCollider2D>();
+        base.SetCashComponent();
 
-        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
+        playerGhostControllerScr = GetComponent<PlayerGhostController>();
         tileMapSpr = tileMap.GetComponent<Tilemap>();
         tr = GetComponent<Transform>();
     }
     //중력
-    public  void Gravity()
+    public  override void Gravity()
     {
         if (rigid.velocity.y < 0)
         {
@@ -129,7 +118,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
         }
     }
     //점프
-    public  void Jump()
+    public void Jump()
     {
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
         {
@@ -142,7 +131,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
         }
     }
     //이동
-    public virtual void Move()
+    public override void Move()
     {
         if (!isInNVDModes)
         {
@@ -204,11 +193,7 @@ public class PlayerGogglesController : MonoBehaviour, IPlayerController
     {
         Init();
         rigid.gravityScale = 8.0f;
-        playerGhost.transform.position = tr.position;
-
-        playerGhost.SetActive(true);
-        playerGhostControllerScr.ChangePlayerToGhost();
-        gameObject.SetActive(false);
+        playerScr.ChangePlayer(PlayerType.PLAYERGHOST);
     }
 
 

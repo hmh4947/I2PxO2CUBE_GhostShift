@@ -3,21 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerGhostController : MonoBehaviour, IPlayerController
+public class PlayerGhostController : PlayerController
 {
-    /*
-     * 상태 디자인 패턴 기획중.
-    public enum State
-    {
-        IDLE,
-        MOVE,
-        DASH,
-        JUMP,
-        STICKING
-    }
-    */
 
-    public float maxSpeed;
     public float dashSpeed;
     public float dashDuration;
     public float jumpPower;
@@ -28,24 +16,10 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     [SerializeField]
     private bool isSticking;
 
-    private Rigidbody2D rigid;
-    private SpriteRenderer spriteRenderer;
-    private Animator anim;
-    private CapsuleCollider2D playercollider;
-    private Transform tr;
-
-    public GameObject playerShield;
-    public GameObject playerGoggles;
-    public GameObject hitEffect;
-
     private GameObject enemyObject;
-    private Health healthScr;
-    private Player playerScr;
 
     [SerializeField]
     private EnemyType enemyType;
-
-    private new AudioSource audio;
 
     public AudioClip jumpSfx;
     public AudioClip dashSfx;
@@ -55,6 +29,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
     // Start is called before the first frame update
     private void Start()
     {
+        SetScrCash();
         SetCashComponent();
         Init();
     }
@@ -78,33 +53,31 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collider.tag == "Enemy")
         {
             if (isDashing)
             {
-                if (collision.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                Debug.Log("정상 진입");
+                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
                 {
-                    enemyObject = collision.gameObject;
+                    enemyObject = collider.gameObject;
                     enemy.Died();
-;                   enemyType = enemy.EnemyType;
-                    tr.position = new Vector2(collision.transform.position.x, collision.transform.position.y + 0.5f);
+                    enemyType = enemy.EnemyType;
+                    tr.position = new Vector2(collider.transform.position.x, collider.transform.position.y + 0.5f);
                     StopCoroutine(Dash());
                     StartCoroutine(StickTo());
                 }
-                
+
             }
             else
             {
+                Debug.Log("체력 달기");
                 healthScr.Damaged(1);
             }
         }
-
-        
-    }
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
         if (collider.tag == "Bullet")
         {
             healthScr.Damaged(1);
@@ -112,8 +85,9 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         }
 
     }
-        //기본 세팅
-        public void Init()
+
+    //기본 세팅
+    public override void Init()
     {
         //Move Variable
         maxSpeed = 14.0f;
@@ -128,23 +102,6 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         SetPlayerStates();
     }
 
-    //메모리 소모를 줄이기 위한 캐쉬 세팅
-    public void SetCashComponent()
-    {
-        // 플레이어 컴포넌트 캐쉬 처리
-        rigid = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        anim = GetComponentInChildren<Animator>();
-        playercollider= GetComponentInChildren<CapsuleCollider2D>();
-        tr = GetComponent<Transform>();
-        audio = GetComponent<AudioSource>();
-        playerScr = GetComponentInParent<Player>();
-
-        //Script 캐쉬 처리
-        healthScr = gameObject.GetComponentInParent<Health>();
-    }
-
-
     private void SetPlayerStates(bool isDashing = false, bool isAbleDash = false, bool isSticking = false)
     {
         this.isDashing = isDashing;
@@ -152,14 +109,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         this.isSticking = isSticking;
     }
 
-    /*
-    private void SetPlayerAnimation()
-    {
-
-    }
-    */
-
-    public void Gravity()
+    public override void Gravity()
     {
         if (rigid.velocity.y < 0)
         {
@@ -191,7 +141,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
         }
     }
 
-    public void Move()
+    public override void Move()
     {
 
         //Animation
@@ -242,6 +192,7 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
                     Destroy(enemyObject);
                     SetPlayerStates(isSticking: false, isAbleDash: true);
                     rigid.gravityScale = 8.0f;
+                    // 공격 사운드 2개중 하나 랜덤 출력
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
                     StartCoroutine(GenerateEffects());
                     StopCoroutine(StickTo());
@@ -254,43 +205,42 @@ public class PlayerGhostController : MonoBehaviour, IPlayerController
             {
                 if (isSticking)
                 {
-                    if(enemyType != EnemyType.None)
+                    if(enemyType != EnemyType.NONE)
                     {
                         Destroy(enemyObject);
                         SetPlayerStates();
-                        ChangePlayer(enemyType);
+                        playerScr.ChangePlayer(GetChangePlayerType(enemyType));
                     }
                 }
             }
         }
     }
 
-
-    //쉴드 캐릭터로 변경
-    public void ChangePlayer(EnemyType enemyType)
+    // 적으로부터 변경할 플레이어 타입을 받아오기
+    public PlayerType GetChangePlayerType(EnemyType enemyType) // 인자로 적 타입(종류) 받아오기
     {
-        Init();
-        rigid.gravityScale = 8.0f;
-
-        switch(enemyType){
-            case EnemyType.None:
-                return;
-            case EnemyType.Shield:
-                playerShield.transform.position = tr.position;
-                playerScr.IsPossesing = true;
-                this.gameObject.SetActive(false);
-                playerShield.SetActive(true);
-                return;
-            case EnemyType.Goggles:
-                playerGoggles.transform.position = tr.position;
-                playerScr.IsPossesing = true;
-                this.gameObject.SetActive(false);
-                playerGoggles.SetActive(true);
-                return;
-
+        PlayerType playerType = PlayerType.PLAYERGHOST;
+        switch (enemyType)
+        {               
+            // 적 타입이 방패병일 경우
+            case EnemyType.SHIELD:
+                // 바꿀 타입을 방패로 설정
+                playerType = PlayerType.PLAYERSHIELD;
+                break;
+            // 적 타입이 고글병일 경우
+            case EnemyType.GOGGLES:
+                // 바꿀 타입을 고글로 설정
+                playerType = PlayerType.PLAYERGOGGLES;
+                break;
+            // 적 타입이 청소부일 경우
+            case EnemyType.CLEANER:
+                // 바꿀 타입을 청소부로 설정
+                playerType = PlayerType.PLAYERCLEANER;
+                break;
         }
+        // 플레이어 타입 반환
+        return playerType;
     }
-
     public void ChangePlayerToGhost()
     {
         SetPlayerStates(isAbleDash: true);

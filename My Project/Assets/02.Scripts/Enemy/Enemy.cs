@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
         anim = GetComponent<Animator>();
         coll = GetComponent<CapsuleCollider2D>();
         isDied = false;
-        playerGhostControllerScr = GameObject.Find("PlayerGhost").GetComponent<PlayerGhostController>();
+        playerGhostControllerScr = GameObject.Find("Player").GetComponent<PlayerGhostController>();
     }
 
     // Update is called once per frame

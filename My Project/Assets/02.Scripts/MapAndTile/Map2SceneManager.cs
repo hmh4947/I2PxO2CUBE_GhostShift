@@ -24,14 +24,14 @@ public class Map2SceneManager : MonoBehaviour
              if (currentSceneName == "Map2")
              {
                 objectToDisable.SetActive(true);
-                Debug.Log("현재 씬 이름: " + currentSceneName);
+                //Debug.Log("현재 씬 이름: " + currentSceneName);
  
              }
              else
             {
               
                 objectToDisable.SetActive(false);
-                Debug.Log("현재 씬 이름: " + currentSceneName);
+                //Debug.Log("현재 씬 이름: " + currentSceneName);
               
             }
          }
