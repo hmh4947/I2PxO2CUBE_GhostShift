@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class PlayerCleanerController : PlayerController
 {
+    // 삼키는 범위
     public float swallowRange;
     // 삼키는 중일때 변수
     public bool isSwallowing;
@@ -46,6 +47,7 @@ public class PlayerCleanerController : PlayerController
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        // Enemy타입의 객체와 충돌하게 된다면
         if(collider.tag == "Enemy")
         {
             // 삼키기 중이라면 데미지 X
@@ -61,20 +63,27 @@ public class PlayerCleanerController : PlayerController
                     anim.SetBool("isSwallowed", true);
                     // 적 객체 없애기
                     Destroy(collider.gameObject);
-                    // 적 객체 추가
+                    // 발사할 적 객체 추가
                     swalloedEnemy.Enqueue(enemy.EnemyType);
                     
                 }
                
             }
+            // 삼키는 중이 아니라면
+            else
+            {
+                // 데미지 입기
+                healthScr.Damaged(1);
+            }
         }
+
         
     }
     private void HandleMouseInput() {
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
         if (!EventSystem.current.IsPointerOverGameObject())
         {
-            //삼킴 상태일 경우 플레이어 변경 불가
+            //삼킴 상태일 경우 플레이어 변경 불가 하도록
             if (!isSwallowed)
             {
                 if (Input.GetMouseButtonDown(0))
@@ -84,6 +93,7 @@ public class PlayerCleanerController : PlayerController
                 }
             }
 
+            // 삼킴 상태일 때 마우스 오른쪽 클릭 시 발사 공격 실행
             if (isSwallowed)
             {
                 if (Input.GetMouseButtonDown(1))
@@ -91,13 +101,16 @@ public class PlayerCleanerController : PlayerController
                     Fire(swalloedEnemy.Dequeue());
                 }
             }
+            // 삼킴 상태가 아닐때 마우스 오른쪽 클릭 시
             else
             {
+                // 삼키기
                 if (Input.GetMouseButton(1))
                 {
                     Debug.Log("삼키기 시도");
                     StartCoroutine(Swallow());
                 }
+                //
                 if (Input.GetMouseButtonUp(1))
                 {
 
@@ -143,16 +156,21 @@ public class PlayerCleanerController : PlayerController
                 }
                 while(isSwallowing)
                 {
+                    // 더 이상 에너미가 없으면 코루틴 종료
+                    if (colliderArray[i] == null) {
+                        Debug.Log($"enemy is null");
+                        break;
+                    }
+                    
                     // 적과 플레이어의 방향 벡터를 구하고
                     Vector3 dir = (colliderArray[i].transform.position - transform.position).normalized;
                     // 적의 포지션에 방향 벡터를 더하여 적을 플레이어의 위치로 끌어당김
-                    dir = new Vector3(dir.x * 0.002f, dir.y * 0.002f, dir.z * 0.002f);
+                    dir = new Vector3(dir.x * 0.05f, dir.y * 0.05f, dir.z * 0.05f);
                     colliderArray[i].transform.position -= dir;
 
                     // 한 프레임 제어권 넘겨주기
                     yield return null;
-                }
-                       
+                }       
             }
         }
         // 끌어당김이 종료되면(마우스 오른쪽 홀딩이 종료되면) 코루틴 종료

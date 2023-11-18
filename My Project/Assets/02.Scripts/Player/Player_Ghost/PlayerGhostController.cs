@@ -189,11 +189,13 @@ public class PlayerGhostController : PlayerController
                 // 달라붙은 상태일경우 달라붙기를 해제하고 대쉬
                 if (isSticking)
                 {
+                    // 적 객체 삭제 후 플레이어 상태를 대쉬 상태로 변경 및 중력값 복구
                     Destroy(enemyObject);
                     SetPlayerStates(isSticking: false, isAbleDash: true);
                     rigid.gravityScale = 8.0f;
                     // 공격 사운드 2개중 하나 랜덤 출력
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
+                    // 이펙트 생성 및 달라붙기 코루틴 종료
                     StartCoroutine(GenerateEffects());
                     StopCoroutine(StickTo());
                 }
@@ -205,10 +207,14 @@ public class PlayerGhostController : PlayerController
             {
                 if (isSticking)
                 {
+                    // 적이 빙의 가능한 객체일 경우
                     if(enemyType != EnemyType.NONE)
                     {
+                        // 적 객체 삭제
                         Destroy(enemyObject);
+                        // 플레이어 상태 초기화
                         SetPlayerStates();
+                        // 적 타입에 따른 빙의 실행
                         playerScr.ChangePlayer(GetChangePlayerType(enemyType));
                     }
                 }
@@ -254,20 +260,35 @@ public class PlayerGhostController : PlayerController
     // Coroutine
 
     //대쉬
+    /*
+     * 대쉬 시간동안 중력값을 0으로 설정 후에, 플레이어의 월드 좌표를 스크린 좌표로 변환한 후에 마우스의 스크린 좌표와의 뻴셈연산을
+     * 통해 방향 벡터를 구하고 이를 단위벡터로 변경한다. 그리고 rigid의 velocity(속력)값을 구한 방향 벡터에 속력 값을 곱한 값으로 설정하여
+     * 플레이어가 그 방향으로 대쉬할 수 있도록 설정한다.
+     * 
+     * Raycast를 사용해서 그 방향에 타일맵이 있다면 그냥 앞쪽으로 대쉬할 수 있도록 설정해봐야 할듯함.
+     * */
     public IEnumerator Dash()
     {
         //대쉬가 가능할 경우
         if (isAbleDash)
         {
+            // 대쉬 애니메이션 설정
             anim.SetBool("isJumping", false);
             anim.SetBool("isDashing", true);
+            // 대쉬 효과음 재생
             audio.PlayOneShot(dashSfx);
+            // 플레이어 상태를 대쉬 상태로 변경
             SetPlayerStates(isDashing: true);
+            // 현재 중력값 저장
             var originalGravityScale = rigid.gravityScale;
+            // 중력값을 0으로 변경
             rigid.gravityScale = 0f;
 
+            // 플레이어의 월드 좌표를 스크린 좌표로 변경
             Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+            // 마우스 좌클릭시의 마우스 스크린 좌표
             Vector2 mouseScreenPosition = Input.mousePosition;
+            // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
             Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
             //대쉬할 때 마우스 위치에 따라 회전
@@ -281,11 +302,14 @@ public class PlayerGhostController : PlayerController
                 if (spriteRenderer.flipX == true)
                     spriteRenderer.flipX = false;
             }
+
+            // 지정 방향으로 대쉬(가속력)
             rigid.velocity = playerToMouseVector * dashSpeed;
 
             // 충돌체크
             yield return new WaitForSeconds(dashDuration);
 
+            // 대쉬 애니메이션 종료
             anim.SetBool("isJumping", true);
             anim.SetBool("isDashing", false);
 
@@ -297,7 +321,9 @@ public class PlayerGhostController : PlayerController
                 yield break;
             }
 
+            // 플레이어 상태를 기본 상태로 변경
             SetPlayerStates();
+            // 중력값 다시 설정.
             rigid.gravityScale = originalGravityScale;
         }
     }
@@ -307,6 +333,7 @@ public class PlayerGhostController : PlayerController
     //달라붙기
     public IEnumerator StickTo()
     {
+        // 달라붙기 애니메이션, 상태 설정 및 중력값, 속도 초기화 
         anim.SetBool("isSticking", true);
         SetPlayerStates(isSticking: true, isAbleDash: true);
         rigid.gravityScale = 0f;
@@ -316,16 +343,20 @@ public class PlayerGhostController : PlayerController
         //달라붙기가 종료될 때까지 대기
         yield return new WaitUntil(() => isSticking == false);
 
+        // 달라붙기 애니메이션 종료 및 중력값 복구
         anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
     }
 
+    // 이펙트 생성 코루틴
     public IEnumerator GenerateEffects()
     {
+        // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크
         GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
         CameraShake.Instance.OnShakeCamera();
         yield return new WaitForSeconds(0.2f);
 
+        // 이펙트 게임 오브젝트 삭제
         Destroy(hitflash);
     }
 
