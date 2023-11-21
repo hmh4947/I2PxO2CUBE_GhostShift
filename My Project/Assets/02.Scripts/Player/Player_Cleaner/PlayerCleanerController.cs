@@ -118,6 +118,7 @@ public class PlayerCleanerController : PlayerController
                     if (!isSwallowing)
                     {
                         Debug.Log("삼키기 중단");
+                        anim.SetBool("isSwallowing", false);
                         StopCoroutine(Swallow());
                     }
 
@@ -138,7 +139,8 @@ public class PlayerCleanerController : PlayerController
     // 삼키기
     IEnumerator Swallow()
     {
-
+        // 삼키는 애니메이션 설정
+        anim.SetBool("isSwallowing", true);
         //Physics2D.OverlapCircleAll : 가상의 원을 만들어 추출하려는 반경 이내에 들어와 있는 콜라이더들을 배열 형태로반환하는 함수
         Collider2D[] colliderArray = Physics2D.OverlapCircleAll(transform.position, swallowRange);
         // 콜라이더 배열을 순환하면서
@@ -165,7 +167,7 @@ public class PlayerCleanerController : PlayerController
                     // 적과 플레이어의 방향 벡터를 구하고
                     Vector3 dir = (colliderArray[i].transform.position - transform.position).normalized;
                     // 적의 포지션에 방향 벡터를 더하여 적을 플레이어의 위치로 끌어당김
-                    dir = new Vector3(dir.x * 0.05f, dir.y * 0.05f, dir.z * 0.05f);
+                    dir = new Vector3(dir.x * 0.01f, dir.y * 0.01f, dir.z * 0.01f);
                     colliderArray[i].transform.position -= dir;
 
                     // 한 프레임 제어권 넘겨주기
@@ -173,14 +175,25 @@ public class PlayerCleanerController : PlayerController
                 }       
             }
         }
-        // 끌어당김이 종료되면(마우스 오른쪽 홀딩이 종료되면) 코루틴 종료
-        yield break;
+        // 끌어당김이 종료되면(마우스 오른쪽 홀딩이 종료되면) 애니메이션 및 코루틴 종료,
+
+        if (isSwallowed) {
+            anim.SetBool("isSwallowing", false);
+            yield break;
+        } 
         
     }
 
     // 삼킨 적 발사
     public void Fire(EnemyType enemyType)
     {
+        // 삼킴 상태 해제
+        isSwallowed = false;
+        // 애니메이션 설정(삼킴 상태 해제)
+        anim.SetBool("isSwallowed", false);
+
+        // 발사 상태 및 애니메이션 설정
+        anim.SetBool("Firing", true);
         switch (enemyType)
         {
             case EnemyType.NONE:
@@ -194,9 +207,9 @@ public class PlayerCleanerController : PlayerController
             case EnemyType.CLEANER:
                 break;
         }
-        // 삼킴 상태 해제
-        isSwallowed = false;
-        // 애니메이션 설정(삼킴 상태 해제)
-        anim.SetBool("isSwallowed", false);
+
+        // 애니메이션 해제
+        anim.SetBool("Firing", false);
+        return;
     }
 }
