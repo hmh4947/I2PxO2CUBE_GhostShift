@@ -30,15 +30,17 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isPossesing = false;
-        // 시작 타입을 유령 타입으로 설정
-        //currentPlayer = PlayerType.PLAYERGHOST;
-        currentPlayer = PlayerType.PLAYERCLEANER;
 
         // 캐쉬 설정
         CashScript();
         // 스크립트 설정
         Init();
+
+
+        isPossesing = false;
+        // 시작 타입을 유령 타입으로 설정
+        //currentPlayer = PlayerType.PLAYERGHOST;
+        currentPlayer = PlayerType.PLAYERCLEANER;
     }
 
     // Update is called once per frame
@@ -121,7 +123,7 @@ public class Player : MonoBehaviour
     // 현재 플레이어 캐릭터 비활성화 하는 함수
     private void inactiveCurrentGameObject(PlayerType currPlayer) // 인자로 현재 플레이어 타입을 받아온다.
     {
-        switch (currPlayer)
+        /*switch (currPlayer)
         {
             // 현재 캐릭터가 유령 캐릭터인 경우
             case PlayerType.PLAYERGHOST:
@@ -148,7 +150,7 @@ public class Player : MonoBehaviour
                 playerCleanerControllerScr.enabled = false;
                 break;
 
-        }
+        }*/
     }
 
 }

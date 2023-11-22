@@ -16,7 +16,9 @@ public class PlayerCleanerController : PlayerController
     // 삼킨 적(적타입)을 저장할 큐
     private Queue<EnemyType> swalloedEnemy = new Queue<EnemyType>();
 
-    public Sprite[] enemyDiedSprites;
+    // 적 
+    public Sprite[] enemyDiedBulletSpritePrefabs;
+    public GameObject enemyDiedBulletPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -68,7 +70,8 @@ public class PlayerCleanerController : PlayerController
                     Destroy(collider.gameObject);
                     // 발사할 적 객체 추가
                     swalloedEnemy.Enqueue(enemy.EnemyType);
-                    
+
+                    Debug.Log(enemy.EnemyType);
                 }
                
             }
@@ -96,19 +99,11 @@ public class PlayerCleanerController : PlayerController
                 }
             }
 
-            // 삼킴 상태일 때 마우스 오른쪽 클릭 시 발사 공격 실행
-            if (isSwallowed)
-            {
-                if (Input.GetMouseButtonDown(1))
-                {
-                    Fire(swalloedEnemy.Dequeue());
-                }
-            }
             // 삼킴 상태가 아닐때 마우스 오른쪽 클릭 시
-            else
+            if (!isSwallowed /*|| !anim.GetCurrentAnimatorStateInfo(0).IsName("Fire")*/)
             {
                 // 삼키기
-                if (Input.GetMouseButton(1))
+                if (Input.GetMouseButtonDown(1))
                 {
                     Debug.Log("삼키기 시도");
                     StartCoroutine(Swallow());
@@ -126,6 +121,15 @@ public class PlayerCleanerController : PlayerController
                     }
 
                 }
+            }
+            // 삼킴 상태일 때 마우스 오른쪽 클릭 시 발사 공격 실행
+            else
+            {
+                if (Input.GetMouseButtonDown(1))
+                {
+                    Fire(swalloedEnemy.Dequeue());
+                }
+                
             }
            
         }
@@ -163,8 +167,8 @@ public class PlayerCleanerController : PlayerController
                 }
                 while(isSwallowing)
                 {
-                    // 더 이상 에너미가 없으면 코루틴 종료
-                    if (colliderArray[i] == null) {
+                    // 더 이상 에너미가 없으면 반복문 종료
+                    if (colliderArray[i] == null || isSwallowed) {
                         Debug.Log($"enemy is null");
                         break;
                     }
@@ -172,7 +176,7 @@ public class PlayerCleanerController : PlayerController
                     // 적과 플레이어의 방향 벡터를 구하고
                     Vector3 dir = (colliderArray[i].transform.position - transform.position).normalized;
                     // 적의 포지션에 방향 벡터를 더하여 적을 플레이어의 위치로 끌어당김
-                    dir = new Vector3(dir.x * 0.01f, dir.y * 0.01f, dir.z * 0.01f);
+                    dir = new Vector3(dir.x * 0.4f, dir.y * 0.4f, dir.z * 0.4f);
                     colliderArray[i].transform.position -= dir;
 
                     // 한 프레임 제어권 넘겨주기
@@ -181,7 +185,6 @@ public class PlayerCleanerController : PlayerController
             }
         }
         // 끌어당김이 종료되면(마우스 오른쪽 홀딩이 종료되면) 애니메이션 및 코루틴 종료,
-
         if (isSwallowed) {
             anim.SetBool("isSwallowing", false);
             yield break;
@@ -192,34 +195,38 @@ public class PlayerCleanerController : PlayerController
     // 삼킨 적 발사
     public void Fire(EnemyType enemyType)
     {
-        // 삼킴 상태 해제
-        isSwallowed = false;
-        // 애니메이션 설정(삼킴 상태 해제)
-        anim.SetBool("isSwallowed", false);
-
-        Sprite enemyDiedBullet = enemyDiedSprites[0];
         // 발사 상태 및 애니메이션 설정
-        anim.SetBool("Firing", true);
+        //anim.SetTrigger("Fire");
+        // 흡수한 적 총알 객체 생성
+        GameObject enemyDiedBullet = Instantiate(enemyDiedBulletPrefab, tr.position, tr.rotation);
+        // 스프라이트 받아오기
+        SpriteRenderer enemyDiedBulletSprite = enemyDiedBullet.GetComponent<SpriteRenderer>();
 
         switch (enemyType)
         {
+            // 흡수한 적 객체가 유령타입일 경우 총알을 유령 Died 스프라이트로 변경
             case EnemyType.NONE:
-                enemyDiedBullet = enemyDiedSprites[0];
+                enemyDiedBulletSprite.sprite= enemyDiedBulletSpritePrefabs[0];
                 break;
+            // 흡수한 적 객체가 방패타입일 경우 총알을 방패병 Died 스프라이트로 변경
             case EnemyType.SHIELD:
-                enemyDiedBullet = enemyDiedSprites[1];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[1];
                 break;
+            // 흡수한 적 객체가 고글타입일 경우 총알을 고글 Died 스프라이트로 변경
             case EnemyType.GOGGLES:
-                enemyDiedBullet = enemyDiedSprites[2];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[2];
                 break;
+            // 흡수한 적 객체가 거너타입일 경우 총알을 거너 Died 스프라이트로 변경
             case EnemyType.GUNNER:
-                enemyDiedBullet = enemyDiedSprites[3];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[3];
                 break;
+            // 흡수한 적 객체가 청소부타입일 경우 총알을 청소부 Died 스프라이트로 변경
             case EnemyType.CLEANER:
-                enemyDiedBullet = enemyDiedSprites[4];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[4];
                 break;
         }
 
+        
         // 플레이어의 월드 좌표를 스크린 좌표로 변경
         Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
         // 마우스 좌클릭시의 마우스 스크린 좌표
@@ -227,10 +234,15 @@ public class PlayerCleanerController : PlayerController
         // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
         Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
+        // 총알 발사
+        Rigidbody2D enemyDiedBulletRigid = enemyDiedBullet.GetComponent<Rigidbody2D>();
+        float bulletSpeed = enemyDiedBullet.GetComponent<BulletController>().GetBulletSpeed();
+        enemyDiedBulletRigid.AddForce(playerToMouseVector * bulletSpeed);
 
-        //GameObject enemyBullet = Instantiate(enemyDiedBullet, tr.position, tr.rotation);
-        // 애니메이션 해제
-        anim.SetBool("Firing", false);
+        // 삼킴 상태 해제
+        isSwallowed = false;
+        // 애니메이션 설정(삼킴 상태 해제)
+        anim.SetBool("isSwallowed", false);
         return;
     }
 }
