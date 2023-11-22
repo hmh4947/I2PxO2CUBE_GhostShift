@@ -210,6 +210,30 @@ PrefabInstance:
       propertyPath: swallowRange
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 8863327765376681843, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
+      propertyPath: enemyDiedSprites.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8863327765376681843, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
+      propertyPath: enemyDiedSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 3564308950950368667, guid: c569f4bf93b18fe4fa633e5089224043, type: 3}
+    - target: {fileID: 8863327765376681843, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
+      propertyPath: enemyDiedSprites.Array.data[1]
+      value: 
+      objectReference: {fileID: 1853032627024274074, guid: 5f42d1891436ca04d8bd61f420b0832d, type: 3}
+    - target: {fileID: 8863327765376681843, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
+      propertyPath: enemyDiedSprites.Array.data[2]
+      value: 
+      objectReference: {fileID: -4016436261258332817, guid: cb33f011dfdf5d949b7e4dc38eede0f9, type: 3}
+    - target: {fileID: 8863327765376681843, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
+      propertyPath: enemyDiedSprites.Array.data[3]
+      value: 
+      objectReference: {fileID: 21300000, guid: 104d3dbdc1b46354396f43f0b823eb65, type: 3}
+    - target: {fileID: 8863327765376681843, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
+      propertyPath: enemyDiedSprites.Array.data[4]
+      value: 
+      objectReference: {fileID: 21300000, guid: 104d3dbdc1b46354396f43f0b823eb65, type: 3}
     - target: {fileID: 8863327765376681844, guid: 55d0deef0b1657443a4d3b79970c85a5, type: 3}
       propertyPath: maxSpeed
       value: 14

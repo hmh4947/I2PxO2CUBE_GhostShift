@@ -15,6 +15,9 @@ public class PlayerCleanerController : PlayerController
     //public GameObject enemyDiedObject; 
     // 삼킨 적(적타입)을 저장할 큐
     private Queue<EnemyType> swalloedEnemy = new Queue<EnemyType>();
+
+    public Sprite[] enemyDiedSprites;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -146,6 +149,8 @@ public class PlayerCleanerController : PlayerController
         // 콜라이더 배열을 순환하면서
         for(int i = 0; i < colliderArray.Length; i++)
         {
+            // null이면 continue;
+            if (colliderArray[i] == null) continue;
             // 주위에 에너미가 있으면
             if(colliderArray[i].tag == "Enemy")
             {
@@ -192,22 +197,38 @@ public class PlayerCleanerController : PlayerController
         // 애니메이션 설정(삼킴 상태 해제)
         anim.SetBool("isSwallowed", false);
 
+        Sprite enemyDiedBullet = enemyDiedSprites[0];
         // 발사 상태 및 애니메이션 설정
         anim.SetBool("Firing", true);
+
         switch (enemyType)
         {
             case EnemyType.NONE:
+                enemyDiedBullet = enemyDiedSprites[0];
                 break;
             case EnemyType.SHIELD:
+                enemyDiedBullet = enemyDiedSprites[1];
                 break;
             case EnemyType.GOGGLES:
+                enemyDiedBullet = enemyDiedSprites[2];
                 break;
             case EnemyType.GUNNER:
+                enemyDiedBullet = enemyDiedSprites[3];
                 break;
             case EnemyType.CLEANER:
+                enemyDiedBullet = enemyDiedSprites[4];
                 break;
         }
 
+        // 플레이어의 월드 좌표를 스크린 좌표로 변경
+        Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        // 마우스 좌클릭시의 마우스 스크린 좌표
+        Vector2 mouseScreenPosition = Input.mousePosition;
+        // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
+        Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
+
+
+        //GameObject enemyBullet = Instantiate(enemyDiedBullet, tr.position, tr.rotation);
         // 애니메이션 해제
         anim.SetBool("Firing", false);
         return;
