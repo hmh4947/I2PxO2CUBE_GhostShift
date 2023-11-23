@@ -29,39 +29,7 @@ public class PlayerShieldController : PlayerController
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            float curAniTime = anim.GetCurrentAnimatorStateInfo(0).length;
-            Debug.Log(curAniTime);
-        }
-
-        // 일시정지 메뉴 클릭할 시에 되는걸 방지
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                // 플레이어 바꾸면서 대쉬
-                ChangePlayer();
-            }
-            // 마우스 우클릭 이벤트
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (!isParrying)
-                {
-                    StartCoroutine(Parrying());
-                }
-                    
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                StartCoroutine(Defending());
-            }
-            if (isDefending)
-            {
-                if (Input.GetKeyDown(KeyCode.W))
-                    isDefending = false;
-            }
-        }
+        HandleMouseInput();
     }
 
     // Update is called once per frame
@@ -76,7 +44,10 @@ public class PlayerShieldController : PlayerController
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        // 스크립트가 비활성화 되어 있으면 return
         if (!enabled) return;
+
+        // 충돌 객체가 Enemy
         if (collider.gameObject.tag == "Enemy")
         {
             Debug.Log("쉴드 캐릭터 체력 달기");
@@ -167,6 +138,37 @@ public class PlayerShieldController : PlayerController
             anim.SetBool("isWalking", false);
         else
             anim.SetBool("isWalking", true);
+    }
+
+    private void HandleMouseInput()
+    {
+        // 일시정지 메뉴 클릭할 시에 되는걸 방지
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // 플레이어 바꾸면서 대쉬
+                ChangePlayer();
+            }
+            // 마우스 우클릭 이벤트
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (!isParrying)
+                {
+                    StartCoroutine(Parrying());
+                }
+
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                StartCoroutine(Defending());
+            }
+            if (isDefending)
+            {
+                if (Input.GetKeyDown(KeyCode.W))
+                    isDefending = false;
+            }
+        }
     }
     // 패링
     public IEnumerator Parrying()

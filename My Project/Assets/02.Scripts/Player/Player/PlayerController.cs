@@ -47,8 +47,8 @@ public class PlayerController : MonoBehaviour, IPlayerController
         //Script 캐쉬 처리
         playerScr = GetComponent<Player>();
         healthScr = GetComponent<Health>();
-
     }
+
     public virtual void Gravity()
     { }
     public virtual void Move() {

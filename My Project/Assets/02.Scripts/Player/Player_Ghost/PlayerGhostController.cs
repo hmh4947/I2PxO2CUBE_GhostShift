@@ -114,11 +114,12 @@ public class PlayerGhostController : PlayerController
     {
         if (rigid.velocity.y < 0)
         {
+            anim.SetBool("isJumping", true);
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
             if (rayHit.collider != null)
             {
-                if (rayHit.distance < 1.0f)
+                if (rayHit.distance < 1.5f)
                 {
                     SetPlayerStates(isAbleDash: true);
                     anim.SetBool("isJumping", false);
@@ -274,7 +275,6 @@ public class PlayerGhostController : PlayerController
         if (isAbleDash)
         {
             // 대쉬 애니메이션 설정
-            anim.SetBool("isJumping", false);
             anim.SetBool("isDashing", true);
             // 대쉬 효과음 재생
             audio.PlayOneShot(dashSfx);
@@ -285,13 +285,9 @@ public class PlayerGhostController : PlayerController
             // 중력값을 0으로 변경
             rigid.gravityScale = 0f;
 
-            // 플레이어의 월드 좌표를 스크린 좌표로 변경
-            Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
-            // 마우스 좌클릭시의 마우스 스크린 좌표
-            Vector2 mouseScreenPosition = Input.mousePosition;
-            // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
-            Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
+            Vector2 playerToMouseVector = GetPlayerToMouseUnitVector();
+            
             //대쉬할 때 마우스 위치에 따라 회전
             if (playerToMouseVector.x > 0)
             {
@@ -304,6 +300,13 @@ public class PlayerGhostController : PlayerController
                     spriteRenderer.flipX = false;
             }
 
+            RaycastHit2D rayHit = Physics2D.Raycast(tr.position, playerToMouseVector, dashSpeed, LayerMask.GetMask("Platform"));
+            Debug.DrawRay(transform.position, playerToMouseVector * dashSpeed, Color.blue);
+            if (rayHit.collider != null && playerToMouseVector.y <= 0)
+            {
+                playerToMouseVector.y = 0;
+            }
+
             // 지정 방향으로 대쉬(가속력)
             rigid.velocity = playerToMouseVector * dashSpeed;
 
@@ -311,9 +314,7 @@ public class PlayerGhostController : PlayerController
             yield return new WaitForSeconds(dashDuration);
 
             // 대쉬 애니메이션 종료
-            anim.SetBool("isJumping", true);
             anim.SetBool("isDashing", false);
-
 
             //적에게 달라붙은 상태일 경우 바로 코루틴 종료
             if (isSticking)

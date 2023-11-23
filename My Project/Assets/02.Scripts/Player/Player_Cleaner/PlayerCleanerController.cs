@@ -31,8 +31,10 @@ public class PlayerCleanerController : PlayerController
     }
 
     void FixedUpdate() {
-        // 이동
-        Move();
+        // 삼키는 중이 아닐 경우
+        if(!isSwallowing)
+            // 이동
+            Move();
     }
 
     // Update is called once per frame
@@ -154,10 +156,12 @@ public class PlayerCleanerController : PlayerController
         // 삼키는 애니메이션 설정
         anim.SetBool("isSwallowing", true);
 
+        // 플레이어 이동 방향에 따른 삼키는 방향 설정
         if((spriteRenderer.flipX == false && swallowRange.x > 0) || (spriteRenderer.flipX == true && swallowRange.x < 0))
         {
             swallowRange.x *= -1;
         }
+
         //Physics2D.OverlapAreaAll : 가상의 직사각형을 만들어 추출하려는 반경 이내에 들어와 있는 콜라이더들을 배열 형태로반환하는 함수
         Collider2D[] colliderArray = Physics2D.OverlapAreaAll(transform.position, transform.position + swallowRange);
         // 콜라이더 배열을 순환하면서
@@ -239,15 +243,12 @@ public class PlayerCleanerController : PlayerController
                 break;
         }
 
-        
-        // 플레이어의 월드 좌표를 스크린 좌표로 변경
-        Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
-        // 마우스 좌클릭시의 마우스 스크린 좌표
-        Vector2 mouseScreenPosition = Input.mousePosition;
-        // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
-        Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
-        // 총알 발사
+
+        // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
+        Vector2 playerToMouseVector = GetPlayerToMouseUnitVector();
+
+        // 총알 발사: 총알 프리팹으로 부터 RigidBody를 받아와 마우스 클릭 지점으로 힘을 주어 총알 발사.
         Rigidbody2D enemyDiedBulletRigid = enemyDiedBullet.GetComponent<Rigidbody2D>();
         float bulletSpeed = enemyDiedBullet.GetComponent<BulletController>().GetBulletSpeed();
         enemyDiedBulletRigid.AddForce(playerToMouseVector * bulletSpeed);
