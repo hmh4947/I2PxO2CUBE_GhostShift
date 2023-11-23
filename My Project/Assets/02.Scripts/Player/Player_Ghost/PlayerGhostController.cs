@@ -56,6 +56,7 @@ public class PlayerGhostController : PlayerController
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (!enabled) return;
         if (collider.tag == "Enemy")
         {
             if (isDashing)

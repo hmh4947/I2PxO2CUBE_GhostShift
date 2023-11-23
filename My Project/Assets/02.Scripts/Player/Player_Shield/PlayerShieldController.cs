@@ -76,6 +76,7 @@ public class PlayerShieldController : PlayerController
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (!enabled) return;
         if (collider.gameObject.tag == "Enemy")
         {
             Debug.Log("쉴드 캐릭터 체력 달기");

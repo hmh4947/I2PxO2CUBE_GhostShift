@@ -86,4 +86,17 @@ public class PlayerController : MonoBehaviour, IPlayerController
         else
             anim.SetBool("isWalking", true);
     }
+
+    // 마우스 입력 좌표로부터 플레이어 까지의 방향 벡터 구하기
+    public virtual Vector2 GetPlayerToMouseUnitVector()
+    {
+        // 플레이어의 월드 좌표를 스크린 좌표로 변경
+        Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        // 마우스 좌클릭시의 마우스 스크린 좌표
+        Vector2 mouseScreenPosition = Input.mousePosition;
+        // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
+        Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
+
+        return playerToMouseVector;
+    }
 }

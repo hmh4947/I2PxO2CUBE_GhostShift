@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     private PlayerType currentPlayer;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
 
         // 캐쉬 설정
@@ -39,8 +39,7 @@ public class Player : MonoBehaviour
 
         isPossesing = false;
         // 시작 타입을 유령 타입으로 설정
-        //currentPlayer = PlayerType.PLAYERGHOST;
-        currentPlayer = PlayerType.PLAYERCLEANER;
+        currentPlayer = PlayerType.PLAYERGHOST;
     }
 
     // Update is called once per frame
@@ -72,10 +71,10 @@ public class Player : MonoBehaviour
     public void Init()
     {
         // 유령 타입 스크립트만 활성화하고 나머지는 비활성화.
-        playerGhostControllerScr.enabled = false;
+        playerGhostControllerScr.enabled = true;
         playerShieldControllerScr.enabled = false;
         playerGogglesControllerScr.enabled = false;
-        playerCleanerControllerScr.enabled = true;
+        playerCleanerControllerScr.enabled = false;
     }
     // 플레이어 변경
     public void ChangePlayer(PlayerType player) // 인자로 바꿀 플레이어 타입을 받아온다.
@@ -123,7 +122,7 @@ public class Player : MonoBehaviour
     // 현재 플레이어 캐릭터 비활성화 하는 함수
     private void inactiveCurrentGameObject(PlayerType currPlayer) // 인자로 현재 플레이어 타입을 받아온다.
     {
-        /*switch (currPlayer)
+        switch (currPlayer)
         {
             // 현재 캐릭터가 유령 캐릭터인 경우
             case PlayerType.PLAYERGHOST:
@@ -150,7 +149,7 @@ public class Player : MonoBehaviour
                 playerCleanerControllerScr.enabled = false;
                 break;
 
-        }*/
+        }
     }
 
 }

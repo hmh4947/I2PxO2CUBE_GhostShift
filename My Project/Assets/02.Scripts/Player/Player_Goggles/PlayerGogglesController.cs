@@ -67,6 +67,7 @@ public class PlayerGogglesController : PlayerController
 
     public void OnTriggerEnter2D(Collider2D collider)
     {
+        if (!enabled) return;
         if (collider.gameObject.tag == "Enemy")
         {
             Health healthScr = gameObject.GetComponentInParent<Health>();

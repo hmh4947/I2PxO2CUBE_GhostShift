@@ -6,7 +6,9 @@ using UnityEngine.EventSystems;
 public class PlayerCleanerController : PlayerController
 {
     // 삼키는 범위
-    public float swallowRange;
+    public Vector3 swallowRange;
+    // 삼키는 속도
+    public float swallowSpeed;
     // 삼키는 중일때 변수
     public bool isSwallowing;
     // 삼킴 상태의 변수
@@ -47,13 +49,16 @@ public class PlayerCleanerController : PlayerController
 
         isSwallowed = false;
         isSwallowing = false;
+
+        swallowRange = new Vector3(8.0f, 1.0f, 0.0f);
     }
 
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (!enabled) return;
         // Enemy타입의 객체와 충돌하게 된다면
-        if(collider.tag == "Enemy")
+        if (collider.tag == "Enemy")
         {
             // 삼키기 중이라면 데미지 X
             if (isSwallowing)
@@ -70,14 +75,13 @@ public class PlayerCleanerController : PlayerController
                     Destroy(collider.gameObject);
                     // 발사할 적 객체 추가
                     swalloedEnemy.Enqueue(enemy.EnemyType);
-
-                    Debug.Log(enemy.EnemyType);
                 }
                
             }
             // 삼키는 중이 아니라면
             else
             {
+                Debug.Log("청소부 캐릭터 데미지 입기");
                 // 데미지 입기
                 healthScr.Damaged(1);
             }
@@ -85,6 +89,7 @@ public class PlayerCleanerController : PlayerController
 
         
     }
+ 
     private void HandleMouseInput() {
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
         if (!EventSystem.current.IsPointerOverGameObject())
@@ -148,8 +153,13 @@ public class PlayerCleanerController : PlayerController
     {
         // 삼키는 애니메이션 설정
         anim.SetBool("isSwallowing", true);
-        //Physics2D.OverlapCircleAll : 가상의 원을 만들어 추출하려는 반경 이내에 들어와 있는 콜라이더들을 배열 형태로반환하는 함수
-        Collider2D[] colliderArray = Physics2D.OverlapCircleAll(transform.position, swallowRange);
+
+        if((spriteRenderer.flipX == false && swallowRange.x > 0) || (spriteRenderer.flipX == true && swallowRange.x < 0))
+        {
+            swallowRange.x *= -1;
+        }
+        //Physics2D.OverlapAreaAll : 가상의 직사각형을 만들어 추출하려는 반경 이내에 들어와 있는 콜라이더들을 배열 형태로반환하는 함수
+        Collider2D[] colliderArray = Physics2D.OverlapAreaAll(transform.position, transform.position + swallowRange);
         // 콜라이더 배열을 순환하면서
         for(int i = 0; i < colliderArray.Length; i++)
         {
@@ -176,7 +186,10 @@ public class PlayerCleanerController : PlayerController
                     // 적과 플레이어의 방향 벡터를 구하고
                     Vector3 dir = (colliderArray[i].transform.position - transform.position).normalized;
                     // 적의 포지션에 방향 벡터를 더하여 적을 플레이어의 위치로 끌어당김
-                    dir = new Vector3(dir.x * 0.4f, dir.y * 0.4f, dir.z * 0.4f);
+                    dir = new Vector3(dir.x * 2.0f, dir.y * 2.0f, dir.z * 2.0f) ;
+                    // 끌어당기는 속도 설정
+                    dir *= swallowSpeed * Time.deltaTime;
+                    // 끌어당기기
                     colliderArray[i].transform.position -= dir;
 
                     // 한 프레임 제어권 넘겨주기
@@ -195,8 +208,8 @@ public class PlayerCleanerController : PlayerController
     // 삼킨 적 발사
     public void Fire(EnemyType enemyType)
     {
-        // 발사 상태 및 애니메이션 설정
-        //anim.SetTrigger("Fire");
+        anim.Play("player_cleaner_fire", -1);
+
         // 흡수한 적 총알 객체 생성
         GameObject enemyDiedBullet = Instantiate(enemyDiedBulletPrefab, tr.position, tr.rotation);
         // 스프라이트 받아오기
@@ -238,6 +251,7 @@ public class PlayerCleanerController : PlayerController
         Rigidbody2D enemyDiedBulletRigid = enemyDiedBullet.GetComponent<Rigidbody2D>();
         float bulletSpeed = enemyDiedBullet.GetComponent<BulletController>().GetBulletSpeed();
         enemyDiedBulletRigid.AddForce(playerToMouseVector * bulletSpeed);
+
 
         // 삼킴 상태 해제
         isSwallowed = false;
