@@ -4632,7 +4632,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2454314290191402506, guid: 58ea9b9657bf5804fad54f6f5513397e, type: 3}
       propertyPath: m_Name
-      value: Enemy_Ghost (1)
+      value: Enemy_Cleaner
       objectReference: {fileID: 0}
     - target: {fileID: 2454314290191402508, guid: 58ea9b9657bf5804fad54f6f5513397e, type: 3}
       propertyPath: m_RootOrder
@@ -4640,11 +4640,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2454314290191402508, guid: 58ea9b9657bf5804fad54f6f5513397e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.51
+      value: -6.99
       objectReference: {fileID: 0}
     - target: {fileID: 2454314290191402508, guid: 58ea9b9657bf5804fad54f6f5513397e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4.14
+      value: 2.28
       objectReference: {fileID: 0}
     - target: {fileID: 2454314290191402508, guid: 58ea9b9657bf5804fad54f6f5513397e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -5306,6 +5306,10 @@ PrefabInstance:
     - target: {fileID: 8710044257617913530, guid: d4b8929919dd30643aa15180e8e3a1c9, type: 3}
       propertyPath: m_Name
       value: BulletGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 8710044257617913530, guid: d4b8929919dd30643aa15180e8e3a1c9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4b8929919dd30643aa15180e8e3a1c9, type: 3}

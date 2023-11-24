@@ -301,16 +301,15 @@ public class PlayerGhostController : PlayerController
                     spriteRenderer.flipX = false;
             }
 
-           /* RaycastHit2D rayHit = Physics2D.Raycast(tr.position, playerToMouseVector, dashSpeed, LayerMask.GetMask("Platform"));
-            Debug.DrawRay(transform.position, playerToMouseVector * dashSpeed, Color.blue);
-            if (rayHit.collider != null && playerToMouseVector.y <= 0)
-            {
-                playerToMouseVector.y = 0;
-            }*/
+            /* RaycastHit2D rayHit = Physics2D.Raycast(tr.position, playerToMouseVector, dashSpeed, LayerMask.GetMask("Platform"));
+             Debug.DrawRay(transform.position, playerToMouseVector * dashSpeed, Color.blue);
+             if (rayHit.collider != null && playerToMouseVector.y <= 0)
+             {
+                 playerToMouseVector.y = 0;
+             }*/
 
             // 지정 방향으로 대쉬(가속력)
             rigid.velocity = playerToMouseVector * dashSpeed;
-
             // 충돌체크
             yield return new WaitForSeconds(dashDuration);
 
