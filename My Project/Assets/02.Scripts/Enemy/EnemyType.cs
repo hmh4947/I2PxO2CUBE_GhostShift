@@ -4,8 +4,9 @@ using UnityEngine;
 
 public enum EnemyType
 {
-    None = 0,
-    Shield,
-    Goggles,
-    Gunner
+    NONE = 0,
+    SHIELD,
+    GOGGLES,
+    GUNNER,
+    CLEANER
 }

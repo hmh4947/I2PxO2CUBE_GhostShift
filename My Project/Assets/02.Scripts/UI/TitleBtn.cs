@@ -21,7 +21,9 @@ public class TitleBtn : MonoBehaviour
     }
     public void OptionBtn()
     {
+        SceneManager.LoadScene("BasicMenu");
         audio.PlayOneShot(clickedAudio);
+
     }
     public void ExitBtn()
     {

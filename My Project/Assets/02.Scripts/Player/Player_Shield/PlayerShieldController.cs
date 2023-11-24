@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PlayerShieldController : MonoBehaviour, IPlayerController
+public class PlayerShieldController : PlayerController
 {
-    public float parryingDuration;
-    public float maxSpeed;
+    private float parryingDuration;
 
     public bool isParrying;
     [SerializeField]
@@ -16,61 +15,21 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     // 쉴드 콜라이더 생성 포지션
     private Vector2 shieldPosition;
 
-    private Rigidbody2D rigid;
-    private SpriteRenderer spriteRenderer;
-    private Animator anim;
-    private CapsuleCollider2D playerCollider;
-    private Transform tr;
-    private Health healthScr;
 
-    public GameObject playerGhost;
     public GameObject shield;
-    private PlayerGhostController playerGhostControllerScr;
-    private new AudioSource audio;
 
     public AudioClip swingSfx;
     // Start is called before the first frame update
-    private void Start()
+    void Start()
     {
+        SetScrCash();
         SetCashComponent();
         Init();
     }
 
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            float curAniTime = anim.GetCurrentAnimatorStateInfo(0).length;
-            Debug.Log(curAniTime);
-        }
-
-        // 일시정지 메뉴 클릭할 시에 되는걸 방지
-        if (!EventSystem.current.IsPointerOverGameObject())
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                // 플레이어 바꾸면서 대쉬
-                ChangePlayer();
-            }
-            // 마우스 우클릭 이벤트
-            if (Input.GetMouseButtonDown(1))
-            {
-                if (!isParrying)
-                {
-                    StartCoroutine(Parrying());
-                }
-                    
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                StartCoroutine(Defending());
-            }
-            if (isDefending)
-            {
-                if (Input.GetKeyDown(KeyCode.W))
-                    isDefending = false;
-            }
-        }
+        HandleMouseInput();
     }
 
     // Update is called once per frame
@@ -83,30 +42,30 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         Gravity();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            healthScr.Damaged(1);
-        }
-
-    }
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        // 스크립트가 비활성화 되어 있으면 return
+        if (!enabled) return;
+
+        // 충돌 객체가 Enemy
+        if (collider.gameObject.tag == "Enemy")
+        {
+            Debug.Log("쉴드 캐릭터 체력 달기");
+            healthScr.Damaged(1);
+        }
         if (collider.gameObject.tag == "Bullet")
         {
             if (!defended)
             {
                 healthScr.Damaged(1);
                 Destroy(collider.gameObject);
-
             }
         }
 
     }
 
     //기본 세팅
-    public virtual void Init()
+    public override void Init()
     {
         //Move Variable
         maxSpeed = 7.5f;
@@ -122,24 +81,8 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         shieldPosition = new Vector3(0.4263f, 0, 0);
 }
 
-    // 메모리 소모를 줄이기 위한 캐쉬 세팅
-    public virtual void SetCashComponent()
-    {
-        // 플레이어 컴포넌트 캐쉬 처리
-        rigid = GetComponent<Rigidbody2D>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        anim = GetComponentInChildren<Animator>();
-        playerCollider = GetComponentInChildren<CapsuleCollider2D>();
-        tr = GetComponent<Transform>();
-
-        //Script 캐쉬 처리
-        healthScr = gameObject.GetComponentInParent<Health>();
-        playerGhostControllerScr = playerGhost.GetComponent<PlayerGhostController>();
-        audio = GetComponent<AudioSource>();
-    }
-
     //중력
-    public virtual void Gravity()
+    public override void Gravity()
     {
         if (rigid.velocity.y < 0)
         {
@@ -156,7 +99,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         }
     }
     //이동
-    public virtual void Move()
+    public override void Move()
     {
         if (!isParrying && !isDefending)
         {
@@ -196,6 +139,37 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
         else
             anim.SetBool("isWalking", true);
     }
+
+    private void HandleMouseInput()
+    {
+        // 일시정지 메뉴 클릭할 시에 되는걸 방지
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                // 플레이어 바꾸면서 대쉬
+                ChangePlayer();
+            }
+            // 마우스 우클릭 이벤트
+            if (Input.GetMouseButtonDown(1))
+            {
+                if (!isParrying)
+                {
+                    StartCoroutine(Parrying());
+                }
+
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                StartCoroutine(Defending());
+            }
+            if (isDefending)
+            {
+                if (Input.GetKeyDown(KeyCode.W))
+                    isDefending = false;
+            }
+        }
+    }
     // 패링
     public IEnumerator Parrying()
     {
@@ -231,11 +205,7 @@ public class PlayerShieldController : MonoBehaviour, IPlayerController
     {
         Init();
         rigid.gravityScale = 8.0f;
-        playerGhost.transform.position = tr.position;
-
-        playerGhost.SetActive(true);
-        playerGhostControllerScr.ChangePlayerToGhost();
-        gameObject.SetActive(false);
+        playerScr.ChangePlayer(PlayerType.PLAYERGHOST);
     }
 
     public void setDefended(bool defended)

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneFadeInOut : MonoBehaviour
 {
+    private GameObject playerObj;
     public Image Panel;
     float time = 0f;
     float frameTime = 1f;
@@ -23,6 +24,7 @@ public class SceneFadeInOut : MonoBehaviour
              if (instance != this) 
                  Destroy(this.gameObject); 
          }
+        playerObj = GameObject.Find("Player");
      }
 
      void Strat()
@@ -57,6 +59,8 @@ public class SceneFadeInOut : MonoBehaviour
         }
         time = 0f;
         yield return new WaitForSeconds(0.5f);
+
+        playerObj.transform.position = new Vector3(-15.41f, 0.5f, 0f);
         SceneManager.LoadScene("Map2");
         yield return new WaitForSeconds(0.5f);
         while (alpha.a > 0f)

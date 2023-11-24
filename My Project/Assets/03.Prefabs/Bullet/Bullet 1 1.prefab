@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blockedBulletPrefab: {fileID: 3907930558292127624, guid: 8abaf6dd91138604b80b5773cfbca943, type: 3}
-  bulletSpeed: -150
+  bulletSpeed: 150
 --- !u!50 &6209843288737536166
 Rigidbody2D:
   serializedVersion: 4
@@ -145,4 +145,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 0
