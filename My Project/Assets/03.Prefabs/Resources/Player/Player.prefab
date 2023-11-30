@@ -140,7 +140,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 56759022594739009}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -15, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -353,14 +353,6 @@ MonoBehaviour:
   dashSpeed: 30
   dashDuration: 0.2
   jumpPower: 22
-  isDashing: 0
-  isAbleDash: 0
-  isSticking: 0
-  enemyType: 0
-  jumpSfx: {fileID: 8300000, guid: c1982e8ffb4229c47b874e841d4ea9d3, type: 3}
-  dashSfx: {fileID: 8300000, guid: cfdd0838cd74d654abffbca8fbc4593d, type: 3}
-  attack1Sfx: {fileID: 8300000, guid: 3ba8d34aeee5cfc4a902b042b0dd234d, type: 3}
-  attack2Sfx: {fileID: 8300000, guid: cf7a6b86b0c621b4ab536344d0a76f54, type: 3}
 --- !u!114 &8672611375756627218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -418,11 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 0
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
-  isParrying: 0
-  isDefending: 0
-  defended: 0
   shield: {fileID: 9205740407175976023}
-  swingSfx: {fileID: 8300000, guid: 2cfae31f3d8919f4884f351e374f85fe, type: 3}
 --- !u!1 &782389985180755476
 GameObject:
   m_ObjectHideFlags: 0
@@ -2306,7 +2294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7084556096703506599
 Transform:
   m_ObjectHideFlags: 0

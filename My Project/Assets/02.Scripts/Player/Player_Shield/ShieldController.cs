@@ -32,7 +32,7 @@ public class ShieldController : MonoBehaviour
             GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
             Destroy(hitflash, 0.2f);
             CameraShake.Instance.OnShakeCamera();
-            if (playerShieldControllerScr.isParrying)
+            if (playerShieldControllerScr.IsParrying)
             {
                 if (collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
                 {

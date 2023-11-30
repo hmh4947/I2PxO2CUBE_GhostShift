@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     protected Transform tr;
     protected new AudioSource audio;
     public GameObject hitEffect;
+    protected GameObject hitflash;
     // ------------------------------------------
 
     // 스크립트 캐시처리
@@ -31,6 +32,8 @@ public class PlayerController : MonoBehaviour, IPlayerController
     public virtual void Init()
     {
         maxSpeed = 14.0f;
+        hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
+        hitflash.SetActive(false);
     }
     public virtual void SetCashComponent() {
         // 플레이어 컴포넌트 캐쉬 처리
@@ -40,7 +43,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
         playerCollider = GetComponentInChildren<CapsuleCollider2D>();
         tr = GetComponent<Transform>();
         audio = GetComponent<AudioSource>();
+
     }
+    public virtual void LoadResources() { }
     
     public virtual void SetScrCash()
     {

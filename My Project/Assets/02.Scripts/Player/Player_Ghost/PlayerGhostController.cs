@@ -5,36 +5,38 @@ using UnityEngine.EventSystems;
 
 public class PlayerGhostController : PlayerController
 {
-    #region Public Properties
+    // Field
+    #region PlayerGhost Public Properties
     public float dashSpeed;
     public float dashDuration;
     public float jumpPower;
-    public bool isDashing;
-
     #endregion
-    [SerializeField]
+    #region PlayerGhost Private Properties
+    private bool isDashing;
     private bool isAbleDash;
-    [SerializeField]
     private bool isSticking;
-
     private GameObject enemyObject;
-
-    [SerializeField]
     private EnemyType enemyType;
-
-    public AudioClip jumpSfx;
-    public AudioClip dashSfx;
-    public AudioClip attack1Sfx;
-    public AudioClip attack2Sfx;
-
+    #region PlayerGhost AudioClips
+    private AudioClip jumpSfx;
+    private AudioClip dashSfx;
+    private AudioClip attack1Sfx;
+    private AudioClip attack2Sfx;
+    #endregion
+    #endregion
+    // Method
+    #region PlayerGhost StartAndUpdate
+    #region PlayerGhost Start
     // Start is called before the first frame update
     private void Start()
     {
         SetScrCash();
         SetCashComponent();
+        LoadResources();
         Init();
     }
-
+    #endregion
+    #region PlayerGhost Update
     private void Update()
     {
         //Jump
@@ -43,7 +45,8 @@ public class PlayerGhostController : PlayerController
         HandleMouseInput();
         
     }
-
+    #endregion
+    #region PlayerGhost FixedUpdate
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -53,41 +56,9 @@ public class PlayerGhostController : PlayerController
         //Landing Platform
         Gravity();
     }
-
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (!enabled) return;
-        if (collider.tag == "Enemy")
-        {
-            if (isDashing)
-            {
-                Debug.Log("정상 진입");
-                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
-                {
-                    enemyObject = collider.gameObject;
-                    enemy.Died();
-                    enemyType = enemy.EnemyType;
-                    tr.position = new Vector2(collider.transform.position.x, collider.transform.position.y + 0.5f);
-                    StopCoroutine(Dash());
-                    StartCoroutine(StickTo());
-                }
-
-            }
-            else
-            {
-                Debug.Log("체력 달기");
-                healthScr.Damaged(1);
-            }
-        }
-        if (collider.tag == "Bullet")
-        {
-            healthScr.Damaged(1);
-            Destroy(collider.gameObject);
-        }
-
-    }
-
+    #endregion
+    #endregion
+    #region PlayerGhost Basic Settings
     //기본 세팅
     public override void Init()
     {
@@ -103,14 +74,22 @@ public class PlayerGhostController : PlayerController
 
         SetPlayerStates();
     }
-
+    public override void LoadResources()
+    {
+        jumpSfx = Resources.Load<AudioClip>("PlayerAudios/jump");
+        dashSfx = Resources.Load<AudioClip>("PlayerAudios/dash");
+        attack1Sfx = Resources.Load<AudioClip>("PlayerAudios/attack1");
+        attack2Sfx = Resources.Load<AudioClip>("PlayerAudios/attack2");
+    }
     private void SetPlayerStates(bool isDashing = false, bool isAbleDash = false, bool isSticking = false)
     {
         this.isDashing = isDashing;
         this.isAbleDash = isAbleDash;
         this.isSticking = isSticking;
     }
-
+    #endregion
+    #region PlayerGhost Behavior
+    // 플레이어 중력
     public override void Gravity()
     {
         if (rigid.velocity.y < 0)
@@ -118,6 +97,13 @@ public class PlayerGhostController : PlayerController
             anim.SetBool("isJumping", true);
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+            /*RaycastHit2D rayHit = Physics2D.BoxCast(rigid.position, new Vector2(1.0f, 1.0f), 0, Vector3.down, 0, LayerMask.GetMask("Platform"));
+            Debug.Log(rayHit.collider);*/
+            /*if(Physics.CheckBox(groundCheck.position, groundBox, transform.rotation, groundMask)){
+                Debug.Log("isGrounbded");
+                SetPlayerStates(isAbleDash: true);
+                anim.SetBool("isJumping", false);
+            }*/
             if (rayHit.collider != null)
             {
                 if (rayHit.distance < 1.5f)
@@ -129,7 +115,7 @@ public class PlayerGhostController : PlayerController
             }
         }
     }
-
+    // 플레이어 점프
     public void Jump()
     {
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
@@ -143,7 +129,7 @@ public class PlayerGhostController : PlayerController
 
         }
     }
-
+    // 플레이어 이동
     public override void Move()
     {
 
@@ -180,7 +166,6 @@ public class PlayerGhostController : PlayerController
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
         }
     }
-
     // 마우스 이벤트
     public void HandleMouseInput()
     {
@@ -224,7 +209,38 @@ public class PlayerGhostController : PlayerController
             }
         }
     }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (!enabled) return;
+        if (collider.tag == "Enemy")
+        {
+            if (isDashing)
+            {
+                Debug.Log("정상 진입");
+                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                {
+                    enemyObject = collider.gameObject;
+                    enemy.Died();
+                    enemyType = enemy.EnemyType;
+                    tr.position = new Vector2(collider.transform.position.x, collider.transform.position.y + 0.5f);
+                    StopCoroutine(Dash());
+                    StartCoroutine(StickTo());
+                }
 
+            }
+            else
+            {
+                Debug.Log("체력 달기");
+                healthScr.Damaged(1);
+            }
+        }
+        if (collider.tag == "Bullet")
+        {
+            healthScr.Damaged(1);
+            Destroy(collider.gameObject);
+        }
+
+    }
     // 적으로부터 변경할 플레이어 타입을 받아오기
     public PlayerType GetChangePlayerType(EnemyType enemyType) // 인자로 적 타입(종류) 받아오기
     {
@@ -250,6 +266,7 @@ public class PlayerGhostController : PlayerController
         // 플레이어 타입 반환
         return playerType;
     }
+
     public void ChangePlayerToGhost()
     {
         SetPlayerStates(isAbleDash: true);
@@ -259,7 +276,7 @@ public class PlayerGhostController : PlayerController
         StartCoroutine(Dash());
         Debug.Log("정상 작동");
     }
-
+    #region PlayerGhost Coroutines
     // Coroutine
 
     //대쉬
@@ -329,9 +346,6 @@ public class PlayerGhostController : PlayerController
             rigid.gravityScale = originalGravityScale;
         }
     }
-
-
-
     //달라붙기
     public IEnumerator StickTo()
     {
@@ -349,17 +363,16 @@ public class PlayerGhostController : PlayerController
         anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
     }
-
     // 이펙트 생성 코루틴
     public IEnumerator GenerateEffects()
     {
         // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크
-        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
+        hitflash.SetActive(true);
         CameraShake.Instance.OnShakeCamera();
         yield return new WaitForSeconds(0.2f);
 
-        // 이펙트 게임 오브젝트 삭제
-        Destroy(hitflash);
+        //hitflash.SetActive(false);
     }
-
+    #endregion
+    #endregion
 }

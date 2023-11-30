@@ -12,6 +12,8 @@ public class PlayerGogglesController : PlayerController
 
     public GameObject tileMap;
     public GameObject background;
+
+
     private Material originalBackground;
     public Material NVDBackground;
 
@@ -108,6 +110,7 @@ public class PlayerGogglesController : PlayerController
         {
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+            /*if(Physics.CheckBox(, 0.2f))*/
             if (rayHit.collider != null)
             {
                 if (rayHit.distance < 1.0f)
