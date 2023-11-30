@@ -8,7 +8,7 @@ public class ObjectPooler : MonoBehaviour
     // EffectManager는 단 하나만 존재해야 하므로 static으로 선언
     private static ObjectPooler instance;
     // instance property
-    public ObjectPooler Instance
+    public static ObjectPooler Instance
     {
         get
         {

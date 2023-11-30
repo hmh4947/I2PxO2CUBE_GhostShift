@@ -367,11 +367,11 @@ public class PlayerGhostController : PlayerController
     public IEnumerator GenerateEffects()
     {
         // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크
-        hitflash.SetActive(true);
+        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
         CameraShake.Instance.OnShakeCamera();
         yield return new WaitForSeconds(0.2f);
 
-        //hitflash.SetActive(false);
+        Destroy(hitflash);
     }
     #endregion
     #endregion
