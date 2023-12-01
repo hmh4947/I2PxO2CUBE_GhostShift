@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     // 플레이어 이동속도
     public float maxSpeed;
 
+    public GameObject hitEffect;
     // 컴포넌트의 캐시를 처리할 변수들
     // 모든 플레이어 캐릭터가 공통적으로 가지고 있는 변수이므로, protected를 이용해 상속.
     // 메모리 소모를 최소화 하기 위함.
@@ -17,8 +18,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
     protected CapsuleCollider2D playerCollider;
     protected Transform tr;
     protected new AudioSource audio;
-    public GameObject hitEffect;
+
     // ------------------------------------------
+
 
     // 스크립트 캐시처리
     protected Player playerScr;

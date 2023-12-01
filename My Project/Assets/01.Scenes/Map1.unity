@@ -4700,6 +4700,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 56759022594739009, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
+    - target: {fileID: 56759022594739009, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
@@ -4759,6 +4763,10 @@ PrefabInstance:
       propertyPath: Priority
       value: 137
       objectReference: {fileID: 0}
+    - target: {fileID: 9205740407175976023, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: m_Icon
+      value: 
+      objectReference: {fileID: 7422848464349959988, guid: 0000000000000000d000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
 --- !u!1 &1527795361 stripped
@@ -4780,7 +4788,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1645469373}
-  - component: {fileID: 1645469372}
   - component: {fileID: 1645469371}
   m_Layer: 0
   m_Name: ObjectPooler
@@ -4801,21 +4808,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6e092915d8f39541a99bd2edf0e5bc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectPoolSize: 0
+  effectPoolSize: 1
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
---- !u!114 &1645469372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1645469370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46719f62921864442992dd6687734252, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initPoolSize: 0
 --- !u!4 &1645469373
 Transform:
   m_ObjectHideFlags: 0
