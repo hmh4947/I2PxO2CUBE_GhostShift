@@ -35,6 +35,13 @@ public class PlayerCleanerController : PlayerController
 
     }
 
+    private void OnEnable()
+    {
+        SetScrCash();
+        SetCashComponent();
+        Init();
+
+    }
     void FixedUpdate() {
         // »ïÅ°´Â ÁßÀÌ ¾Æ´Ò °æ¿ì
         if(!isSwallowing)

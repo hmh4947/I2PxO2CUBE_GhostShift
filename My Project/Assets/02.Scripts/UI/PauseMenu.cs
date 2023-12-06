@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -56,12 +57,13 @@ public class PauseMenu : MonoBehaviour
     public void StageExit()
     {
         audio.PlayOneShot(clickedAudio);
-        Debug.Log("스테이지를 나갑니다..");
+        SceneManagerEx.Instance.LoadScene(SceneManagerEx.Scenes.Title);
     }
     public void QuitGame()
     {
         audio.PlayOneShot(clickedAudio);
-        Debug.Log("게임을 종료합니다..");
+        Application.Quit();
+
     }
     
 

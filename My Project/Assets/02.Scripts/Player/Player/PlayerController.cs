@@ -28,7 +28,8 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     void Start()
     {
-
+        // 마우스 커서 밖으로 못나가게 하기
+        Cursor.lockState = CursorLockMode.Confined;
     }
     public virtual void Init()
     {

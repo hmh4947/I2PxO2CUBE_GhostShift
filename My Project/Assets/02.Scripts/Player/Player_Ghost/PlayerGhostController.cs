@@ -35,6 +35,13 @@ public class PlayerGhostController : PlayerController
         LoadResources();
         Init();
     }
+
+    private void OnEnable()
+    {
+        SetScrCash();
+        SetCashComponent();
+        Init();
+    }
     #endregion
     #region PlayerGhost Update
     private void Update()
@@ -97,13 +104,7 @@ public class PlayerGhostController : PlayerController
             anim.SetBool("isJumping", true);
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
-            /*RaycastHit2D rayHit = Physics2D.BoxCast(rigid.position, new Vector2(1.0f, 1.0f), 0, Vector3.down, 0, LayerMask.GetMask("Platform"));
-            Debug.Log(rayHit.collider);*/
-            /*if(Physics.CheckBox(groundCheck.position, groundBox, transform.rotation, groundMask)){
-                Debug.Log("isGrounbded");
-                SetPlayerStates(isAbleDash: true);
-                anim.SetBool("isJumping", false);
-            }*/
+
             if (rayHit.collider != null)
             {
                 if (rayHit.distance < 1.5f)
@@ -132,7 +133,7 @@ public class PlayerGhostController : PlayerController
     // 플레이어 이동
     public override void Move()
     {
-
+        if (isDashing) return;
         //Animation
         if (Mathf.Abs(rigid.velocity.x) < 0.5)
         {
@@ -300,6 +301,10 @@ public class PlayerGhostController : PlayerController
             SetPlayerStates(isDashing: true);
             // 현재 중력값 저장
             var originalGravityScale = rigid.gravityScale;
+            if(rigid.gravityScale == 0)
+            {
+                originalGravityScale = 8.0f;
+            }
             // 중력값을 0으로 변경
             rigid.gravityScale = 0f;
 

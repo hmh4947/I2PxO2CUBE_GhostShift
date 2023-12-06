@@ -38,6 +38,12 @@ public class PlayerShieldController : PlayerController
         Init();
     }
 
+    private void OnEnable()
+    {
+        SetScrCash();
+        SetCashComponent();
+        Init();
+    }
     void Update()
     {
         HandleMouseInput();
@@ -170,6 +176,10 @@ public class PlayerShieldController : PlayerController
             // 마우스 우클릭 이벤트
             if (Input.GetMouseButtonDown(1))
             {
+                if (isDefending)
+                {
+                    return;
+                }
                 if (!isParrying)
                 {
                     StartCoroutine(Parrying());

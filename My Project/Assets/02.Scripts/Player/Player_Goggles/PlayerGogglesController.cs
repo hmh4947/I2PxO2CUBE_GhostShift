@@ -10,20 +10,40 @@ public class PlayerGogglesController : PlayerController
     [SerializeField]
     private bool isInNVDModes; // NVD: Night Vision Device
 
-    public GameObject tileMap;
-    public GameObject background;
+    private GameObject tileMap;
+    private GameObject background;
 
 
     private Material originalBackground;
-    public Material NVDBackground;
+    private Material NVDBackground;
 
     PlayerGhostController playerGhostControllerScr;
     private Tilemap tileMapSpr;
 
+    public bool IsInNVDModes
+    {
+        get
+        {
+            return isInNVDModes;
+        }
+    }
     // Start is called before the first frame update
     private void Start()
     {
         SetScrCash();
+        tileMap = GameObject.Find("Tilemap");
+        background = GameObject.Find("Quad");
+        originalBackground = background.GetComponent<MeshRenderer>().material;
+        NVDBackground = Resources.Load<Material>("Materials/NVDMaterial");
+        SetCashComponent();
+        Init();
+    }
+
+    private void OnEnable()
+    {
+        SetScrCash();
+        tileMap = GameObject.Find("Tilemap");
+        background = GameObject.Find("Quad");
         originalBackground = background.GetComponent<MeshRenderer>().material;
         SetCashComponent();
         Init();
