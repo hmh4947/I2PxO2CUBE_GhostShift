@@ -53,11 +53,13 @@ public class PauseMenu : MonoBehaviour
     {
         audio.PlayOneShot(clickedAudio);
         Debug.Log("옵션창 출력");
+        pauseMenuUI.SetActive(true);
     }
     public void StageExit()
     {
         audio.PlayOneShot(clickedAudio);
         SceneManagerEx.Instance.LoadScene(SceneManagerEx.Scenes.Title);
+        Resume();
     }
     public void QuitGame()
     {

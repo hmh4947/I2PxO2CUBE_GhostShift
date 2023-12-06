@@ -5,13 +5,14 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     public GameObject blockedBulletPrefab;
+    private GameObject hitEffect;
 
     // ÃÑ¾Ë ¼Óµµ
     public float bulletSpeed;
     // Start is called before the first frame update
     public void Start()
     {
-
+        hitEffect = Resources.Load<GameObject>("Effects/FX_Hit");
     }
 
     // Update is called once per frame
@@ -37,8 +38,10 @@ public class BulletController : MonoBehaviour
         {
             if(collision.tag == "Enemy" )
             {
+                GameObject effect = Instantiate(hitEffect, transform.position, transform.rotation);
                 Destroy(collision.gameObject);
                 Destroy(this.gameObject);
+                Destroy(effect, 0.2f);
             }
 
         }

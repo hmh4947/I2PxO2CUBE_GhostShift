@@ -24,6 +24,10 @@ public class PlayerCleanerController : PlayerController
     private Sprite[] enemyDiedBulletSprites;
     // 총알 발사는 오브젝트 풀링으로 구현해보기
     private GameObject enemyDiedBulletPrefab;
+
+    // Audio Clips
+    private AudioClip attack1Sfx;
+    private AudioClip attack2Sfx;
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -83,6 +87,9 @@ public class PlayerCleanerController : PlayerController
         enemyDiedBulletSprites[3] = Resources.Load<Sprite>("EnemyImages/Enemy_Gunner/Enemy_gun_dead");
         // 청소부 타입 적 사망 스프라이트 로드
         enemyDiedBulletSprites[4] = Resources.Load<Sprite>("EnemyImages/Enemy_Gunner/Enemy_gun_dead");
+
+        attack1Sfx = Resources.Load<AudioClip>("PlayerAudios/attack1");
+        attack2Sfx = Resources.Load<AudioClip>("PlayerAudios/attack2");
     }
     private void OnTriggerEnter2D(Collider2D collider)
     {
@@ -241,7 +248,7 @@ public class PlayerCleanerController : PlayerController
     public void Fire(EnemyType enemyType)
     {
         anim.Play("player_cleaner_fire", -1);
-
+        audio.PlayOneShot(attack1Sfx);
         // 흡수한 적 총알 객체 생성
         GameObject enemyDiedBullet = Instantiate(enemyDiedBulletPrefab, tr.position, tr.rotation);
         // 스프라이트 받아오기
