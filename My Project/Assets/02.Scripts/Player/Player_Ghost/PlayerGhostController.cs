@@ -17,6 +17,9 @@ public class PlayerGhostController : PlayerController
     private bool isSticking;
     private GameObject enemyObject;
     private EnemyType enemyType;
+
+    private Vector3 groundPos;
+    private Vector3 groundBoxSize;
     #region PlayerGhost AudioClips
     private AudioClip jumpSfx;
     private AudioClip dashSfx;
@@ -46,10 +49,12 @@ public class PlayerGhostController : PlayerController
     #region PlayerGhost Update
     private void Update()
     {
+
         //Jump
         Jump();
 
         HandleMouseInput();
+
         
     }
     #endregion
@@ -76,10 +81,19 @@ public class PlayerGhostController : PlayerController
         jumpPower = 22.0f;
 
         //Dash Variable
-        dashSpeed = 30.0f;
         dashDuration = 0.2f;
 
-        SetPlayerStates();
+        // Ground Check Pos
+        groundPos = tr.position + new Vector3(0, -0.5f, 0);
+
+        // Ground Check Bound
+        groundBoxSize = new Vector3(1.2f, 0.6f, 0);
+
+        isDashing = false;
+        isAbleDash = true;
+        isSticking = false;
+
+        SetPlayerStates(isDashing, isAbleDash, isSticking);
     }
     public override void LoadResources()
     {
@@ -88,7 +102,7 @@ public class PlayerGhostController : PlayerController
         attack1Sfx = Resources.Load<AudioClip>("PlayerAudios/attack1");
         attack2Sfx = Resources.Load<AudioClip>("PlayerAudios/attack2");
     }
-    private void SetPlayerStates(bool isDashing = false, bool isAbleDash = false, bool isSticking = false)
+    private void SetPlayerStates(bool isDashing, bool isAbleDash, bool isSticking)
     {
         this.isDashing = isDashing;
         this.isAbleDash = isAbleDash;
@@ -102,20 +116,33 @@ public class PlayerGhostController : PlayerController
         if (rigid.velocity.y < 0)
         {
             anim.SetBool("isJumping", true);
-            Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
-            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+            RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0.02f, LayerMask.GetMask("Platform"));
 
             if (rayHit.collider != null)
             {
-                if (rayHit.distance < 1.5f)
+                if (isDashing)
                 {
-                    SetPlayerStates(isAbleDash: true);
-                    anim.SetBool("isJumping", false);
+                    SetPlayerStates(isDashing, isAbleDash, isSticking);
                 }
-
+                else
+                {
+                    SetPlayerStates(isDashing, isAbleDash: true, isSticking);
+                }
+                
+                anim.SetBool("isJumping", false);
             }
         }
     }
+
+    // 땅에 닿았는지 범위 체크를 위한 기즈모
+    private void OnDrawGizmos()
+    {
+        groundPos = tr.position + new Vector3(0, -0.8f, 0);
+        //RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0.02f, LayerMask.GetMask("Platform"));
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(groundPos, groundBoxSize);
+    }
+
     // 플레이어 점프
     public void Jump()
     {
@@ -180,7 +207,7 @@ public class PlayerGhostController : PlayerController
                 {
                     // 적 객체 삭제 후 플레이어 상태를 대쉬 상태로 변경 및 중력값 복구
                     Destroy(enemyObject);
-                    SetPlayerStates(isSticking: false, isAbleDash: true);
+                    SetPlayerStates(isDashing:false, isAbleDash: true, isSticking: false);
                     rigid.gravityScale = 8.0f;
                     // 공격 사운드 2개중 하나 랜덤 출력
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
@@ -202,7 +229,7 @@ public class PlayerGhostController : PlayerController
                         // 적 객체 삭제
                         Destroy(enemyObject);
                         // 플레이어 상태 초기화
-                        SetPlayerStates();
+                        SetPlayerStates(isDashing:false, isAbleDash:true, isSticking:false);
                         // 적 타입에 따른 빙의 실행
                         playerScr.ChangePlayer(GetChangePlayerType(enemyType));
                     }
@@ -227,7 +254,6 @@ public class PlayerGhostController : PlayerController
                     StopCoroutine(Dash());
                     StartCoroutine(StickTo());
                 }
-
             }
             else
             {
@@ -270,7 +296,7 @@ public class PlayerGhostController : PlayerController
 
     public void ChangePlayerToGhost()
     {
-        SetPlayerStates(isAbleDash: true);
+        SetPlayerStates(isDashing:false, isAbleDash: true, isSticking:false);
         playerScr.IsPossesing = false;
         // 플레이어를 다시 유령으로 변경시 이펙트 생성과 함께 대쉬하기.
         StartCoroutine(GenerateEffects());
@@ -298,7 +324,7 @@ public class PlayerGhostController : PlayerController
             // 대쉬 효과음 재생
             audio.PlayOneShot(dashSfx);
             // 플레이어 상태를 대쉬 상태로 변경
-            SetPlayerStates(isDashing: true);
+            SetPlayerStates(isDashing: true, isAbleDash:false, isSticking);
             // 현재 중력값 저장
             var originalGravityScale = rigid.gravityScale;
             if(rigid.gravityScale == 0)
@@ -323,15 +349,9 @@ public class PlayerGhostController : PlayerController
                     spriteRenderer.flipX = false;
             }
 
-            /* RaycastHit2D rayHit = Physics2D.Raycast(tr.position, playerToMouseVector, dashSpeed, LayerMask.GetMask("Platform"));
-             Debug.DrawRay(transform.position, playerToMouseVector * dashSpeed, Color.blue);
-             if (rayHit.collider != null && playerToMouseVector.y <= 0)
-             {
-                 playerToMouseVector.y = 0;
-             }*/
-
             // 지정 방향으로 대쉬(가속력)
             rigid.velocity = playerToMouseVector * dashSpeed;
+            //rigid.MovePosition(playerToMouseVector * dashSpeed);
             // 충돌체크
             yield return new WaitForSeconds(dashDuration);
 
@@ -346,7 +366,7 @@ public class PlayerGhostController : PlayerController
             }
 
             // 플레이어 상태를 기본 상태로 변경
-            SetPlayerStates();
+            SetPlayerStates(isDashing:false, isAbleDash:true, isSticking:false);
             // 중력값 다시 설정.
             rigid.gravityScale = originalGravityScale;
         }
@@ -356,7 +376,7 @@ public class PlayerGhostController : PlayerController
     {
         // 달라붙기 애니메이션, 상태 설정 및 중력값, 속도 초기화 
         anim.SetBool("isSticking", true);
-        SetPlayerStates(isSticking: true, isAbleDash: true);
+        SetPlayerStates(isDashing:false, isAbleDash: true, isSticking: true);
         rigid.gravityScale = 0f;
         rigid.velocity = new Vector2(0, 0);
 

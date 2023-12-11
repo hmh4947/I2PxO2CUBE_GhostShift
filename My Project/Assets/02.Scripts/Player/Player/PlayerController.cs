@@ -97,9 +97,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
     public virtual Vector2 GetPlayerToMouseUnitVector()
     {
         // 플레이어의 월드 좌표를 스크린 좌표로 변경
-        Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        Vector2 playerScreenPosition = transform.position;
         // 마우스 좌클릭시의 마우스 스크린 좌표
-        Vector2 mouseScreenPosition = Input.mousePosition;
+        Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
         Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 

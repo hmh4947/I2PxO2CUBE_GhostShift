@@ -344,6 +344,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5415979100529972320, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415979100529972320, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: m_Size.y
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5415979100529972320, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510776168720424050, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: maxSpeed
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510776168720424050, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+      propertyPath: dashSpeed
+      value: 30
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
 --- !u!1 &1407458550 stripped
