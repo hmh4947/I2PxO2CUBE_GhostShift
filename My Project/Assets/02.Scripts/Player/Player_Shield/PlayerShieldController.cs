@@ -5,28 +5,45 @@ using UnityEngine.EventSystems;
 
 public class PlayerShieldController : PlayerController
 {
+    // Field
+    #region PlayerShield Private Properties
     private float parryingDuration;
-
-    public bool isParrying;
-    [SerializeField]
+    private bool isParrying;
     private bool isDefending;
-    [SerializeField]
     private bool defended;
     // 쉴드 콜라이더 생성 포지션
     private Vector2 shieldPosition;
+    // 패링 사운드
+    private AudioClip swingSfx;
 
-
+    #endregion
+    #region PlayerShiled Public Properties
     public GameObject shield;
-
-    public AudioClip swingSfx;
+    #endregion
+    #region PlayerShiled GetterAndSetter
+    public void setDefended(bool defended)
+    {
+        this.defended = defended;
+    }
+    public bool IsParrying { get; set; }
+    #endregion
+    // Method
+    #region PlayerShiled StartAndUpdate
     // Start is called before the first frame update
     void Start()
     {
         SetScrCash();
         SetCashComponent();
+        LoadResources();
         Init();
     }
 
+    private void OnEnable()
+    {
+        SetScrCash();
+        SetCashComponent();
+        Init();
+    }
     void Update()
     {
         HandleMouseInput();
@@ -41,29 +58,8 @@ public class PlayerShieldController : PlayerController
         //Landing Platform
         Gravity();
     }
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        // 스크립트가 비활성화 되어 있으면 return
-        if (!enabled) return;
-
-        // 충돌 객체가 Enemy
-        if (collider.gameObject.tag == "Enemy")
-        {
-            Debug.Log("쉴드 캐릭터 체력 달기");
-            healthScr.Damaged(1);
-        }
-        if (collider.gameObject.tag == "Bullet")
-        {
-            if (!defended)
-            {
-                healthScr.Damaged(1);
-                Destroy(collider.gameObject);
-            }
-        }
-
-    }
-
+    #endregion
+    #region PlayerSheild Basic Settings
     //기본 세팅
     public override void Init()
     {
@@ -78,9 +74,16 @@ public class PlayerShieldController : PlayerController
 
         defended = false;
 
-        shieldPosition = new Vector3(0.4263f, 0, 0);
+        shieldPosition = new Vector3(0.8263f, 0, 0);
 }
 
+    // 리소스 로드
+    public override void LoadResources()
+    {
+        swingSfx = Resources.Load<AudioClip>("PlayerAudios/swing");
+    }
+    #endregion
+    #region PlayerShield Behavior
     //중력
     public override void Gravity()
     {
@@ -139,7 +142,27 @@ public class PlayerShieldController : PlayerController
         else
             anim.SetBool("isWalking", true);
     }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        // 스크립트가 비활성화 되어 있으면 return
+        if (!enabled) return;
 
+        // 충돌 객체가 Enemy
+        if (collider.gameObject.tag == "Enemy")
+        {
+            Debug.Log("쉴드 캐릭터 체력 달기");
+            healthScr.Damaged(1);
+        }
+        if (collider.gameObject.tag == "Bullet")
+        {
+            if (!defended)
+            {
+                healthScr.Damaged(1);
+                Destroy(collider.gameObject);
+            }
+        }
+
+    }
     private void HandleMouseInput()
     {
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
@@ -153,6 +176,10 @@ public class PlayerShieldController : PlayerController
             // 마우스 우클릭 이벤트
             if (Input.GetMouseButtonDown(1))
             {
+                if (isDefending)
+                {
+                    return;
+                }
                 if (!isParrying)
                 {
                     StartCoroutine(Parrying());
@@ -170,6 +197,7 @@ public class PlayerShieldController : PlayerController
             }
         }
     }
+    #region PlayerShield Coroutines
     // 패링
     public IEnumerator Parrying()
     {
@@ -190,16 +218,20 @@ public class PlayerShieldController : PlayerController
     // 방어 모드
     public IEnumerator Defending()
     {
+        // 방어 애니메이션 설정 및 방패 활성화
         anim.SetBool("isDefending", true);
         isDefending = true;
         shield.SetActive(true);
 
         yield return new WaitUntil(() => isDefending == false);
+
+        // 방어 애니매이션 종료 및 방패 비활성화
         anim.SetBool("isDefending", false);
         isDefending = false;
-
+        shield.SetActive(false);
 
     }
+    #endregion
     //유령 캐릭터로 변경
     public void ChangePlayer()
     {
@@ -207,9 +239,6 @@ public class PlayerShieldController : PlayerController
         rigid.gravityScale = 8.0f;
         playerScr.ChangePlayer(PlayerType.PLAYERGHOST);
     }
+    #endregion
 
-    public void setDefended(bool defended)
-    {
-        this.defended = defended;
-    }
 }

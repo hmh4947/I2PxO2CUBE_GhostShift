@@ -10,18 +10,40 @@ public class PlayerGogglesController : PlayerController
     [SerializeField]
     private bool isInNVDModes; // NVD: Night Vision Device
 
-    public GameObject tileMap;
-    public GameObject background;
+    private GameObject tileMap;
+    private GameObject background;
+
+
     private Material originalBackground;
-    public Material NVDBackground;
+    private Material NVDBackground;
 
     PlayerGhostController playerGhostControllerScr;
     private Tilemap tileMapSpr;
 
+    public bool IsInNVDModes
+    {
+        get
+        {
+            return isInNVDModes;
+        }
+    }
     // Start is called before the first frame update
     private void Start()
     {
         SetScrCash();
+        tileMap = GameObject.Find("Tilemap");
+        background = GameObject.Find("Quad");
+        originalBackground = background.GetComponent<MeshRenderer>().material;
+        NVDBackground = Resources.Load<Material>("Materials/NVDMaterial");
+        SetCashComponent();
+        Init();
+    }
+
+    private void OnEnable()
+    {
+        SetScrCash();
+        tileMap = GameObject.Find("Tilemap");
+        background = GameObject.Find("Quad");
         originalBackground = background.GetComponent<MeshRenderer>().material;
         SetCashComponent();
         Init();
@@ -108,6 +130,7 @@ public class PlayerGogglesController : PlayerController
         {
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
             RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+            /*if(Physics.CheckBox(, 0.2f))*/
             if (rayHit.collider != null)
             {
                 if (rayHit.distance < 1.0f)

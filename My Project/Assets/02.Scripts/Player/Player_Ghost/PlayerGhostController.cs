@@ -5,45 +5,60 @@ using UnityEngine.EventSystems;
 
 public class PlayerGhostController : PlayerController
 {
-    #region Public Properties
+    // Field
+    #region PlayerGhost Public Properties
     public float dashSpeed;
     public float dashDuration;
     public float jumpPower;
-    public bool isDashing;
-
     #endregion
-    [SerializeField]
+    #region PlayerGhost Private Properties
+    private bool isDashing;
     private bool isAbleDash;
-    [SerializeField]
     private bool isSticking;
-
     private GameObject enemyObject;
-
-    [SerializeField]
     private EnemyType enemyType;
 
-    public AudioClip jumpSfx;
-    public AudioClip dashSfx;
-    public AudioClip attack1Sfx;
-    public AudioClip attack2Sfx;
-
+    private Vector3 groundPos;
+    private Vector3 groundBoxSize;
+    #region PlayerGhost AudioClips
+    private AudioClip jumpSfx;
+    private AudioClip dashSfx;
+    private AudioClip attack1Sfx;
+    private AudioClip attack2Sfx;
+    #endregion
+    #endregion
+    // Method
+    #region PlayerGhost StartAndUpdate
+    #region PlayerGhost Start
     // Start is called before the first frame update
     private void Start()
     {
         SetScrCash();
         SetCashComponent();
+        LoadResources();
         Init();
     }
 
+    private void OnEnable()
+    {
+        SetScrCash();
+        SetCashComponent();
+        Init();
+    }
+    #endregion
+    #region PlayerGhost Update
     private void Update()
     {
+
         //Jump
         Jump();
 
         HandleMouseInput();
+
         
     }
-
+    #endregion
+    #region PlayerGhost FixedUpdate
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -53,41 +68,9 @@ public class PlayerGhostController : PlayerController
         //Landing Platform
         Gravity();
     }
-
-
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (!enabled) return;
-        if (collider.tag == "Enemy")
-        {
-            if (isDashing)
-            {
-                Debug.Log("정상 진입");
-                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
-                {
-                    enemyObject = collider.gameObject;
-                    enemy.Died();
-                    enemyType = enemy.EnemyType;
-                    tr.position = new Vector2(collider.transform.position.x, collider.transform.position.y + 0.5f);
-                    StopCoroutine(Dash());
-                    StartCoroutine(StickTo());
-                }
-
-            }
-            else
-            {
-                Debug.Log("체력 달기");
-                healthScr.Damaged(1);
-            }
-        }
-        if (collider.tag == "Bullet")
-        {
-            healthScr.Damaged(1);
-            Destroy(collider.gameObject);
-        }
-
-    }
-
+    #endregion
+    #endregion
+    #region PlayerGhost Basic Settings
     //기본 세팅
     public override void Init()
     {
@@ -98,38 +81,68 @@ public class PlayerGhostController : PlayerController
         jumpPower = 22.0f;
 
         //Dash Variable
-        dashSpeed = 30.0f;
         dashDuration = 0.2f;
 
-        SetPlayerStates();
-    }
+        // Ground Check Pos
+        groundPos = tr.position + new Vector3(0, -0.5f, 0);
 
-    private void SetPlayerStates(bool isDashing = false, bool isAbleDash = false, bool isSticking = false)
+        // Ground Check Bound
+        groundBoxSize = new Vector3(1.2f, 0.6f, 0);
+
+        isDashing = false;
+        isAbleDash = true;
+        isSticking = false;
+
+        SetPlayerStates(isDashing, isAbleDash, isSticking);
+    }
+    public override void LoadResources()
+    {
+        jumpSfx = Resources.Load<AudioClip>("PlayerAudios/jump");
+        dashSfx = Resources.Load<AudioClip>("PlayerAudios/dash");
+        attack1Sfx = Resources.Load<AudioClip>("PlayerAudios/attack1");
+        attack2Sfx = Resources.Load<AudioClip>("PlayerAudios/attack2");
+    }
+    private void SetPlayerStates(bool isDashing, bool isAbleDash, bool isSticking)
     {
         this.isDashing = isDashing;
         this.isAbleDash = isAbleDash;
         this.isSticking = isSticking;
     }
-
+    #endregion
+    #region PlayerGhost Behavior
+    // 플레이어 중력
     public override void Gravity()
     {
         if (rigid.velocity.y < 0)
         {
             anim.SetBool("isJumping", true);
-            Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
-            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+            RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0.02f, LayerMask.GetMask("Platform"));
+
             if (rayHit.collider != null)
             {
-                if (rayHit.distance < 1.5f)
+                if (isDashing)
                 {
-                    SetPlayerStates(isAbleDash: true);
-                    anim.SetBool("isJumping", false);
+                    SetPlayerStates(isDashing, isAbleDash, isSticking);
                 }
-
+                else
+                {
+                    SetPlayerStates(isDashing, isAbleDash: true, isSticking);
+                }
+                
+                anim.SetBool("isJumping", false);
             }
         }
     }
 
+    // 땅에 닿았는지 범위 체크를 위한 기즈모
+    private void OnDrawGizmos()
+    {
+        groundPos = tr.position + new Vector3(0, -0.8f, 0);
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(groundPos, groundBoxSize);
+    }
+
+    // 플레이어 점프
     public void Jump()
     {
         if (Input.GetButtonDown("Jump") && !anim.GetBool("isJumping"))
@@ -143,10 +156,10 @@ public class PlayerGhostController : PlayerController
 
         }
     }
-
+    // 플레이어 이동
     public override void Move()
     {
-
+        if (isDashing) return;
         //Animation
         if (Mathf.Abs(rigid.velocity.x) < 0.5)
         {
@@ -180,7 +193,6 @@ public class PlayerGhostController : PlayerController
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
         }
     }
-
     // 마우스 이벤트
     public void HandleMouseInput()
     {
@@ -194,7 +206,7 @@ public class PlayerGhostController : PlayerController
                 {
                     // 적 객체 삭제 후 플레이어 상태를 대쉬 상태로 변경 및 중력값 복구
                     Destroy(enemyObject);
-                    SetPlayerStates(isSticking: false, isAbleDash: true);
+                    SetPlayerStates(isDashing:false, isAbleDash: true, isSticking: false);
                     rigid.gravityScale = 8.0f;
                     // 공격 사운드 2개중 하나 랜덤 출력
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
@@ -216,7 +228,7 @@ public class PlayerGhostController : PlayerController
                         // 적 객체 삭제
                         Destroy(enemyObject);
                         // 플레이어 상태 초기화
-                        SetPlayerStates();
+                        SetPlayerStates(isDashing:false, isAbleDash:true, isSticking:false);
                         // 적 타입에 따른 빙의 실행
                         playerScr.ChangePlayer(GetChangePlayerType(enemyType));
                     }
@@ -224,7 +236,37 @@ public class PlayerGhostController : PlayerController
             }
         }
     }
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (!enabled) return;
+        if (collider.tag == "Enemy")
+        {
+            if (isDashing)
+            {
+                Debug.Log("정상 진입");
+                if (collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                {
+                    enemyObject = collider.gameObject;
+                    enemy.Died();
+                    enemyType = enemy.EnemyType;
+                    tr.position = new Vector2(collider.transform.position.x, collider.transform.position.y + 0.5f);
+                    StopCoroutine(Dash());
+                    StartCoroutine(StickTo());
+                }
+            }
+            else
+            {
+                Debug.Log("체력 달기");
+                healthScr.Damaged(1);
+            }
+        }
+        if (collider.tag == "Bullet")
+        {
+            healthScr.Damaged(1);
+            Destroy(collider.gameObject);
+        }
 
+    }
     // 적으로부터 변경할 플레이어 타입을 받아오기
     public PlayerType GetChangePlayerType(EnemyType enemyType) // 인자로 적 타입(종류) 받아오기
     {
@@ -250,16 +292,17 @@ public class PlayerGhostController : PlayerController
         // 플레이어 타입 반환
         return playerType;
     }
+
     public void ChangePlayerToGhost()
     {
-        SetPlayerStates(isAbleDash: true);
+        SetPlayerStates(isDashing:false, isAbleDash: true, isSticking:false);
         playerScr.IsPossesing = false;
         // 플레이어를 다시 유령으로 변경시 이펙트 생성과 함께 대쉬하기.
         StartCoroutine(GenerateEffects());
         StartCoroutine(Dash());
         Debug.Log("정상 작동");
     }
-
+    #region PlayerGhost Coroutines
     // Coroutine
 
     //대쉬
@@ -280,9 +323,13 @@ public class PlayerGhostController : PlayerController
             // 대쉬 효과음 재생
             audio.PlayOneShot(dashSfx);
             // 플레이어 상태를 대쉬 상태로 변경
-            SetPlayerStates(isDashing: true);
+            SetPlayerStates(isDashing: true, isAbleDash:false, isSticking);
             // 현재 중력값 저장
             var originalGravityScale = rigid.gravityScale;
+            if(rigid.gravityScale == 0)
+            {
+                originalGravityScale = 8.0f;
+            }
             // 중력값을 0으로 변경
             rigid.gravityScale = 0f;
 
@@ -301,15 +348,9 @@ public class PlayerGhostController : PlayerController
                     spriteRenderer.flipX = false;
             }
 
-            /* RaycastHit2D rayHit = Physics2D.Raycast(tr.position, playerToMouseVector, dashSpeed, LayerMask.GetMask("Platform"));
-             Debug.DrawRay(transform.position, playerToMouseVector * dashSpeed, Color.blue);
-             if (rayHit.collider != null && playerToMouseVector.y <= 0)
-             {
-                 playerToMouseVector.y = 0;
-             }*/
-
             // 지정 방향으로 대쉬(가속력)
             rigid.velocity = playerToMouseVector * dashSpeed;
+            //rigid.MovePosition(playerToMouseVector * dashSpeed);
             // 충돌체크
             yield return new WaitForSeconds(dashDuration);
 
@@ -324,20 +365,17 @@ public class PlayerGhostController : PlayerController
             }
 
             // 플레이어 상태를 기본 상태로 변경
-            SetPlayerStates();
+            SetPlayerStates(isDashing:false, isAbleDash:true, isSticking:false);
             // 중력값 다시 설정.
             rigid.gravityScale = originalGravityScale;
         }
     }
-
-
-
     //달라붙기
     public IEnumerator StickTo()
     {
         // 달라붙기 애니메이션, 상태 설정 및 중력값, 속도 초기화 
         anim.SetBool("isSticking", true);
-        SetPlayerStates(isSticking: true, isAbleDash: true);
+        SetPlayerStates(isDashing:false, isAbleDash: true, isSticking: true);
         rigid.gravityScale = 0f;
         rigid.velocity = new Vector2(0, 0);
 
@@ -349,7 +387,6 @@ public class PlayerGhostController : PlayerController
         anim.SetBool("isSticking", false);
         rigid.gravityScale = 8.0f;
     }
-
     // 이펙트 생성 코루틴
     public IEnumerator GenerateEffects()
     {
@@ -358,8 +395,8 @@ public class PlayerGhostController : PlayerController
         CameraShake.Instance.OnShakeCamera();
         yield return new WaitForSeconds(0.2f);
 
-        // 이펙트 게임 오브젝트 삭제
         Destroy(hitflash);
     }
-
+    #endregion
+    #endregion
 }
