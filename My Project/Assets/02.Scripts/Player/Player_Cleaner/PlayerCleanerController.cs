@@ -20,8 +20,8 @@ public class PlayerCleanerController : PlayerController
     private bool isSwallowed;
     // 삼킨 적(적타입)을 저장할 큐
     private Queue<EnemyType> swalloedEnemy = new Queue<EnemyType>();
-    // 적 
-    private Sprite[] enemyDiedBulletSprites;
+    // enemyDied 스프라이트를 저장할 배열 생성
+    private Sprite[] enemyDiedBulletSprites = new Sprite[5];
     // 총알 발사는 오브젝트 풀링으로 구현해보기
     private GameObject enemyDiedBulletPrefab;
 
@@ -69,8 +69,8 @@ public class PlayerCleanerController : PlayerController
         isSwallowing = false;
 
         swallowRange = new Vector3(8.0f, 1.0f, 0.0f);
-        // enemyDied 스프라이트를 저장할 배열 생성
-        enemyDiedBulletSprites = new Sprite[5];
+        
+
     }
 
     public override void LoadResources()

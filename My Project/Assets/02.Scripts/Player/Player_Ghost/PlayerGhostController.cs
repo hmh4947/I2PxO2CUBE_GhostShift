@@ -138,7 +138,6 @@ public class PlayerGhostController : PlayerController
     private void OnDrawGizmos()
     {
         groundPos = tr.position + new Vector3(0, -0.8f, 0);
-        //RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0.02f, LayerMask.GetMask("Platform"));
         Gizmos.color = Color.red;
         Gizmos.DrawCube(groundPos, groundBoxSize);
     }

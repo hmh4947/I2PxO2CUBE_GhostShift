@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
 
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
+    public GameObject manualUI;
 
     private new AudioSource audio;
 
@@ -38,6 +39,7 @@ public class PauseMenu : MonoBehaviour
     {
         audio.PlayOneShot(clickedAudio);
         pauseMenuUI.SetActive(false);
+        manualUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;     
     }
@@ -52,8 +54,17 @@ public class PauseMenu : MonoBehaviour
     public void Option()
     {
         audio.PlayOneShot(clickedAudio);
-        Debug.Log("옵션창 출력");
-        pauseMenuUI.SetActive(true);
+        if (manualUI.activeSelf)
+        {
+            manualUI.SetActive(false);
+            pauseMenuUI.SetActive(true);
+        }
+        else
+        {
+            manualUI.SetActive(true);
+            pauseMenuUI.SetActive(false);
+        }
+        
     }
     public void StageExit()
     {
