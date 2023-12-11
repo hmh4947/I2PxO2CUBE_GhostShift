@@ -9,6 +9,7 @@ public class PlayerShieldController : PlayerController
     #region PlayerShield Private Properties
     private float parryingDuration;
     private bool isParrying;
+    public bool IsParrying { get; set; }
     private bool isDefending;
     private bool defended;
     // 쉴드 콜라이더 생성 포지션
@@ -25,7 +26,7 @@ public class PlayerShieldController : PlayerController
     {
         this.defended = defended;
     }
-    public bool IsParrying { get; set; }
+
     #endregion
     // Method
     #region PlayerShiled StartAndUpdate

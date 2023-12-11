@@ -2843,4 +2843,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
+  playerBullet: {fileID: 3907930558292127624, guid: 8abaf6dd91138604b80b5773cfbca943, type: 3}
   parryingSfx: {fileID: 8300000, guid: 3ef9450b871ad5d438d79347b2b4b230, type: 3}
