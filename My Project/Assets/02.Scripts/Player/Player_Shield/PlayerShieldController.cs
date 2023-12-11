@@ -218,14 +218,17 @@ public class PlayerShieldController : PlayerController
     // 방어 모드
     public IEnumerator Defending()
     {
+        // 방어 애니메이션 설정 및 방패 활성화
         anim.SetBool("isDefending", true);
         isDefending = true;
         shield.SetActive(true);
 
         yield return new WaitUntil(() => isDefending == false);
+
+        // 방어 애니매이션 종료 및 방패 비활성화
         anim.SetBool("isDefending", false);
         isDefending = false;
-
+        shield.SetActive(false);
 
     }
     #endregion

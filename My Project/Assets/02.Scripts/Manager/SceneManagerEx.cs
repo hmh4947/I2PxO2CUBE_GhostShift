@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class SceneManagerEx : MonoBehaviour
 {
     private static SceneManagerEx instance;
+    private Vector2 playerBasePosition;
     private GameObject player;
     private Player playerScr;
     public static SceneManagerEx Instance
@@ -42,6 +43,7 @@ public class SceneManagerEx : MonoBehaviour
 
         player = GameObject.Find("Player");
         playerScr = player.GetComponent<Player>();
+        playerBasePosition = new Vector2(-18, 0);
     }
 
     public void LoadScene(Scenes scenename)
@@ -78,8 +80,28 @@ public class SceneManagerEx : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            SetPlayerPositionAndCondition(new Vector2(-18, 0));
-        }        
+            SetPlayerPositionAndCondition(playerBasePosition);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            LoadScene(Scenes.Tutorial);
+            SetPlayerPositionAndCondition(playerBasePosition);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            LoadScene(Scenes.PlayerShieldTutorial);
+            SetPlayerPositionAndCondition(playerBasePosition);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            LoadScene(Scenes.PlayerGogglesTutorial);
+            SetPlayerPositionAndCondition(playerBasePosition);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            LoadScene(Scenes.PlayerCleanerTutorial);
+            SetPlayerPositionAndCondition(playerBasePosition);
+        }
     }
 
     public void SetPlayerPositionAndCondition(Vector2 pos)
