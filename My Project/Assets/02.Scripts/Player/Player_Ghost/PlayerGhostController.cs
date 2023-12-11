@@ -62,6 +62,8 @@ public class PlayerGhostController : PlayerController
     // Update is called once per frame
     void FixedUpdate()
     {
+        groundPos = tr.position + new Vector3(0, -0.8f, 0);
+
         //Move By Key Control(Move Speed)
         Move();
 
@@ -87,7 +89,7 @@ public class PlayerGhostController : PlayerController
         groundPos = tr.position + new Vector3(0, -0.5f, 0);
 
         // Ground Check Bound
-        groundBoxSize = new Vector3(1.2f, 0.6f, 0);
+        groundBoxSize = new Vector3(0.8f, 0.6f, 0);
 
         isDashing = false;
         isAbleDash = true;
@@ -116,31 +118,33 @@ public class PlayerGhostController : PlayerController
         if (rigid.velocity.y < 0)
         {
             anim.SetBool("isJumping", true);
-            RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0.02f, LayerMask.GetMask("Platform"));
+            
+        }
 
-            if (rayHit.collider != null)
+        RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0.02f, LayerMask.GetMask("Platform"));
+
+        if (rayHit.collider != null)
+        {
+            if (isDashing)
             {
-                if (isDashing)
-                {
-                    SetPlayerStates(isDashing, isAbleDash, isSticking);
-                }
-                else
-                {
-                    SetPlayerStates(isDashing, isAbleDash: true, isSticking);
-                }
-                
-                anim.SetBool("isJumping", false);
+                SetPlayerStates(isDashing, isAbleDash: false, isSticking);
             }
+            else
+            {
+                SetPlayerStates(isDashing, isAbleDash: true, isSticking);
+            }
+
+            anim.SetBool("isJumping", false);
         }
     }
 
     // 땅에 닿았는지 범위 체크를 위한 기즈모
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
-        groundPos = tr.position + new Vector3(0, -0.8f, 0);
+        
         Gizmos.color = Color.red;
         Gizmos.DrawCube(groundPos, groundBoxSize);
-    }
+    }*/
 
     // 플레이어 점프
     public void Jump()
@@ -365,7 +369,7 @@ public class PlayerGhostController : PlayerController
             }
 
             // 플레이어 상태를 기본 상태로 변경
-            SetPlayerStates(isDashing:false, isAbleDash:true, isSticking:false);
+            SetPlayerStates(isDashing:false, isAbleDash:false, isSticking:false);
             // 중력값 다시 설정.
             rigid.gravityScale = originalGravityScale;
         }
