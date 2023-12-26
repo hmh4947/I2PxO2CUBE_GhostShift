@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/01.Scenes/I2PxO2CUBE.unity
-    guid: 89777134d1ec4e745831dd04f2c472cb
-  - enabled: 1
     path: Assets/01.Scenes/Title.unity
     guid: eef2d51e0b44edb47bd7114935df78fe
   - enabled: 1

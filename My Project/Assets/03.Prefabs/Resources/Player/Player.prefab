@@ -163,7 +163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &976854750
 RectTransform:
   m_ObjectHideFlags: 0
@@ -451,9 +451,9 @@ MonoBehaviour:
   m_Text: "\uC774\uB3D9: W, A, S, D\n\uB300\uC26C: Mouse Left Click\n\uBE59\uC758:
     Mouse Right Click\n\n\uBC29\uD328\uBCD1, \uACE0\uAE00\uBCD1 \uD2B9\uC218\uB2A5\uB825
     \uC0AC\uC6A9: S\n\uBC29\uD328\uBCD1, \uACE0\uAE00\uBCD1 \uD2B9\uC218\uB2A5\uB825
-    \uC0AC\uC6A9 \uD574\uC81C: W\n\uBC29\uD328\uBCD1 \uD328\uB9C1: Mouse Right Click\n\uCCAD\uC18C\uAE30\uBCD1
-    \uC801 \uD761\uC218: Mouse Right Holding\n\uCCAD\uC18C\uAE30\uBCD1 \uCD1D\uC54C
-    \uBC1C\uC0AC: Mouse Right Click\n"
+    \uC0AC\uC6A9 \uD574\uC81C: W\n\n\uCCAD\uC18C\uAE30\uBCD1 \uC801 \uD761\uC218:
+    Mouse Right Holding\n\uCCAD\uC18C\uAE30\uBCD1 \uCD1D\uC54C \uBC1C\uC0AC: Mouse
+    Right Click\n"
 --- !u!1 &56759021823636770
 GameObject:
   m_ObjectHideFlags: 0
