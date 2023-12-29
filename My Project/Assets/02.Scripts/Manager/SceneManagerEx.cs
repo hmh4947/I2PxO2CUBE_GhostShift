@@ -8,6 +8,7 @@ public class SceneManagerEx : MonoBehaviour
     private Vector2 playerBasePosition;
     private GameObject player;
     private Player playerScr;
+    private PlayerGogglesController playerGogglesControllerScr;
     public static SceneManagerEx Instance
     {
         get
@@ -43,6 +44,7 @@ public class SceneManagerEx : MonoBehaviour
 
         player = GameObject.Find("Player");
         playerScr = player.GetComponent<Player>();
+        playerGogglesControllerScr = player.GetComponent<PlayerGogglesController>();
         playerBasePosition = new Vector2(-18, 0);
     }
 
@@ -77,6 +79,10 @@ public class SceneManagerEx : MonoBehaviour
 
     public void Update()
     {
+        if (playerGogglesControllerScr.IsInNVDModes)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

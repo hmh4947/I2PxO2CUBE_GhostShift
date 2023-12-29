@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         playerScr = GetComponent<Player>();
         healthScr = GetComponent<Health>();
     }
-
+    
     public virtual void Gravity()
     { }
     public virtual void Move() {
