@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     // 플레이어 이동속도
     public float maxSpeed;
 
+    public GameObject hitEffect;
     // 컴포넌트의 캐시를 처리할 변수들
     // 모든 플레이어 캐릭터가 공통적으로 가지고 있는 변수이므로, protected를 이용해 상속.
     // 메모리 소모를 최소화 하기 위함.
@@ -17,8 +18,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
     protected CapsuleCollider2D playerCollider;
     protected Transform tr;
     protected new AudioSource audio;
-    public GameObject hitEffect;
+
     // ------------------------------------------
+
 
     // 스크립트 캐시처리
     protected Player playerScr;
@@ -26,11 +28,13 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
     void Start()
     {
-
+        // 마우스 커서 밖으로 못나가게 하기
+        Cursor.lockState = CursorLockMode.Confined;
     }
     public virtual void Init()
     {
         maxSpeed = 14.0f;
+        /*hitflash = ObjectPooler.Instance.GetEffectObject();*/
     }
     public virtual void SetCashComponent() {
         // 플레이어 컴포넌트 캐쉬 처리
@@ -40,7 +44,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
         playerCollider = GetComponentInChildren<CapsuleCollider2D>();
         tr = GetComponent<Transform>();
         audio = GetComponent<AudioSource>();
+
     }
+    public virtual void LoadResources() { }
     
     public virtual void SetScrCash()
     {
@@ -48,7 +54,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         playerScr = GetComponent<Player>();
         healthScr = GetComponent<Health>();
     }
-
+    
     public virtual void Gravity()
     { }
     public virtual void Move() {
@@ -91,9 +97,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
     public virtual Vector2 GetPlayerToMouseUnitVector()
     {
         // 플레이어의 월드 좌표를 스크린 좌표로 변경
-        Vector2 playerScreenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        Vector2 playerScreenPosition = transform.position;
         // 마우스 좌클릭시의 마우스 스크린 좌표
-        Vector2 mouseScreenPosition = Input.mousePosition;
+        Vector2 mouseScreenPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         // 마우스 클릭 지점과 플레이어의 스크린 좌표의 방향 벡터
         Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
