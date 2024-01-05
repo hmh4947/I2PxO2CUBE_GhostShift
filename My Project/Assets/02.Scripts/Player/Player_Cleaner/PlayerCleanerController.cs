@@ -5,31 +5,47 @@ using UnityEngine.EventSystems;
 
 public class PlayerCleanerController : PlayerController
 {
-    // 삼키는 범위
-    public Vector3 swallowRange;
+    // 청소부 캐릭터 public 변수
+    #region PlayerCleaner Public Properties
     // 삼키는 속도
     public float swallowSpeed;
+    #endregion
+    // 청소부 캐릭터 private 변수
+    #region PlayerCleaner Private Properties
+    // 삼키는 범위
+    private Vector3 swallowRange;
     // 삼키는 중일때 변수
-    public bool isSwallowing;
+    private bool isSwallowing;
     // 삼킴 상태의 변수
-    public bool isSwallowed;
-
-    //public GameObject enemyDiedObject; 
+    private bool isSwallowed;
     // 삼킨 적(적타입)을 저장할 큐
     private Queue<EnemyType> swalloedEnemy = new Queue<EnemyType>();
+    // enemyDied 스프라이트를 저장할 배열 생성
+    private Sprite[] enemyDiedBulletSprites = new Sprite[5];
+    // 총알 발사는 오브젝트 풀링으로 구현해보기
+    private GameObject enemyDiedBulletPrefab;
 
-    // 적 
-    public Sprite[] enemyDiedBulletSpritePrefabs;
-    public GameObject enemyDiedBulletPrefab;
-
+    // Audio Clips
+    private AudioClip attack1Sfx;
+    private AudioClip attack2Sfx;
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
         SetScrCash();
         SetCashComponent();
         Init();
+        LoadResources();
+
     }
 
+    private void OnEnable()
+    {
+        SetScrCash();
+        SetCashComponent();
+        Init();
+
+    }
     void FixedUpdate() {
         // 삼키는 중이 아닐 경우
         if(!isSwallowing)
@@ -53,9 +69,28 @@ public class PlayerCleanerController : PlayerController
         isSwallowing = false;
 
         swallowRange = new Vector3(8.0f, 1.0f, 0.0f);
+        
+
     }
 
+    public override void LoadResources()
+    {
+        // 플레이어 총알 받아오기
+        enemyDiedBulletPrefab = Resources.Load<GameObject>("BulletPrefabs/PlayerBullet");
+        // 유령 타입 적 사망 스프라이트 로드
+        enemyDiedBulletSprites[0] = Resources.Load<Sprite>("EnemyImages/Enemy_Ghost/Enemy_ghost_dead");
+        // 방패병 타입 적 사망 스프라이트 로드
+        enemyDiedBulletSprites[1] = Resources.Load<Sprite>("EnemyImages/Enemy_Shield/Enemy_shield_dead");
+        // 고글 타입 적 사망 스프라이트 로드
+        enemyDiedBulletSprites[2] = Resources.Load<Sprite>("EnemyImages/Enemy_Goggles/Enemy_goggles_dead");
+        // 거너 타입 적 사망 스프라이트 로드
+        enemyDiedBulletSprites[3] = Resources.Load<Sprite>("EnemyImages/Enemy_Gunner/Enemy_gun_dead");
+        // 청소부 타입 적 사망 스프라이트 로드
+        enemyDiedBulletSprites[4] = Resources.Load<Sprite>("EnemyImages/Enemy_Gunner/Enemy_gun_dead");
 
+        attack1Sfx = Resources.Load<AudioClip>("PlayerAudios/attack1");
+        attack2Sfx = Resources.Load<AudioClip>("PlayerAudios/attack2");
+    }
     private void OnTriggerEnter2D(Collider2D collider)
     {
         if (!enabled) return;
@@ -213,7 +248,7 @@ public class PlayerCleanerController : PlayerController
     public void Fire(EnemyType enemyType)
     {
         anim.Play("player_cleaner_fire", -1);
-
+        audio.PlayOneShot(attack1Sfx);
         // 흡수한 적 총알 객체 생성
         GameObject enemyDiedBullet = Instantiate(enemyDiedBulletPrefab, tr.position, tr.rotation);
         // 스프라이트 받아오기
@@ -223,23 +258,23 @@ public class PlayerCleanerController : PlayerController
         {
             // 흡수한 적 객체가 유령타입일 경우 총알을 유령 Died 스프라이트로 변경
             case EnemyType.NONE:
-                enemyDiedBulletSprite.sprite= enemyDiedBulletSpritePrefabs[0];
+                enemyDiedBulletSprite.sprite= enemyDiedBulletSprites[0];
                 break;
             // 흡수한 적 객체가 방패타입일 경우 총알을 방패병 Died 스프라이트로 변경
             case EnemyType.SHIELD:
-                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[1];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSprites[1];
                 break;
             // 흡수한 적 객체가 고글타입일 경우 총알을 고글 Died 스프라이트로 변경
             case EnemyType.GOGGLES:
-                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[2];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSprites[2];
                 break;
             // 흡수한 적 객체가 거너타입일 경우 총알을 거너 Died 스프라이트로 변경
             case EnemyType.GUNNER:
-                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[3];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSprites[3];
                 break;
             // 흡수한 적 객체가 청소부타입일 경우 총알을 청소부 Died 스프라이트로 변경
             case EnemyType.CLEANER:
-                enemyDiedBulletSprite.sprite = enemyDiedBulletSpritePrefabs[4];
+                enemyDiedBulletSprite.sprite = enemyDiedBulletSprites[4];
                 break;
         }
 
