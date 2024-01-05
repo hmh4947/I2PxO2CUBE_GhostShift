@@ -16,12 +16,12 @@ public class TitleBtn : MonoBehaviour
     }
     public void StartBtn()
     {
-        SceneManager.LoadScene("Tutorial");
+        SceneManager.LoadScene("Map1");
         audio.PlayOneShot(clickedAudio);
     }
     public void OptionBtn()
     {
-        //SceneManager.LoadScene("BasicMenu");
+        SceneManager.LoadScene("BasicMenu");
         audio.PlayOneShot(clickedAudio);
 
     }

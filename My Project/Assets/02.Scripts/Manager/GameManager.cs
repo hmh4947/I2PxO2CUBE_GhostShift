@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
                 {
                     instance = obj;
                 }
-                    // 존재하지 않는다면 새로운 게임오브젝트를 생성후 그 게임오브젝트에 GameManger를 부착 후 instance에 삽입
+                // 존재하지 않는다면 새로운 게임오브젝트를 생성후 그 게임오브젝트에 GameManger를 부착 후 instance에 삽입
                 else
                 {
                     var newObj = new GameObject().AddComponent<GameManager>();
