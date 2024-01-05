@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
 
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
-    public GameObject manualUI;
 
     private new AudioSource audio;
 
@@ -39,7 +37,6 @@ public class PauseMenu : MonoBehaviour
     {
         audio.PlayOneShot(clickedAudio);
         pauseMenuUI.SetActive(false);
-        manualUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;     
     }
@@ -54,29 +51,17 @@ public class PauseMenu : MonoBehaviour
     public void Option()
     {
         audio.PlayOneShot(clickedAudio);
-        if (manualUI.activeSelf)
-        {
-            manualUI.SetActive(false);
-            pauseMenuUI.SetActive(true);
-        }
-        else
-        {
-            manualUI.SetActive(true);
-            pauseMenuUI.SetActive(false);
-        }
-        
+        Debug.Log("옵션창 출력");
     }
     public void StageExit()
     {
         audio.PlayOneShot(clickedAudio);
-        SceneManagerEx.Instance.LoadScene(SceneManagerEx.Scenes.Title);
-        Resume();
+        Debug.Log("스테이지를 나갑니다..");
     }
     public void QuitGame()
     {
         audio.PlayOneShot(clickedAudio);
-        Application.Quit();
-
+        Debug.Log("게임을 종료합니다..");
     }
     
 

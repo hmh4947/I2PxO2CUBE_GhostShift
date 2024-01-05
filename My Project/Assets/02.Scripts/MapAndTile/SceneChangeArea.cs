@@ -5,23 +5,19 @@ using UnityEngine.UI;
 
 public class SceneChangeArea : MonoBehaviour
 {
-    public SceneManagerEx.Scenes scene;
-
     void OnTriggerEnter2D(Collider2D collider2D)
     {
         if (collider2D.gameObject.tag == "Player")
         {
-            Debug.Log("충돌");
+            Debug.Log("충돌");         
+            GameObject.Find("Canvas").GetComponent<SceneFadeInOut>().Fade();
 
-            //GameObject.Find("Canvas").GetComponent<SceneFadeInOut>().Fade();
-            SceneManagerEx.Instance.LoadScene(scene);
-            SceneManagerEx.Instance.SetPlayerPositionAndCondition(new Vector2(-18, 0));
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame

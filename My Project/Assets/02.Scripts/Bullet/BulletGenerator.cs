@@ -5,13 +5,11 @@ using UnityEngine;
 public class BulletGenerator : MonoBehaviour
 {
     public GameObject bulletPrefab;
-    private BulletController bulletControllerScr;
     private float generateTime;
     // Start is called before the first frame update
     void Start()
     {
         generateTime = 5.0f;
-        bulletControllerScr = bulletPrefab.GetComponent<BulletController>();
     }
 
     // Update is called once per frame
@@ -28,9 +26,7 @@ public class BulletGenerator : MonoBehaviour
 
     public IEnumerator GenerateBullet()
     {
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
-        float bullletSpeed = bulletControllerScr.GetBulletSpeed();
-        bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-bullletSpeed, 0));
+        Instantiate(bulletPrefab, transform.position, transform.rotation);
         yield return null;
     }
 }
