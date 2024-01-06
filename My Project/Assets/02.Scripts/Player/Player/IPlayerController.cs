@@ -15,6 +15,7 @@ public interface IPlayerController
     public void Gravity();
     //이동
     public void Move();
-    //대쉬
+    //리소스로드
+    public void LoadResources();
 }
 
