@@ -224,6 +224,7 @@ QualitySettings:
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 2
+    CloudRendering: 5
     GameCoreScarlett: 5
     GameCoreXboxOne: 5
     Lumin: 5

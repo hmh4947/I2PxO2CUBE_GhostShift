@@ -5,15 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Bullet
+  - GlobalVolume
+  - PlayerBullet
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - PostProcess
+  - 
   - Water
   - UI
   - Platform
-  - 
+  - ScreenFade
   - 
   - 
   - 
