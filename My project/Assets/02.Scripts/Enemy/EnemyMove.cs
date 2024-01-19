@@ -10,6 +10,13 @@ public class EnemyMove : MonoBehaviour
     public GameObject Player;
     public GameObject Enemy;
 
+    public GameObject prfHpBar;
+    public GameObject canvas;
+
+    RectTransform hpBar;
+
+    public float height = 1.7f;
+       
     //float speed =1.5f; 
 
     public bool Player_detection = false;
@@ -19,6 +26,8 @@ public class EnemyMove : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody2D>();
         nextMove = 1; // 오른쪽 이동
+
+        hpBar = Instantiate(prfHpBar, canvas.transform).GetComponent<RectTransform>();
 
     }
 
@@ -36,12 +45,20 @@ public class EnemyMove : MonoBehaviour
             // DrawRay( ) : 에디터 상에서만 Ray를 그려주는 함수  (위치 , 쏘는 방향 ,레이 컬러(코드에는 녹색적용))
             RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform"));  // (위치 , 쏘는 방향 ,거리(안줘도 됀다) , Layer정보)
                                                                                                                 //RayCastHit : Ray에 닿은 오브젝트, GetMask : 레이어 이름에 해당하는 정수값을 리턴하는 함
+            //Status
+            Vector3 hpBarPos =
+                Camera.main.WorldToScreenPoint(new Vector3(transform.position.x, transform.position.y + height, 0));
+            hpBar.position = hpBarPos;
+
+
             if (rayHit.collider == null)
             {
                 //Invoke("Wait", 2);
                 nextMove = nextMove * -1;
 
             }
+
+
 
             /*
                          Debug.DrawRay(frontVec, Vector3.forward, new Color(0, 1, 0));

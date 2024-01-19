@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 1751969294095774425}
   - component: {fileID: 1751969294095774426}
   - component: {fileID: 1751969294095774427}
-  - component: {fileID: 1751969294095774424}
-  - component: {fileID: 1751969294095774405}
   - component: {fileID: 6077740664299093903}
+  - component: {fileID: 1751969294095774424}
   m_Layer: 0
   m_Name: Enemy_Shield
   m_TagString: Enemy
@@ -139,6 +138,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyType: 1
   isDied: 0
+--- !u!114 &6077740664299093903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751969294095774428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4395bb1204bf6bd4abdb98ccc2957b9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextMove: 0
+  distace: 0
+  Player: {fileID: 56759022594739009, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
+  Enemy: {fileID: 1751969294095774428}
+  Detection: 0
+  Collison: 0
+  speed: 1.5
 --- !u!95 &1751969294095774424
 Animator:
   serializedVersion: 5
@@ -159,39 +177,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
---- !u!114 &1751969294095774405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751969294095774428}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1700870167b842348a7eb797ed6ca390, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextMove: 0
-  distace: 0
-  Player: {fileID: 0}
-  Enemy: {fileID: 1751969294095774428}
-  Player_detection: 0
---- !u!114 &6077740664299093903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1751969294095774428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4395bb1204bf6bd4abdb98ccc2957b9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nextMove: 0
-  distace: 0
-  Player: {fileID: 56759022594739009, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
-  Enemy: {fileID: 1751969294095774428}
-  Detection: 0
-  Collison: 0
-  speed: 1.5
