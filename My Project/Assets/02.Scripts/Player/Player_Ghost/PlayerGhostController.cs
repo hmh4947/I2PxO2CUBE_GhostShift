@@ -29,8 +29,8 @@ public class PlayerGhostController : PlayerController
     private EnemyType enemyType;
 
     // 바닥 충돌 체크를 확인할 변수
-    private Vector3 groundPos;
     private Vector3 groundBoxSize;
+    private float groundCheckDistance;
 
     // 점프 효과음
     private AudioClip jumpSfx;
@@ -68,22 +68,20 @@ public class PlayerGhostController : PlayerController
         Init();
     }
 
+    void OnDisable()
+    {
+        Init();
+    }
 
     void Update()
     {
-        groundPos = tr.position + new Vector3(0, -0.8f, 0);
         // 중력 함수 호출
         Gravity();
-
 
         //Jump
         Jump();
 
         HandleMouseInput();
-
-        // 움직임 체크 함수 호출
-        Move();
-
 
     }
 
@@ -92,6 +90,8 @@ public class PlayerGhostController : PlayerController
     void FixedUpdate()
     {
 
+        // 움직임 체크 함수 호출
+        Move();
     }
 
 
@@ -99,20 +99,19 @@ public class PlayerGhostController : PlayerController
     public override void Init()
     {
         // 이동 속도 설정
-        maxSpeed = 14.0f;
+        maxSpeed = 10.0f;
 
         // 점프 파워 설정
-        jumpPower = 22.0f;
+        jumpPower = 33.0f;
 
         // 대쉬 지속시간 설정
         dashDuration = 0.2f;
 
-        // 지면 충돌 체크 범위 시작지점 설정(플레이어의 좌표보다 y축으로 -0.5만큼 아래로 설정)
-        groundPos = tr.position + new Vector3(0, -0.5f, 0);
+        // 지면 충돌 체크 범위 설정(가로 0.8, 세로 0.1 길이의 상자)
+        groundBoxSize = new Vector3(0.8f, 0.1f, 0);
 
-        // 지면 충돌 체크 범위 설정(가로 0.8, 세로 0.6 길이의 상자)
-        groundBoxSize = new Vector3(0.8f, 0.6f, 0);
-
+        // 지면 체크 거리
+        groundCheckDistance = 1.2f;
 
         isJumping = false;
         isDashing = false;
@@ -135,51 +134,66 @@ public class PlayerGhostController : PlayerController
     // 플레이어 중력
     public override void Gravity()
     {
-        // 지면으로 박스 모양의 레이저를 쏴 지면에 닿았는지 체크
-        RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0f, LayerMask.GetMask("Platform"));
-        if (rayHit.collider != null)
+/*        // 지면으로 박스 모양의 레이저를 쏴 지면에 닿았는지 체크
+        RaycastHit2D rayHit = Physics2D.BoxCast(tr.position, groundBoxSize, 0f, Vector2.down, groundCheckDistance, LayerMask.GetMask("Platform"));
+        if(rigid.velocity.y <= 0)
         {
-            isGrounded = true;
-            // 점프중이었다면 점프 상태 해제
-            if (isJumping) isJumping = false;
-            // 지면과 충돌했으면 추락 모션 해제
-            anim.SetBool(hashJump, false);
-            // 대쉬 가능 상태로 전이
-            isAbleDash = true;
-            return;
-        }
-
-        // 대쉬 중이면 추락 모션 설정 X
-        if (isDashing) return;
-        
-
+            if (rayHit.collider != null)
+            {
+                isGrounded = true;
+                // 점프중이었다면 점프 상태 해제
+                if (isJumping) isJumping = false;
+                // 지면과 충돌했으면 추락 모션 해제
+                anim.SetBool(hashJump, false);
+                // 대쉬 가능 상태로 전이
+                isAbleDash = true;
+                return;
+            }
+        }*/
+       
+                //Landing Platform
         if (rigid.velocity.y < 0)
         {
-            // 중력이 작용할 때 추락 모션 설정
-            anim.SetBool(hashJump, true);
-        }
-
+            Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
+            RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, Vector3.down, 1, LayerMask.GetMask("Platform"));
+            if (rayHit.collider != null)
+            {
+                if (rayHit.distance < 1.0f)
+                {
+                    isJumping = false;
+                    isAbleDash = true;
+                    anim.SetBool("isJumping", false);
+                }
+                    
+            }
+        }  
         
     }
 
     // 땅에 닿았는지 범위 체크를 위한 기즈모
     private void OnDrawGizmos()
     {
-        // 지면으로 박스 모양의 레이저를 쏴 지면에 닿았는지 체크
-        RaycastHit2D rayHit = Physics2D.BoxCast(groundPos, groundBoxSize, 0f, Vector3.down, 0f, LayerMask.GetMask("Platform"));
-        if (rayHit)
+        /*// 지면으로 박스 모양의 레이저를 쏴 지면에 닿았는지 체크
+        RaycastHit2D rayHit = Physics2D.BoxCast(tr.position, groundBoxSize, 0f, Vector2.down, groundCheckDistance, LayerMask.GetMask("Platform"));
+
+        if(rayHit.collider != null)
+        {
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(tr.position, Vector2.down * rayHit.distance);
+            Gizmos.DrawWireCube(tr.position + Vector3.down * rayHit.distance, groundBoxSize);
+        }
+        else
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(tr.position, tr.lossyScale);
-        }
-        /*Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(groundPos, Vector3.down * 0.02f);*/
+            Gizmos.DrawRay(tr.position, Vector2.down * groundBoxSize);
+        }*/
     }
 
     // 플레이어 점프
     public void Jump()
     {
-        if (Input.GetButtonDown("Jump") && !isJumping)
+        if (Input.GetButtonDown("Jump") && !isJumping && !isKnockBack)
         {
             // 점프
             rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
@@ -195,8 +209,8 @@ public class PlayerGhostController : PlayerController
     // 플레이어 이동
     public override void Move()
     {
-        // 대쉬 중이거나 달라붙기 중일 경우 움직임 x
-        if (isDashing || isSticking) return;
+        // 대쉬 중이거나 달라붙기, 넉백 중일 경우 움직임 x
+        if (isDashing || isSticking || isKnockBack) return;
 
         // 이동속도가 0.5f 이하일 경우 이동 애니메이션 해제
         if (Mathf.Abs(rigid.velocity.x) < 0.5)
@@ -245,7 +259,6 @@ public class PlayerGhostController : PlayerController
 
                     // 달라붙기 상태 종료
                     isSticking = false;
-
                     // 오류 체크
                     if (enemyObject == null)
                     {
@@ -261,6 +274,8 @@ public class PlayerGhostController : PlayerController
 
                     // 이펙트 생성
                     GenerateEffects();
+                    // 중력값 복구
+                    rigid.gravityScale = 8.0f;
                 }
                 // 대쉬
                 StartCoroutine(Dash());
@@ -282,6 +297,12 @@ public class PlayerGhostController : PlayerController
 
                         // 적 객체 삭제
                         Destroy(enemyObject);
+
+                        // 중력값 복구
+                        rigid.gravityScale = 8.0f;
+
+                        // 대쉬 가능상태로 전이
+                        isAbleDash = true;
 
                         // 적 타입에 따른 빙의 실행
                         playerScr.ChangePlayer(GetChangePlayerType(enemyType));
@@ -324,7 +345,8 @@ public class PlayerGhostController : PlayerController
             else
             {
                 Debug.Log($"{0}: 적과 충돌하여 체력 달기", this);
-                healthScr.Damaged(1);
+                if(healthScr.Damaged(1))
+                    StartCoroutine(KnockBack());
             }
         }
         // 총알과 충돌했을 경우
@@ -368,6 +390,9 @@ public class PlayerGhostController : PlayerController
         playerScr.IsPossesing = false;
         // 플레이어를 다시 유령으로 변경시 이펙트 생성과 함께 대쉬하기.
         GenerateEffects();
+
+        // 대쉬 가능상태로 전이
+        isAbleDash = true;
         StartCoroutine(Dash());
         Debug.Log($"{0}: 플레이어를 유령 타입으로 변환", this);
     }
@@ -428,16 +453,17 @@ public class PlayerGhostController : PlayerController
             isDashing = false;
             // 대쉬 애니메이션 종료
             anim.SetBool(hashDash, false);
-            // 플레이어 상태를 기본 상태로 변경
-            //SetPlayerStates(isDashing:false, isAbleDash:false, isSticking:false);
-            // 중력값 다시 설정.
-            rigid.gravityScale = originalGravityScale;
+            
+            if(!isSticking)
+                // 중력값 다시 설정.
+                rigid.gravityScale = originalGravityScale;
         }
     }
     //달라붙기
     public IEnumerator StickTo()
     {
         isSticking = true;
+        isAbleDash = true;
         // 달라붙기 애니메이션, 상태 설정 및 중력값, 속도 초기화 
         anim.SetBool(hashStick, true);
         rigid.gravityScale = 0f;
@@ -448,7 +474,6 @@ public class PlayerGhostController : PlayerController
 
         // 달라붙기 애니메이션 종료 및 중력값 복구
         anim.SetBool(hashStick, false);
-        rigid.gravityScale = 8.0f;
     }
     // 이펙트 생성 코루틴
     public void GenerateEffects()

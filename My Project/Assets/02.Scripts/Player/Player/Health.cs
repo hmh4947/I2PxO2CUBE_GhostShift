@@ -11,7 +11,8 @@ public class Health : MonoBehaviour
     private int numOfHearts;
 
     // 무적 상태에 돌입했는지 확인하는 bool 변수
-    private bool isInvincible;
+    public bool isInvincible;
+
     // 무적시간
     public float invincibleTime;
     // 깜빡이는 시간
@@ -63,13 +64,15 @@ public class Health : MonoBehaviour
     {
         return HP;
     }
-    public void Damaged(int damage)
+    public bool Damaged(int damage)
     {
         if (!isInvincible)
         {
             HP -= damage;
             StartCoroutine(Invincible());
+            return true;
         }
+        return false;
 
     }
     public void Healed(int health)

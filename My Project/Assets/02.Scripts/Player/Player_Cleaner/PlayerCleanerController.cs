@@ -145,7 +145,7 @@ public class PlayerCleanerController : PlayerController
             if (!isSwallowed /*|| !anim.GetCurrentAnimatorStateInfo(0).IsName("Fire")*/)
             {
                 // 삼키기
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButton(1))
                 {
                     Debug.Log("삼키기 시도");
                     StartCoroutine(Swallow());
@@ -198,7 +198,7 @@ public class PlayerCleanerController : PlayerController
         }
 
         //Physics2D.OverlapAreaAll : 가상의 직사각형을 만들어 추출하려는 반경 이내에 들어와 있는 콜라이더들을 배열 형태로반환하는 함수
-        Collider2D[] colliderArray = Physics2D.OverlapAreaAll(transform.position, transform.position + swallowRange);
+        Collider2D[] colliderArray = Physics2D.OverlapAreaAll(tr.position, tr.position + swallowRange);
         // 콜라이더 배열을 순환하면서
         for(int i = 0; i < colliderArray.Length; i++)
         {

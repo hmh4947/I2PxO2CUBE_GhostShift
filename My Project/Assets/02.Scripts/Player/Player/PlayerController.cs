@@ -6,6 +6,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
 {
     // 플레이어 이동속도
     public float maxSpeed;
+    // 플레이어 넉백 정도
+    [SerializeField]
+    protected float knockBackPower;
+    // 플레이어 넉백 중인지
+    protected bool isKnockBack;
 
     public GameObject hitEffect;
     // 컴포넌트의 캐시를 처리할 변수들
@@ -18,7 +23,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
     protected CapsuleCollider2D playerCollider;
     protected Transform tr;
     protected new AudioSource audio;
-
     // ------------------------------------------
 
 
@@ -30,10 +34,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
     {
         // 마우스 커서 밖으로 못나가게 하기
         Cursor.lockState = CursorLockMode.Confined;
+        isKnockBack = false;
+
     }
     public virtual void Init()
     {
-        maxSpeed = 14.0f;
         /*hitflash = ObjectPooler.Instance.GetEffectObject();*/
     }
     public virtual void SetCashComponent() {
@@ -104,5 +109,27 @@ public class PlayerController : MonoBehaviour, IPlayerController
         Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
         return playerToMouseVector;
+    }
+
+    // 이동 방향에 따른 넉백 실행
+    public virtual IEnumerator KnockBack()
+    {
+        isKnockBack = true;
+        knockBackPower = 21.0f;
+        // 플레이어가 오른쪽을 바라보고 있을 경우
+        if (spriteRenderer.flipX == true)
+        {
+            Debug.Log("왼쪽 넉백 실행");
+            rigid.AddForce(knockBackPower * new Vector2(-1.0f, 1.0f), ForceMode2D.Impulse);
+        }
+        else
+        {
+            Debug.Log("오른쪽 넉백 실행");
+            rigid.AddForce(knockBackPower * new Vector2(1.0f, 1.0f), ForceMode2D.Impulse);
+        }
+
+        yield return new WaitForSeconds(0.3f);
+
+        isKnockBack = false;
     }
 }
