@@ -502,8 +502,7 @@ MonoBehaviour:
   m_text: Press Play to watch how to stack effects on top of each other.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1ffb8c3515fb6dc4688eff5a7e48200f, type: 2}
-  m_sharedMaterial: {fileID: 7453642021753212536, guid: 1ffb8c3515fb6dc4688eff5a7e48200f,
-    type: 2}
+  m_sharedMaterial: {fileID: 7453642021753212536, guid: 1ffb8c3515fb6dc4688eff5a7e48200f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -592,6 +591,7 @@ MonoBehaviour:
   useTypeWriter: 1
   startTypewriterMode: 3
   hideAppearancesOnSkip: 0
+  hideDisappearancesOnSkip: 0
   triggerEventsOnSkip: 0
   resetTypingSpeedAtStartup: 1
   disappearanceOrientation: 0
@@ -640,8 +640,7 @@ MonoBehaviour:
   isResettingTimeOnNewText: 1
   useDefaultDatabases: 1
   databaseBehaviors: {fileID: 11400000, guid: 143063c9d42da4bb3bdef3e969df1633, type: 2}
-  databaseAppearances: {fileID: 11400000, guid: efcefe34ffbda4c5eb7e39d858738fbc,
-    type: 2}
+  databaseAppearances: {fileID: 11400000, guid: efcefe34ffbda4c5eb7e39d858738fbc, type: 2}
   useDefaultStyleSheet: 1
   styleSheet: {fileID: 0}
   databaseActions: {fileID: 11400000, guid: 59963a936d6fb4257a79cffca6bafcbb, type: 2}
