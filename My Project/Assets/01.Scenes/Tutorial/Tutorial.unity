@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 537803984}
   - component: {fileID: 537803985}
   - component: {fileID: 537803983}
+  - component: {fileID: 537803986}
   m_Layer: 5
   m_Name: shield_guide
   m_TagString: Untagged
@@ -253,7 +254,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1980, y: 1020}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &537803985
 CanvasRenderer:
@@ -263,6 +264,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537803982}
   m_CullTransparentMesh: 1
+--- !u!95 &537803986
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537803982}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a80e97428d8880540a9bebe3ee603518, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &603067849
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +326,7 @@ GameObject:
   - component: {fileID: 656845283}
   - component: {fileID: 656845284}
   - component: {fileID: 656845282}
+  - component: {fileID: 656845285}
   m_Layer: 5
   m_Name: goggles_guide
   m_TagString: Untagged
@@ -359,7 +381,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1980, y: 1020}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &656845284
 CanvasRenderer:
@@ -369,6 +391,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 656845281}
   m_CullTransparentMesh: 1
+--- !u!95 &656845285
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 656845281}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 44260f67d22bcdb45a40bb81fee0afa9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &1397450210
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +562,7 @@ MonoBehaviour:
   gogglesImage: {fileID: 656845282}
   shieldImage: {fileID: 537803983}
   cleanerImage: {fileID: 1866357883}
+  ani: {fileID: 0}
 --- !u!1001 &1468344589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4753,13 +4796,14 @@ GameObject:
   - component: {fileID: 1866357885}
   - component: {fileID: 1866357884}
   - component: {fileID: 1866357883}
+  - component: {fileID: 1866357886}
   m_Layer: 5
   m_Name: cleaner_guide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1866357883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4815,8 +4859,28 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1980, y: 1020}
+  m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &1866357886
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1866357882}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d9eca451bed502b4998ac4724a99ff99, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1001 &1979875568
 PrefabInstance:
   m_ObjectHideFlags: 0
