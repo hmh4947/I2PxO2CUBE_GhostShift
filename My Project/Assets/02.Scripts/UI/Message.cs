@@ -6,21 +6,26 @@ using UnityEngine;
 public class Message : MonoBehaviour
 {
     public Animator ani;
-   
 
+    public TypewriterByCharacter textAnimatorPlayer;
+    [TextArea(5, 50), SerializeField] //인스펙터에 접근 가능(외부 스크립트에서는 불가능)
+    string textToShow = " ";
     // Start is called before the first frame update
     void Start()
     {
         ani = GetComponent<Animator>();
-      
+        
     }
-
+    public void ShowText()
+    {
+        textAnimatorPlayer.ShowText(textToShow);
+    }
     public void message()
     {
-      
+        
         ani.SetBool("message", true);
         Debug.Log("메시지 보이기");
-       
+        ShowText(); //메세지 박스가 보일때 마다 텍스트 애니메이션이 동작
     }
     public void messageBehind()
     {
