@@ -266,8 +266,9 @@ public class PlayerGhostController : PlayerController
                         return;
                     }
 
+                    enemyObject.GetComponent<Enemy>().KnockBack(-1 * GetPlayerToMouseUnitVector());
                     // 적 객체 삭제
-                    Destroy(enemyObject);
+                    Destroy(enemyObject, 3.0f);
                     enemyObject = null;
                     // 공격 사운드 2개중 하나 랜덤 출력
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
@@ -352,9 +353,15 @@ public class PlayerGhostController : PlayerController
         // 총알과 충돌했을 경우
         if (collider.CompareTag("Bullet"))
         {
-            Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
-            healthScr.Damaged(1);
-            Destroy(collider.gameObject);
+            if(collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+            {
+
+                Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
+                if (healthScr.Damaged(1))
+                    StartCoroutine(KnockBack(new Vector2(-1.0f * Mathf.Sign(bulletControllerScr.bulletSpeed), 1.0f)));
+                Destroy(collider.gameObject);
+            }
+
         }
 
     }

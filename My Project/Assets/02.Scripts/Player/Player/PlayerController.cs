@@ -112,21 +112,30 @@ public class PlayerController : MonoBehaviour, IPlayerController
     }
 
     // 이동 방향에 따른 넉백 실행
-    public virtual IEnumerator KnockBack()
+    public virtual IEnumerator KnockBack(Vector2? dir = null)
     {
+        
         isKnockBack = true;
         knockBackPower = 21.0f;
-        // 플레이어가 오른쪽을 바라보고 있을 경우
-        if (spriteRenderer.flipX == true)
+        if(dir == null)
         {
-            Debug.Log("왼쪽 넉백 실행");
-            rigid.AddForce(knockBackPower * new Vector2(-1.0f, 1.0f), ForceMode2D.Impulse);
+            // 플레이어가 오른쪽을 바라보고 있을 경우
+            if (spriteRenderer.flipX == true)
+            {
+                Debug.Log("왼쪽 넉백 실행");
+                rigid.AddForce(knockBackPower * new Vector2(-1.0f, 1.0f), ForceMode2D.Impulse);
+            }
+            else
+            {
+                Debug.Log("오른쪽 넉백 실행");
+                rigid.AddForce(knockBackPower * new Vector2(1.0f, 1.0f), ForceMode2D.Impulse);
+            }
         }
         else
         {
-            Debug.Log("오른쪽 넉백 실행");
-            rigid.AddForce(knockBackPower * new Vector2(1.0f, 1.0f), ForceMode2D.Impulse);
+            rigid.AddForce(knockBackPower * (Vector2)dir, ForceMode2D.Impulse);
         }
+        
 
         yield return new WaitForSeconds(0.3f);
 

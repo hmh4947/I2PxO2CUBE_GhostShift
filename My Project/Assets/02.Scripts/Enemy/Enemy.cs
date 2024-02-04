@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
     private Animator anim;
     private CapsuleCollider2D coll;
     private PlayerGhostController playerGhostControllerScr;
+    private Rigidbody2D rigid;
+    private float knockBackPower;
 
     [SerializeField]
     private bool isDied;
@@ -18,6 +20,8 @@ public class Enemy : MonoBehaviour
         coll = GetComponent<CapsuleCollider2D>();
         isDied = false;
         playerGhostControllerScr = GameObject.Find("Player").GetComponent<PlayerGhostController>();
+        rigid = GetComponent<Rigidbody2D>();
+        knockBackPower = 10.0f;
     }
 
     // Update is called once per frame
@@ -33,6 +37,10 @@ public class Enemy : MonoBehaviour
         coll.isTrigger = true;
     }
 
+    public void KnockBack(Vector2 dir)
+    {
+        rigid.AddForce(knockBackPower * dir, ForceMode2D.Impulse);
+    }
     public bool IsDied() { return this.isDied; }
 
 }
