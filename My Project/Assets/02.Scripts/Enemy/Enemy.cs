@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isDied", true);
         isDied = true;
         coll.isTrigger = true;
+       
     }
 
     public bool IsDied() { return this.isDied; }

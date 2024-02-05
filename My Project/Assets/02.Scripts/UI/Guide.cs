@@ -14,9 +14,7 @@ public class Guide : MonoBehaviour
     public Image shieldImage;
     public Image cleanerImage;
 
-    float time = 0f;
-    float frameTime = 1f;
-
+    
     public Animator ani;
 
     void Start()

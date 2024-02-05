@@ -284,6 +284,11 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!1 &559056679 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2454314290191402506, guid: 58ea9b9657bf5804fad54f6f5513397e, type: 3}
+  m_PrefabInstance: {fileID: 458522777}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &603067849
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 603067850}
+  - component: {fileID: 603067851}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -315,6 +321,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &603067851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 603067849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a86d1e14c200da94282879ff33e8208a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy_ghost: {fileID: 559056679}
+  HeartPrefab: {fileID: 8508445245580414124, guid: bd10eed426a668d4e8e1cbf8fe911f60, type: 3}
+  PrefabControl:
+  - {fileID: 0}
 --- !u!1 &656845281
 GameObject:
   m_ObjectHideFlags: 0
