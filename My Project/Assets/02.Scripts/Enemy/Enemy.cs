@@ -37,9 +37,12 @@ public class Enemy : MonoBehaviour
         coll.isTrigger = true;
     }
 
+    // Àû »ç¸Á½Ã ³Ë¹é
     public void KnockBack(Vector2 dir)
     {
-        rigid.AddForce(knockBackPower * dir, ForceMode2D.Impulse);
+        rigid.constraints = RigidbodyConstraints2D.None;
+        rigid.AddForce(new Vector2(knockBackPower * dir.x, 30.0f), ForceMode2D.Impulse);
+        rigid.gravityScale = 8.0f;
     }
     public bool IsDied() { return this.isDied; }
 

@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
     // 플레이어 넉백 중인지
     protected bool isKnockBack;
 
+    // 피격 효과음
+    private AudioClip damagedSfx;
+
     public GameObject hitEffect;
     // 컴포넌트의 캐시를 처리할 변수들
     // 모든 플레이어 캐릭터가 공통적으로 가지고 있는 변수이므로, protected를 이용해 상속.
@@ -50,6 +53,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         tr = GetComponent<Transform>();
         audio = GetComponent<AudioSource>();
 
+        damagedSfx = Resources.Load<AudioClip>("PlayerAudios/damaged");
     }
     public virtual void LoadResources() { }
     
@@ -114,7 +118,9 @@ public class PlayerController : MonoBehaviour, IPlayerController
     // 이동 방향에 따른 넉백 실행
     public virtual IEnumerator KnockBack(Vector2? dir = null)
     {
-        
+        GenerateEffects();
+        // 피격 효과음 재생
+        audio.PlayOneShot(damagedSfx);
         isKnockBack = true;
         knockBackPower = 21.0f;
         if(dir == null)
@@ -140,5 +146,15 @@ public class PlayerController : MonoBehaviour, IPlayerController
         yield return new WaitForSeconds(0.3f);
 
         isKnockBack = false;
+    }
+    // 이펙트 생성 함수
+    public virtual void GenerateEffects()
+    {
+        // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크
+        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
+        CameraShake.Instance.OnShakeCamera();
+
+        // 0.2초뒤에 이펙트 삭제
+        Destroy(hitflash, 0.2f);
     }
 }

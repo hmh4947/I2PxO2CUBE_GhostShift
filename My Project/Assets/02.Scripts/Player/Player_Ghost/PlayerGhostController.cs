@@ -265,10 +265,10 @@ public class PlayerGhostController : PlayerController
                         Debug.LogError($"{0}: 삭제할 적 객체가 존재하지 않습니다.", this);
                         return;
                     }
-
+                    // 적 넉백 실행(플레이어가 대쉬하는 반대 방향으로 넉백)
                     enemyObject.GetComponent<Enemy>().KnockBack(-1 * GetPlayerToMouseUnitVector());
                     // 적 객체 삭제
-                    Destroy(enemyObject, 3.0f);
+                    Destroy(enemyObject, 1.5f);
                     enemyObject = null;
                     // 공격 사운드 2개중 하나 랜덤 출력
                     audio.PlayOneShot(Random.Range(0, 2) == 1 ? attack1Sfx : attack2Sfx);
@@ -345,7 +345,14 @@ public class PlayerGhostController : PlayerController
             }
             else
             {
+                // 대쉬 중이 아닌 상태에서 적과 충돌했을 때
+                if(collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
+                {
+                    // 적이 이미 죽은 상태이면 체력 감소 x
+                    if (enemy.IsDied() == true) return;
+                }
                 Debug.Log($"{0}: 적과 충돌하여 체력 달기", this);
+                // 적과 충돌하여 넉백 실행
                 if(healthScr.Damaged(1))
                     StartCoroutine(KnockBack());
             }
@@ -353,10 +360,11 @@ public class PlayerGhostController : PlayerController
         // 총알과 충돌했을 경우
         if (collider.CompareTag("Bullet"))
         {
+            // 총알의 방향을 읽어오기 위해 스크립트 컴포넌트 얻어오기
             if(collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
             {
-
                 Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
+                // 총알의 진행 방향의 반대 방향으로 넉백
                 if (healthScr.Damaged(1))
                     StartCoroutine(KnockBack(new Vector2(-1.0f * Mathf.Sign(bulletControllerScr.bulletSpeed), 1.0f)));
                 Destroy(collider.gameObject);
@@ -481,16 +489,6 @@ public class PlayerGhostController : PlayerController
 
         // 달라붙기 애니메이션 종료 및 중력값 복구
         anim.SetBool(hashStick, false);
-    }
-    // 이펙트 생성 코루틴
-    public void GenerateEffects()
-    {
-        // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크
-        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
-        CameraShake.Instance.OnShakeCamera();
-
-        // 0.2초뒤에 이펙트 삭제
-        Destroy(hitflash, 0.2f);
     }
 
 }
