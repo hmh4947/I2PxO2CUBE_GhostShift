@@ -149,17 +149,26 @@ public class PlayerShieldController : PlayerController
         if (!enabled) return;
 
         // 충돌 객체가 Enemy
-        if (collider.gameObject.tag == "Enemy")
+        if (collider.CompareTag("Enemy"))
         {
             Debug.Log("쉴드 캐릭터 체력 달기");
             healthScr.Damaged(1);
         }
-        if (collider.gameObject.tag == "Bullet")
+
+        // 총알과 충돌했을 경우
+        if (collider.CompareTag("Bullet"))
         {
             if (!defended)
             {
-                healthScr.Damaged(1);
-                Destroy(collider.gameObject);
+                // 총알의 방향을 읽어오기 위해 스크립트 컴포넌트 얻어오기
+                if (collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+                {
+                    Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
+                    // 총알의 진행 방향의 반대 방향으로 넉백
+                    if (healthScr.Damaged(1))
+                        StartCoroutine(KnockBack(new Vector2(-1.0f * Mathf.Sign(bulletControllerScr.bulletSpeed), 1.0f)));
+                    Destroy(collider.gameObject);
+                }
             }
         }
 

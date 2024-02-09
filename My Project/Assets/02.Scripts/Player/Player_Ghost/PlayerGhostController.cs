@@ -20,8 +20,6 @@ public class PlayerGhostController : PlayerController
     private bool isAbleDash;
     // 달라붙기 상태인지 확인하기 위한 변수
     private bool isSticking;
-    // 지면에 있는디 확인하기 위한 변수
-    private bool isGrounded = false;
 
     // 적 오브젝트를 저장할 변수
     private GameObject enemyObject;
@@ -203,7 +201,6 @@ public class PlayerGhostController : PlayerController
             anim.SetBool(hashJump, true);
             // 점프 상태로 전이
             isJumping = true;
-            isGrounded = false;
         }
     }
     // 플레이어 이동

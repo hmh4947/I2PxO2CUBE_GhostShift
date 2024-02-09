@@ -95,7 +95,7 @@ public class PlayerCleanerController : PlayerController
     {
         if (!enabled) return;
         // Enemy타입의 객체와 충돌하게 된다면
-        if (collider.tag == "Enemy")
+        if (collider.CompareTag("Enemy"))
         {
             // 삼키기 중이라면 데미지 X
             if (isSwallowing)
@@ -120,11 +120,26 @@ public class PlayerCleanerController : PlayerController
             {
                 Debug.Log("청소부 캐릭터 데미지 입기");
                 // 데미지 입기
-                healthScr.Damaged(1);
+                if (healthScr.Damaged(1))
+                    StartCoroutine(KnockBack());
+            }
+        }
+        // 총알과 충돌했을 경우
+        if (collider.CompareTag("Bullet"))
+        {
+            // 총알의 방향을 읽어오기 위해 스크립트 컴포넌트 얻어오기
+            if (collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+            {
+                Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
+                // 총알의 진행 방향의 반대 방향으로 넉백
+                if (healthScr.Damaged(1))
+                    StartCoroutine(KnockBack(new Vector2(-1.0f * Mathf.Sign(bulletControllerScr.bulletSpeed), 1.0f)));
+                Destroy(collider.gameObject);
             }
         }
 
-        
+
+
     }
  
     private void HandleMouseInput() {
