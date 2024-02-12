@@ -15,7 +15,7 @@ public class SceneChangeArea : MonoBehaviour
 
             //GameObject.Find("Canvas").GetComponent<SceneFadeInOut>().Fade();
             SceneManagerEx.Instance.LoadScene(scene);
-            SceneManagerEx.Instance.SetPlayerPositionAndCondition(new Vector2(-18, 0));
+            SceneManagerEx.Instance.SetPlayerPositionAndCondition(new Vector2(-15, 0));
 
             
         }

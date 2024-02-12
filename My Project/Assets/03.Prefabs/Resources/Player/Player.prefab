@@ -580,6 +580,7 @@ GameObject:
   - component: {fileID: 8672611375756627218}
   - component: {fileID: 6608583380383729626}
   - component: {fileID: 4241020061288726482}
+  - component: {fileID: 6887813868810927709}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -853,6 +854,25 @@ MonoBehaviour:
   maxSpeed: 0
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
   shield: {fileID: 9205740407175976023}
+--- !u!114 &6887813868810927709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 56759022594739009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cecdb7248a5ef8e43968f19b04b89ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goggles_guide: {fileID: 0}
+  shield_guide: {fileID: 0}
+  cleaner_guide: {fileID: 0}
+  gogglesImage: {fileID: 0}
+  shieldImage: {fileID: 0}
+  cleanerImage: {fileID: 0}
+  ani: {fileID: 0}
 --- !u!1 &782389985180755476
 GameObject:
   m_ObjectHideFlags: 0
