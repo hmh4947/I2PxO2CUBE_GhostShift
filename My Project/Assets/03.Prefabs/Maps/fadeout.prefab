@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Panel: {fileID: 4175406938014004176}
+  StartPoint: {fileID: 7024155537529248209, guid: 291973d327152664fb8af653c6a39fa5, type: 3}
 --- !u!1 &4175406938014004177
 GameObject:
   m_ObjectHideFlags: 0

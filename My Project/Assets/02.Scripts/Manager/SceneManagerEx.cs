@@ -27,7 +27,15 @@ public class SceneManagerEx : MonoBehaviour
         Tutorial,
         PlayerShieldTutorial,
         PlayerGogglesTutorial,
-        PlayerCleanerTutorial
+        PlayerCleanerTutorial,
+        Stage1_Map1,
+        Stage1_Map2,
+        Stage1_Map3,
+        Stage1_Map4,
+        Stage1_Map5,
+        Stage1_Map6,
+        Stage1_Map7,
+        Stage1_Map8
     }
     private void Awake()
     {
@@ -71,6 +79,30 @@ public class SceneManagerEx : MonoBehaviour
             case Scenes.PlayerCleanerTutorial:
                 SceneManager.LoadScene("PlayerCleanerTutorial");
                 break;
+            case Scenes.Stage1_Map1:
+                SceneManager.LoadScene("Stage1_Map1");
+                break;
+            case Scenes.Stage1_Map2:
+                SceneManager.LoadScene("Stage1_Map2");
+                break;
+            case Scenes.Stage1_Map3:
+                SceneManager.LoadScene("Stage1_Map3");
+                break;
+            case Scenes.Stage1_Map4:
+                SceneManager.LoadScene("Stage1_Map4");
+                break;
+            case Scenes.Stage1_Map5:
+                SceneManager.LoadScene("Stage1_Map5");
+                break;
+            case Scenes.Stage1_Map6:
+                SceneManager.LoadScene("Stage1_Map6");
+                break;
+            case Scenes.Stage1_Map7:
+                SceneManager.LoadScene("Stage1_Map7");
+                break;
+            case Scenes.Stage1_Map8:
+                SceneManager.LoadScene("Stage1_Map8");
+                break;
             default:
                 Debug.LogError("다른 신이 들어옴");
                 break;
@@ -108,6 +140,9 @@ public class SceneManagerEx : MonoBehaviour
             LoadScene(Scenes.PlayerCleanerTutorial);
             SetPlayerPositionAndCondition(playerBasePosition);
         }
+
+        
+
     }
 
     public void SetPlayerPositionAndCondition(Vector2 pos)

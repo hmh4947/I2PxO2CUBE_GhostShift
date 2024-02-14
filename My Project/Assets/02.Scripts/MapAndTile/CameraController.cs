@@ -10,13 +10,17 @@ public class CameraController : MonoBehaviour
     public GameObject targetObject1;//활성화 상태 검사
     public GameObject targetObject2;
 
+    public GameObject quadScale;
+
     public float smoothSpeed = 3;
     public Vector2 offset;
+
     public float limitMinX, limitMaxX, limitMinY, limitMaxY;
     float cameraHalfWidth, cameraHalfHeight;
-
+    
     private void Start()
     {
+        
         cameraHalfWidth = Camera.main.aspect * Camera.main.orthographicSize;
         cameraHalfHeight = Camera.main.orthographicSize;
     }
@@ -31,6 +35,51 @@ public class CameraController : MonoBehaviour
     }
     private void Update()
     {
+        quadScale = GameObject.Find("Quad");
+
+        //트랜스폼 컴포넌트 가져오기
+        Transform quadScaleTransform = quadScale.transform;
+        float quadeScale_x = quadScaleTransform.localScale.x;
+        float quadeScale_y = quadScaleTransform.localScale.y;
+
+       // Debug.Log("X 스케일 값: " + quadeScale_x);
+       // Debug.Log("Y 스케일 값: " + quadeScale_y);
+        if (quadeScale_x == 32 && quadeScale_y == 18)
+        {
+            limitMinX = -19f;
+            limitMaxX = 13f;
+            limitMinY = -8f;
+            limitMaxY = 10f;
+        }
+        if (quadeScale_x==42&& quadeScale_y == 24)
+        {
+            limitMinX = -19f;
+            limitMaxX = 23f;
+            limitMinY = -8f;
+            limitMaxY = 16f;
+        }
+        if (quadeScale_x == 60 && quadeScale_y == 21)
+        {
+            limitMinX = -19f;
+            limitMaxX =41f;
+            limitMinY = -8f;
+            limitMaxY = 13f;
+        }
+        if (quadeScale_x == 44 && quadeScale_y == 18)
+        {
+
+            limitMinX = -19f;
+            limitMaxX = 25f;
+            limitMinY = -8f;
+            limitMaxY = 10f;
+        }
+        if (quadeScale_x ==42 && quadeScale_y ==18)
+        {
+            limitMinX = -19f;
+            limitMaxX = 23f;
+            limitMinY = -8f;
+            limitMaxY = 10f;
+        }
         if (targetObject.activeSelf)
         {
             GameObject playerObject = GameObject.Find("Player");
