@@ -16,17 +16,16 @@ public class MessageBox : MonoBehaviour
        text.SetActive(false);
        
        ani = GetComponent<Animator>();
-      //  msgObj.GetComponent<Message>().OnBecameVisible();
+      
     }
     
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == ("Player"))
         {
-
-            msgObj.GetComponent<Message>().message();
-        //    msgObj.GetComponent<Message>().OnBecameVisible();
             text.SetActive(true);
+            msgObj.GetComponent<Message>().message();
+       
           
         }
         
@@ -36,8 +35,7 @@ public class MessageBox : MonoBehaviour
         if (other.gameObject.tag == ("Player"))
         {
             msgObj.GetComponent<Message>().messageBehind();
-           // msgObj.GetComponent<Message>().OnBecameInvisible();
-          
+           
         }
 
     }

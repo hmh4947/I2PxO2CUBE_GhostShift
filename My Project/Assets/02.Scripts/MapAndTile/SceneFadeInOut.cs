@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEditor.SearchService;
-using UnityEditorInternal;
+//using UnityEditor.SearchService;
+//using UnityEditorInternal;
 
 public class SceneFadeInOut : MonoBehaviour
 {
