@@ -14,12 +14,13 @@ public class PreviousMap : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            Debug.Log("back스크립트 return map 함수 실행");
+           // Debug.Log("back스크립트 return map 함수 실행");
             GameObject.Find("fadeout").GetComponent<SceneFadeInOut>().ReturnMap();
 
 
         }
     }
+
     // Start is called before the first frame update
 }
 

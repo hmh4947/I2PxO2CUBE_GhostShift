@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEditor.SearchService;
+using UnityEditorInternal;
 
 public class SceneFadeInOut : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class SceneFadeInOut : MonoBehaviour
 
     public static SceneFadeInOut instance = null;
 
+    bool coroutineControl=false;
 
     private void Awake()
     {
@@ -33,7 +35,7 @@ public class SceneFadeInOut : MonoBehaviour
 
     void Strat()
     {
-
+        
         if (instance != null)
         {
             DestroyImmediate(this.gameObject);
@@ -46,22 +48,25 @@ public class SceneFadeInOut : MonoBehaviour
 
     public void Fade()
     {
-
+        coroutineControl = true;
         StartCoroutine(FadeFlow());
 
     }
     public void Fade2()
     {
-          StartCoroutine(FadeFlow2());
+        coroutineControl = true;
+        StartCoroutine(FadeFlow2());
 
     }
     public void ReturnMap()
     {
+        coroutineControl = true;
         StartCoroutine(FadeFlowReturnMap());
 
     }
     public void ReturnMap2()
     {
+        coroutineControl = true;
         StartCoroutine(FadeFlowReturnMap2());
 
     }
@@ -92,8 +97,10 @@ public class SceneFadeInOut : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         //다음 씬 로드
-        SceneManagerEx.Instance.LoadScene(sceneName);
-
+        if (coroutineControl == true)
+        {
+            SceneManagerEx.Instance.LoadScene(sceneName);
+        }
         yield return new WaitForSeconds(0.5f);
 
         //현재 씬이 게이트 씬과 같다면 해당되는 위치로 플레이어를 이동
@@ -103,24 +110,29 @@ public class SceneFadeInOut : MonoBehaviour
 
            // Debug.Log("다음 맵인 map2로 이동합니다.");
             playerObj.transform.position = new Vector2(-16, -3);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map3")
         {
             Debug.Log("다음 맵인 map3로 이동합니다.");
             playerObj.transform.position = new Vector2(-16, 5.4f);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map5")
         {
             playerObj.transform.position = new Vector2(-16, -4);
+            coroutineControl = false;
         }
         if ( currentSceneName == "Stage1_Map7" || currentSceneName == "Stage1_Map8")
         {
             playerObj.transform.position = new Vector2(-16, -4);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map6")
         {
 
             playerObj.transform.position = new Vector2(-16, 5);
+            coroutineControl = false;
         }
         while (alpha.a > 0f)
         {
@@ -164,8 +176,10 @@ public class SceneFadeInOut : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         //씬 로드
-        SceneManagerEx.Instance.LoadScene(sceneName);
-
+        if (coroutineControl == true)
+        {
+            SceneManagerEx.Instance.LoadScene(sceneName);
+        }
         yield return new WaitForSeconds(0.5f);
 
         //현재 씬이 게이트 씬과 같다면 해당되는 위치로 플레이어를 이동
@@ -174,16 +188,19 @@ public class SceneFadeInOut : MonoBehaviour
         {
 
 
-            playerObj.transform.position = new Vector2(-16, -3); 
+            playerObj.transform.position = new Vector2(-16, -3);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map3" || currentSceneName == "Stage1_Map6"|| currentSceneName == "Stage1_Map7")
         {
 
             playerObj.transform.position = new Vector2(-16, 5);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map5" ||  currentSceneName == "Stage1_Map8")
         {
             playerObj.transform.position = new Vector2(-16, -4);
+            coroutineControl = false;
         }
      
         while (alpha.a > 0f)
@@ -231,40 +248,50 @@ public class SceneFadeInOut : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         //씬 로드
-        SceneManagerEx.Instance.LoadScene(pre_sceneName);
-
+        if (coroutineControl == true)
+        {
+            SceneManagerEx.Instance.LoadScene(pre_sceneName);
+        }
+        Debug.Log("씬 로드");
         yield return new WaitForSeconds(0.5f);
-
+       
         //현재 씬이 게이트 씬과 같다면 해당되는 위치로 플레이어를 이동
         string currentSceneName = SceneManager.GetActiveScene().name;
+      
+            if (currentSceneName == "Stage1_Map1")
+            {
+                playerObj.transform.position = new Vector2(10, -3);
+                Debug.Log("이전맵인 map1로 돌아갑니다.");
+                coroutineControl = false;
+             }
+            if (currentSceneName == "Stage1_Map2")
+            {
+                playerObj.transform.position = new Vector2(10, 3f);
+                Debug.Log("이전맵인 map2로 돌아갑니다.");
+                coroutineControl = false;
+            }
+            if (currentSceneName == "Stage1_Map3" || currentSceneName == "Stage1_Map7")
+            {
 
-        if (currentSceneName == "Stage1_Map1")
-        {
-            playerObj.transform.position = new Vector2(10, -3);
-            Debug.Log("이전맵인 map1로 돌아갑니다.");
-        }
-        if (currentSceneName == "Stage1_Map2")
-        {
-            playerObj.transform.position = new Vector2(10, 3f);
-            Debug.Log("이전맵인 map2로 돌아갑니다.");
-        }
-        if (currentSceneName == "Stage1_Map3"||currentSceneName == "Stage1_Map7")
-        {
+                playerObj.transform.position = new Vector2(10, -3.7f);
+                Debug.Log("이전맵인 map3로 돌아갑니다.");
+                coroutineControl = false;
+             }
+            if (currentSceneName == "Stage1_Map4")//map4 down gate
+            {
 
-            playerObj.transform.position = new Vector2(10, -3.7f);
-            Debug.Log("이전맵인 map3로 돌아갑니다.");
+                playerObj.transform.position = new Vector2(20, -3f);
+                Debug.Log("이전맵인 map4로 돌아갑니다." + currentSceneName);
+                coroutineControl = false;
+
         }
-        if (currentSceneName == "Stage1_Map4")//map4 down gate
-        {
-            playerObj.transform.position = new Vector2(20, -3f);
-            Debug.Log("이전맵인 map4로 돌아갑니다.");
-        }
-        if (currentSceneName == "Stage1_Map5")
-        {
-            playerObj.transform.position = new Vector2(37, -3f);
-        }
+            if (currentSceneName == "Stage1_Map5")
+            {
+                playerObj.transform.position = new Vector2(37, -3f);
+                coroutineControl = false;
+            }
+
         
-
 
         while (alpha.a > 0f)
         {
@@ -306,8 +333,10 @@ public class SceneFadeInOut : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         //씬 로드
-        SceneManagerEx.Instance.LoadScene(pre_sceneName);
-
+        if (coroutineControl == true)
+        {
+            SceneManagerEx.Instance.LoadScene(pre_sceneName);
+        }
         yield return new WaitForSeconds(0.5f);
 
         //현재 씬이 게이트 씬과 같다면 해당되는 위치로 플레이어를 이동
@@ -315,15 +344,18 @@ public class SceneFadeInOut : MonoBehaviour
         if (currentSceneName == "Stage1_Map4")
         {
             playerObj.transform.position = new Vector2(20, 8.5f);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map6")
         {
 
             playerObj.transform.position = new Vector2(22, 1.3f);
+            coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map7")
         {
             playerObj.transform.position = new Vector2(10, -3.5f);
+            coroutineControl = false;
         }
 
         while (alpha.a > 0f)
