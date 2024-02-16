@@ -216,9 +216,11 @@ public class PlayerShieldController : PlayerController
         audio.clip = swingSfx;
         audio.Play();
         shield.SetActive(true);
+        shield.GetComponent<ShieldController>().isParrying = true;
 
         yield return new WaitForSeconds(parryingDuration);
 
+        shield.GetComponent<ShieldController>().isParrying = false;
         isParrying = false;
         anim.SetBool("isParrying", false);
         shield.SetActive(false);

@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - GlobalVolume
   - PlayerBullet
+  - NVDOBJECTS
   layers:
   - Default
   - TransparentFX

@@ -1047,6 +1047,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1751969294095774427, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
+      propertyPath: enemyType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1751969294095774428, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
       propertyPath: m_Name
       value: Enemy_Shield
@@ -1183,10 +1187,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1751969294095774405, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1751969294095774406, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1229,14 +1229,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1751969294095774406, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1751969294095774426, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1751969294095774426, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}
-      propertyPath: m_UsedByEffector
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1751969294095774428, guid: 819e8e88eae4bee44b079d9eca15c438, type: 3}

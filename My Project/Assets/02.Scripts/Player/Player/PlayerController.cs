@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
     protected bool isKnockBack;
 
     // 피격 효과음
-    private AudioClip damagedSfx;
+    protected AudioClip damagedSfx;
 
     public GameObject hitEffect;
     // 컴포넌트의 캐시를 처리할 변수들

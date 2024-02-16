@@ -111,7 +111,7 @@ public class PlayerCleanerController : PlayerController
                     // 적 객체 없애기
                     Destroy(collider.gameObject);
                     // 발사할 적 객체 추가
-                    swalloedEnemy.Enqueue(enemy.EnemyType);
+                    swalloedEnemy.Enqueue(enemy.enemyType);
                 }
                
             }
@@ -162,7 +162,6 @@ public class PlayerCleanerController : PlayerController
                 // 삼키기
                 if (Input.GetMouseButton(1))
                 {
-                    Debug.Log("삼키기 시도");
                     StartCoroutine(Swallow());
                 }
                 //
@@ -172,7 +171,6 @@ public class PlayerCleanerController : PlayerController
                     // 삼키는 중이 아닐때에만 삼키기 멈추기
                     if (!isSwallowing)
                     {
-                        Debug.Log("삼키기 중단");
                         anim.SetBool("isSwallowing", false);
                         StopCoroutine(Swallow());
                     }
@@ -233,7 +231,7 @@ public class PlayerCleanerController : PlayerController
                 {
                     // 더 이상 에너미가 없으면 반복문 종료
                     if (colliderArray[i] == null || isSwallowed) {
-                        Debug.Log($"enemy is null");
+                        isSwallowing = false;
                         break;
                     }
                     

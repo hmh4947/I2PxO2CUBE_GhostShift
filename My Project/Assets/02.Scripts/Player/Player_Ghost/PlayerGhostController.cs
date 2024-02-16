@@ -26,10 +26,6 @@ public class PlayerGhostController : PlayerController
     // 적 타입을 저장할 변수
     private EnemyType enemyType;
 
-    // 바닥 충돌 체크를 확인할 변수
-    private Vector3 groundBoxSize;
-    private float groundCheckDistance;
-
     // 점프 효과음
     private AudioClip jumpSfx;
     // 대쉬 효과음
@@ -104,12 +100,6 @@ public class PlayerGhostController : PlayerController
 
         // 대쉬 지속시간 설정
         dashDuration = 0.2f;
-
-        // 지면 충돌 체크 범위 설정(가로 0.8, 세로 0.1 길이의 상자)
-        groundBoxSize = new Vector3(0.8f, 0.1f, 0);
-
-        // 지면 체크 거리
-        groundCheckDistance = 1.2f;
 
         isJumping = false;
         isDashing = false;
@@ -285,7 +275,7 @@ public class PlayerGhostController : PlayerController
                 if (isSticking)
                 {
                     // 적이 빙의 가능한 객체일 경우
-                    if(enemyType != EnemyType.NONE)
+                    if(enemyType != EnemyType.NONE && enemyType != EnemyType.GUNNER)
                     {
                         // 오류 체크
                         if (enemyObject == null) {
@@ -331,7 +321,7 @@ public class PlayerGhostController : PlayerController
                     // 적 상태를 die로 변경
                     enemy.Died();
                     // 적 객체 타입 저장
-                    enemyType = enemy.EnemyType;
+                    enemyType = enemy.enemyType;
                     // 위치를 적 객체의 위로 보내기
                     tr.position = new Vector2(collider.transform.position.x, collider.transform.position.y + 0.5f);
                     // 대쉬 코루틴 종료
@@ -342,6 +332,7 @@ public class PlayerGhostController : PlayerController
             }
             else
             {
+                if (isSticking || healthScr.isInvincible) return;
                 // 대쉬 중이 아닌 상태에서 적과 충돌했을 때
                 if(collider.gameObject.TryGetComponent<Enemy>(out Enemy enemy))
                 {
@@ -357,6 +348,7 @@ public class PlayerGhostController : PlayerController
         // 총알과 충돌했을 경우
         if (collider.CompareTag("Bullet"))
         {
+            if (isSticking || healthScr.isInvincible) return;
             // 총알의 방향을 읽어오기 위해 스크립트 컴포넌트 얻어오기
             if(collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
             {
@@ -439,7 +431,7 @@ public class PlayerGhostController : PlayerController
             }
             // 중력값을 0으로 변경
             rigid.gravityScale = 0f;
-
+            
 
             Vector2 playerToMouseVector = GetPlayerToMouseUnitVector();
             
