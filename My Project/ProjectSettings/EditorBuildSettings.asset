@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/01.Scenes/Title.unity
+    guid: eef2d51e0b44edb47bd7114935df78fe
+  - enabled: 1
+    path: Assets/01.Scenes/Tutorial/Tutorial.unity
+    guid: c70240788858e4c4ba36c7e2c8f93190
+  - enabled: 1
+    path: Assets/01.Scenes/Tutorial/PlayerShieldTutorial.unity
+    guid: e0c67f28093e0f248b696bd9d69bea0b
+  - enabled: 1
+    path: Assets/01.Scenes/Tutorial/PlayerGogglesTutorial.unity
+    guid: 295d492170babd4499a2fa380998539b
+  - enabled: 1
+    path: Assets/01.Scenes/Tutorial/PlayerCleanerTutorial.unity
+    guid: 680fa8382cff59e4f8cab49b40bc1578
+  m_configObjects: {}
