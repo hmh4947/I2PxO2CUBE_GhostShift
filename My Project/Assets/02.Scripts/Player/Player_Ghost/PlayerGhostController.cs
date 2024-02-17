@@ -158,26 +158,6 @@ public class PlayerGhostController : PlayerController
         
     }
 
-    // 땅에 닿았는지 범위 체크를 위한 기즈모
-    private void OnDrawGizmos()
-    {
-        /*// 지면으로 박스 모양의 레이저를 쏴 지면에 닿았는지 체크
-        RaycastHit2D rayHit = Physics2D.BoxCast(tr.position, groundBoxSize, 0f, Vector2.down, groundCheckDistance, LayerMask.GetMask("Platform"));
-
-        if(rayHit.collider != null)
-        {
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(tr.position, Vector2.down * rayHit.distance);
-            Gizmos.DrawWireCube(tr.position + Vector3.down * rayHit.distance, groundBoxSize);
-        }
-        else
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(tr.position, Vector2.down * groundBoxSize);
-        }*/
-    }
-
     // 플레이어 점프
     public void Jump()
     {
@@ -341,8 +321,32 @@ public class PlayerGhostController : PlayerController
                 }
                 Debug.Log($"{0}: 적과 충돌하여 체력 달기", this);
                 // 적과 충돌하여 넉백 실행
-                if(healthScr.Damaged(1))
-                    StartCoroutine(KnockBack());
+                if (healthScr.Damaged(1))
+                {
+                    Vector2 knockBackVec;
+                    // 플레이어가 오른쪽으로 가고 있을 때
+                    if(rigid.velocity.x > 0.5f)
+                    {
+                        knockBackVec = new Vector2(-1.0f, 1.0f);
+                    }
+                    else if(rigid.velocity.x < -0.5f)
+                    {
+                        knockBackVec = new Vector2(1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        if(collider.GetComponent<Rigidbody2D>().velocity.x >= 0)
+                        {
+                            knockBackVec = new Vector2(1.0f, 1.0f);
+                        }
+                        else
+                        {
+                            knockBackVec = new Vector2(-1.0f, 1.0f);
+                        }
+                    }
+                    StartCoroutine(KnockBack(knockBackVec));
+                }
+                    
             }
         }
         // 총알과 충돌했을 경우
@@ -353,9 +357,9 @@ public class PlayerGhostController : PlayerController
             if(collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
             {
                 Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
-                // 총알의 진행 방향의 반대 방향으로 넉백
+                // 총알의 진행 방향으로 넉백
                 if (healthScr.Damaged(1))
-                    StartCoroutine(KnockBack(new Vector2(-1.0f * Mathf.Sign(bulletControllerScr.bulletSpeed), 1.0f)));
+                    StartCoroutine(KnockBack(new Vector2(Mathf.Sign(collider.gameObject.GetComponent<Rigidbody2D>().velocity.x), 1.0f)));
                 Destroy(collider.gameObject);
             }
 
