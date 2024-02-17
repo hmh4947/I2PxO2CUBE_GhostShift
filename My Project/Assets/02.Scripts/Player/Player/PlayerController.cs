@@ -38,7 +38,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
         // 마우스 커서 밖으로 못나가게 하기
         Cursor.lockState = CursorLockMode.Confined;
         isKnockBack = false;
-
     }
     public virtual void Init()
     {
@@ -123,24 +122,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         audio.PlayOneShot(damagedSfx);
         isKnockBack = true;
         knockBackPower = 21.0f;
-        if(dir == null)
-        {
-            // 플레이어가 오른쪽을 바라보고 있을 경우
-            if (spriteRenderer.flipX == true)
-            {
-                Debug.Log("왼쪽 넉백 실행");
-                rigid.AddForce(knockBackPower * new Vector2(-1.0f, 1.0f), ForceMode2D.Impulse);
-            }
-            else
-            {
-                Debug.Log("오른쪽 넉백 실행");
-                rigid.AddForce(knockBackPower * new Vector2(1.0f, 1.0f), ForceMode2D.Impulse);
-            }
-        }
-        else
-        {
-            rigid.AddForce(knockBackPower * (Vector2)dir, ForceMode2D.Impulse);
-        }
+        rigid.AddForce(knockBackPower * (Vector2)dir, ForceMode2D.Impulse);
         
 
         yield return new WaitForSeconds(0.3f);

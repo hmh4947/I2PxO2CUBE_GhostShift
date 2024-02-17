@@ -18,6 +18,8 @@ public class Enemy : MonoBehaviour
     
     // 이동 방향
     private Vector2 moveDir;
+    // 이동 방향 프로퍼티
+    public Vector2 MoveDir { get; set; }
     // enemy의 현재 좌표
     private Transform enemyTr;
     // player의 현재 좌표
@@ -305,6 +307,7 @@ public class Enemy : MonoBehaviour
     }
     public void Died()
     {
+        playerFoundUi.SetActive(false);
         anim.SetTrigger(hashDie);
         isDied = true;
         coll.isTrigger = true;
