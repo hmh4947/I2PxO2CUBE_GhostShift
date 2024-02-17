@@ -10,6 +10,7 @@ public class ShieldController : MonoBehaviour
     private BulletController bulletControllerScr;
     public AudioClip parryingSfx;
     private new AudioSource audio;
+    public bool isParrying;
 
     // Start is called before the first frame update
     void Start()
@@ -33,14 +34,14 @@ public class ShieldController : MonoBehaviour
             GameObject hitflash = Instantiate(hitEffect, transform.position, transform.rotation);
             Destroy(hitflash, 0.2f);
             CameraShake.Instance.OnShakeCamera();
-            if (playerShieldControllerScr.IsParrying == true)
+            if (isParrying)
             {
-                Debug.Log("패링 진입");
+                Debug.Log("튕겨낸 총알 생성");
                 GameObject bullet = Instantiate(playerBullet, transform.position, transform.rotation);
-                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(-collider.GetComponent<Rigidbody2D>().velocity.x, 0));
+                bullet.GetComponent<Rigidbody2D>().AddForce(new Vector2(Mathf.Sign(collider.GetComponent<Rigidbody2D>().velocity.x) * -150.0f, 0));
+                isParrying = false;
             }
             Destroy(collider.gameObject);
-
         }
     }
 }

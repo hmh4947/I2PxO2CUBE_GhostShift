@@ -6,6 +6,14 @@ public class PlayerController : MonoBehaviour, IPlayerController
 {
     // 플레이어 이동속도
     public float maxSpeed;
+    // 플레이어 넉백 정도
+    [SerializeField]
+    protected float knockBackPower;
+    // 플레이어 넉백 중인지
+    protected bool isKnockBack;
+
+    // 피격 효과음
+    protected AudioClip damagedSfx;
 
     public GameObject hitEffect;
     // 컴포넌트의 캐시를 처리할 변수들
@@ -18,7 +26,6 @@ public class PlayerController : MonoBehaviour, IPlayerController
     protected CapsuleCollider2D playerCollider;
     protected Transform tr;
     protected new AudioSource audio;
-
     // ------------------------------------------
 
 
@@ -30,10 +37,10 @@ public class PlayerController : MonoBehaviour, IPlayerController
     {
         // 마우스 커서 밖으로 못나가게 하기
         Cursor.lockState = CursorLockMode.Confined;
+        isKnockBack = false;
     }
     public virtual void Init()
     {
-        maxSpeed = 14.0f;
         /*hitflash = ObjectPooler.Instance.GetEffectObject();*/
     }
     public virtual void SetCashComponent() {
@@ -45,6 +52,7 @@ public class PlayerController : MonoBehaviour, IPlayerController
         tr = GetComponent<Transform>();
         audio = GetComponent<AudioSource>();
 
+        damagedSfx = Resources.Load<AudioClip>("PlayerAudios/damaged");
     }
     public virtual void LoadResources() { }
     
@@ -104,5 +112,39 @@ public class PlayerController : MonoBehaviour, IPlayerController
         Vector2 playerToMouseVector = (mouseScreenPosition - playerScreenPosition).normalized;
 
         return playerToMouseVector;
+    }
+
+    /// <summary>
+    /// 넉백 함수
+    /// </summary>
+    /// <param name="dir">넉백 진행 방향 벡터</param>
+    /// <returns></returns>
+    public virtual IEnumerator KnockBack(Vector2? dir = null)
+    {
+        GenerateEffects();
+        // 피격 효과음 재생
+        audio.PlayOneShot(damagedSfx);
+        isKnockBack = true;
+        knockBackPower = 21.0f;
+        rigid.AddForce(knockBackPower * (Vector2)dir, ForceMode2D.Impulse);
+        
+
+        yield return new WaitForSeconds(0.3f);
+
+        isKnockBack = false;
+    }
+
+    /// <summary>
+    /// 이펙트 생성 함수
+    /// 이펙트는 0.2초 생성후 삭제
+    /// </summary>
+    public virtual void GenerateEffects()
+    {
+        // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크
+        GameObject hitflash = Instantiate(hitEffect, tr.position, tr.rotation);
+        CameraShake.Instance.OnShakeCamera();
+
+        // 0.2초뒤에 이펙트 삭제
+        Destroy(hitflash, 0.2f);
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -62,7 +62,7 @@ public class SceneManagerEx : MonoBehaviour
         {
             case Scenes.Title:
                 SceneManager.LoadScene("Title");
-                foreach(GameObject o in Object.FindObjectsOfType<GameObject>())
+                foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
                 {
                     Destroy(o);
                 }
@@ -104,7 +104,7 @@ public class SceneManagerEx : MonoBehaviour
                 SceneManager.LoadScene("Stage1_Map8");
                 break;
             default:
-                Debug.LogError("´Ù¸¥ ½ÅÀÌ µé¾î¿È");
+                Debug.LogError("Â´Ã™Â¸Â¥ Â½Ã…Ã€ÃŒ ÂµÃ©Â¾Ã®Â¿Ãˆ");
                 break;
         }
     }
@@ -140,9 +140,6 @@ public class SceneManagerEx : MonoBehaviour
             LoadScene(Scenes.PlayerCleanerTutorial);
             SetPlayerPositionAndCondition(playerBasePosition);
         }
-
-        
-
     }
 
     public void SetPlayerPositionAndCondition(Vector2 pos)

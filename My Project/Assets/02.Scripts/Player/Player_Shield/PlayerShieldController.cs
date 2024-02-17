@@ -149,17 +149,49 @@ public class PlayerShieldController : PlayerController
         if (!enabled) return;
 
         // 충돌 객체가 Enemy
-        if (collider.gameObject.tag == "Enemy")
+        if (collider.CompareTag("Enemy"))
         {
             Debug.Log("쉴드 캐릭터 체력 달기");
-            healthScr.Damaged(1);
+            if (healthScr.Damaged(1)) {
+                Vector2 knockBackVec;
+                // 플레이어가 오른쪽으로 가고 있을 때
+                if (rigid.velocity.x > 0.5f)
+                {
+                    knockBackVec = new Vector2(-1.0f, 1.0f);
+                }
+                else if (rigid.velocity.x < -0.5f)
+                {
+                    knockBackVec = new Vector2(1.0f, 1.0f);
+                }
+                else
+                {
+                    if (collider.GetComponent<Rigidbody2D>().velocity.x >= 0)
+                    {
+                        knockBackVec = new Vector2(1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        knockBackVec = new Vector2(-1.0f, 1.0f);
+                    }
+                }
+                StartCoroutine(KnockBack(knockBackVec));
+            }
         }
-        if (collider.gameObject.tag == "Bullet")
+
+        // 총알과 충돌했을 경우
+        if (collider.CompareTag("Bullet"))
         {
             if (!defended)
             {
-                healthScr.Damaged(1);
-                Destroy(collider.gameObject);
+                // 총알의 방향을 읽어오기 위해 스크립트 컴포넌트 얻어오기
+                if (collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+                {
+                    Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
+                    // 총알의 진행 방향으로 넉백
+                    if (healthScr.Damaged(1))
+                        StartCoroutine(KnockBack(new Vector2(Mathf.Sign(collider.gameObject.GetComponent<Rigidbody2D>().velocity.x), 1.0f)));
+                    Destroy(collider.gameObject);
+                }
             }
         }
 
@@ -207,9 +239,11 @@ public class PlayerShieldController : PlayerController
         audio.clip = swingSfx;
         audio.Play();
         shield.SetActive(true);
+        shield.GetComponent<ShieldController>().isParrying = true;
 
         yield return new WaitForSeconds(parryingDuration);
 
+        shield.GetComponent<ShieldController>().isParrying = false;
         isParrying = false;
         anim.SetBool("isParrying", false);
         shield.SetActive(false);

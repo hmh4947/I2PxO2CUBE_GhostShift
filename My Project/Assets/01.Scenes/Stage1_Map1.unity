@@ -699,6 +699,10 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 276695160888032236, guid: ce0ffbf34b29b2444b79f5d13079e659, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce0ffbf34b29b2444b79f5d13079e659, type: 3}
 --- !u!1001 &870574214
@@ -15784,6 +15788,25 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 56759022594739009, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
   m_PrefabInstance: {fileID: 565550266}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1607319469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607319468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cecdb7248a5ef8e43968f19b04b89ecb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goggles_guide: {fileID: 8994548299124837897}
+  shield_guide: {fileID: 8994548299105475366}
+  cleaner_guide: {fileID: 8994548297917463442}
+  gogglesImage: {fileID: 8994548299124837898}
+  shieldImage: {fileID: 8994548299105475367}
+  cleanerImage: {fileID: 8994548297917463443}
+  ani: {fileID: 0}
 --- !u!4 &1607319479 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 56759022594739130, guid: 5e5b78d8064de534b9207af2c1f7f4dd, type: 3}
@@ -16005,8 +16028,7 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6315269944483794302, guid: b84b02c5fe48f0f41be768750e157351, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b84b02c5fe48f0f41be768750e157351, type: 3}
 --- !u!1001 &6638264958339899170
 PrefabInstance:

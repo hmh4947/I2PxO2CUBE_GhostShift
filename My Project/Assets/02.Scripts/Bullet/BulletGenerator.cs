@@ -10,19 +10,12 @@ public class BulletGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        generateTime = 5.0f;
         bulletControllerScr = bulletPrefab.GetComponent<BulletController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        generateTime -= Time.deltaTime;
-        if(generateTime <= 0)
-        {
-            StartCoroutine(GenerateBullet());
-            generateTime = 3.0f;
-        }
         
     }
 

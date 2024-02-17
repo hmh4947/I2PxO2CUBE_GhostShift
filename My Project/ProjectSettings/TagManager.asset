@@ -9,6 +9,7 @@ TagManager:
   - GlobalVolume
   - PlayerBullet
   - Heart
+  - NVDOBJECTS
   layers:
   - Default
   - TransparentFX

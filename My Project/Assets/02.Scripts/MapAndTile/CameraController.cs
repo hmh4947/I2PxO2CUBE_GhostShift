@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
 
     public Transform target;
     public GameObject targetObject;
-    public GameObject targetObject1;//È°¼ºÈ­ »óÅÂ °Ë»ç
+    public GameObject targetObject1;//í™œì„±í™” ìƒíƒœ ê²€ì‚¬
     public GameObject targetObject2;
 
     public GameObject quadScale;
@@ -17,10 +17,10 @@ public class CameraController : MonoBehaviour
 
     public float limitMinX, limitMaxX, limitMinY, limitMaxY;
     float cameraHalfWidth, cameraHalfHeight;
-    
+
     private void Start()
     {
-        
+
         cameraHalfWidth = Camera.main.aspect * Camera.main.orthographicSize;
         cameraHalfHeight = Camera.main.orthographicSize;
     }
@@ -37,13 +37,13 @@ public class CameraController : MonoBehaviour
     {
         quadScale = GameObject.Find("Quad");
 
-        //Æ®·£½ºÆû ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        //íŠ¸ëœìŠ¤í¼ ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
         Transform quadScaleTransform = quadScale.transform;
         float quadeScale_x = quadScaleTransform.localScale.x;
         float quadeScale_y = quadScaleTransform.localScale.y;
 
-       // Debug.Log("X ½ºÄÉÀÏ °ª: " + quadeScale_x);
-       // Debug.Log("Y ½ºÄÉÀÏ °ª: " + quadeScale_y);
+        // Debug.Log("X ìŠ¤ì¼€ì¼ ê°’: " + quadeScale_x);
+        // Debug.Log("Y ìŠ¤ì¼€ì¼ ê°’: " + quadeScale_y);
         if (quadeScale_x == 32 && quadeScale_y == 18)
         {
             limitMinX = -19f;
@@ -51,7 +51,7 @@ public class CameraController : MonoBehaviour
             limitMinY = -8f;
             limitMaxY = 10f;
         }
-        if (quadeScale_x==42&& quadeScale_y == 24)
+        if (quadeScale_x == 42 && quadeScale_y == 24)
         {
             limitMinX = -19f;
             limitMaxX = 23f;
@@ -61,7 +61,7 @@ public class CameraController : MonoBehaviour
         if (quadeScale_x == 60 && quadeScale_y == 21)
         {
             limitMinX = -19f;
-            limitMaxX =41f;
+            limitMaxX = 41f;
             limitMinY = -8f;
             limitMaxY = 13f;
         }
@@ -73,7 +73,7 @@ public class CameraController : MonoBehaviour
             limitMinY = -8f;
             limitMaxY = 10f;
         }
-        if (quadeScale_x ==42 && quadeScale_y ==18)
+        if (quadeScale_x == 42 && quadeScale_y == 18)
         {
             limitMinX = -19f;
             limitMaxX = 23f;
@@ -86,12 +86,14 @@ public class CameraController : MonoBehaviour
 
             if (playerObject != null)
             {
-               //ÀÚ½Ä ¿ÀºêÁ§Æ®¸¦ Ã£À½
+                //ìì‹ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ìŒ
                 Transform playerGhost = playerObject.transform.Find("PlayerGhost");
+
+                
 
                 if (playerGhost != null)
                 {
-                    // Ã£Àº "PlayerGhost"¸¦ »õ·Î¿î targetÀ¸·Î ¼³Á¤
+                    // ì°¾ì€ "PlayerGhost"ë¥¼ ìƒˆë¡œìš´ targetìœ¼ë¡œ ì„¤ì •
                     target = playerGhost;
                 }
             }
@@ -102,32 +104,32 @@ public class CameraController : MonoBehaviour
 
             if (playerObject != null)
             {
-                //ÀÚ½Ä ¿ÀºêÁ§Æ®¸¦ Ã£À½
+                //ìì‹ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ìŒ
                 Transform playerShield = playerObject.transform.Find("PlayerShield");
 
                 if (playerShield != null)
                 {
-                    // Ã£Àº "PlayerShield"¸¦ »õ·Î¿î targetÀ¸·Î ¼³Á¤
+                    // ì°¾ì€ "PlayerShield"ë¥¼ ìƒˆë¡œìš´ targetìœ¼ë¡œ ì„¤ì •
                     target = playerShield;
                 }
             }
         }
         if (targetObject2.activeSelf)
-        {    
+        {
             GameObject playerObject = GameObject.Find("Player");
 
             if (playerObject != null)
             {
-                //ÀÚ½Ä ¿ÀºêÁ§Æ®¸¦ Ã£À½
+                //ìì‹ ì˜¤ë¸Œì íŠ¸ë¥¼ ì°¾ìŒ
                 Transform playerGoggles = playerObject.transform.Find("PlayerGoggles");
 
                 if (playerGoggles != null)
                 {
-                    // Ã£Àº "PlayerGoggles"¸¦ »õ·Î¿î targetÀ¸·Î ¼³Á¤
+                    // ì°¾ì€ "PlayerGoggles"ë¥¼ ìƒˆë¡œìš´ targetìœ¼ë¡œ ì„¤ì •
                     target = playerGoggles;
                 }
             }
         }
     }
-   
+
 }
