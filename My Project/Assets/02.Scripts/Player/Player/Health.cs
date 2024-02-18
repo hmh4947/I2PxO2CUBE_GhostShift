@@ -11,7 +11,8 @@ public class Health : MonoBehaviour
     private int numOfHearts;
 
     // 무적 상태에 돌입했는지 확인하는 bool 변수
-    private bool isInvincible;
+    public bool isInvincible;
+
     // 무적시간
     public float invincibleTime;
     // 깜빡이는 시간
@@ -63,13 +64,24 @@ public class Health : MonoBehaviour
     {
         return HP;
     }
-    public void Damaged(int damage)
+    /// <summary>
+    /// 데미지 입는 함수, 무적시간에 들어가있을 경우 반환값은 false 아닐 경우 true
+    /// </summary>
+    /// <param name="damage">데미지 양</param>
+    /// <returns></returns>
+    public bool Damaged(int damage)
     {
         if (!isInvincible)
         {
             HP -= damage;
+            if(HP <= 0)
+            {
+                SceneManagerEx.Instance.LoadScene(SceneManagerEx.Scenes.Title);
+            }
             StartCoroutine(Invincible());
+            return true;
         }
+        return false;
 
     }
     public void Healed(int health)

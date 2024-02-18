@@ -24,7 +24,7 @@ public class Message : MonoBehaviour
     {
         
         ani.SetBool("message", true);
-        Debug.Log("메시지 보이기");
+       // Debug.Log("메시지 보이기");
         ShowText(); //메세지 박스가 보일때 마다 텍스트 애니메이션이 동작
     }
     public void messageBehind()
@@ -32,18 +32,18 @@ public class Message : MonoBehaviour
      
         ani.SetBool("message", false);
         
-        Debug.Log("메시지 가리기");
+       // Debug.Log("메시지 가리기");
         
     }
     // Update is called once per frame
     public void OnBecameInvisible() //오브젝트가 카메라 밖에 있는지 체크
     {
-        Debug.Log("안보임");
+      //  Debug.Log("안보임");
       
     }
     public void OnBecameVisible() //오브젝트가 카메라 안에 있는지 체크
     {
-        Debug.Log("보임");
+     //   Debug.Log("보임");
         
     }
 }

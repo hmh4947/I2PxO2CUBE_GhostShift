@@ -637,6 +637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 0
   numOfHearts: 0
+  isInvincible: 0
   invincibleTime: 2
   blinkingTime: 0.2
   hearts:
@@ -788,7 +789,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e8d816a63fe3d4ca54a18e465e9c06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 10
+  maxSpeed: 14
+  knockBackPower: 30
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
 --- !u!114 &5510776168720424050
 MonoBehaviour:
@@ -803,6 +805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 14
+  knockBackPower: 0
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
   dashSpeed: 30
   dashDuration: 0.2
@@ -819,9 +822,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 868943b67d81d904d8a4a0964f4f652a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 0
+  maxSpeed: 14
+  knockBackPower: 0
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
-  swallowSpeed: 8
+  swallowSpeed: 0.5
 --- !u!114 &6608583380383729626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -835,6 +839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 0
+  knockBackPower: 0
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
   jumpPower: 0
   isInNVDModes: 0
@@ -851,6 +856,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 0
+  knockBackPower: 0
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
   shield: {fileID: 9205740407175976023}
 --- !u!1 &782389985180755476
@@ -2845,3 +2851,4 @@ MonoBehaviour:
   hitEffect: {fileID: 5131032198903454546, guid: 15bf5b931e0129543ac7919af553b62d, type: 3}
   playerBullet: {fileID: 3907930558292127624, guid: 8abaf6dd91138604b80b5773cfbca943, type: 3}
   parryingSfx: {fileID: 8300000, guid: 3ef9450b871ad5d438d79347b2b4b230, type: 3}
+  isParrying: 0

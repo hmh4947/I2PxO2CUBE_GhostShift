@@ -13,6 +13,7 @@ public class BulletController : MonoBehaviour
     public void Start()
     {
         hitEffect = Resources.Load<GameObject>("Effects/FX_Hit");
+        Destroy(this.gameObject, 6.0f);
     }
 
     // Update is called once per frame
@@ -34,19 +35,22 @@ public class BulletController : MonoBehaviour
     // 面倒 贸府
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(this.gameObject.tag == "PlayerBullet")
+        if(gameObject.CompareTag("PlayerBullet"))
         {
-            if(collision.tag == "Enemy" )
+            if(collision.CompareTag("Enemy"))
             {
                 GameObject effect = Instantiate(hitEffect, transform.position, transform.rotation);
                 Destroy(collision.gameObject);
                 Destroy(this.gameObject);
                 Destroy(effect, 0.2f);
             }
-
+        }
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Platform"))
+        {
+            Debug.Log("面倒");
+            Destroy(this.gameObject);
         }
     }
-
 
     public void generateBlockedBullet()
     {

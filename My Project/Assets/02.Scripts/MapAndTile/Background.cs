@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using static UnityEditor.PlayerSettings;
 
 public class Background : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Background : MonoBehaviour
     public float stopXr; // ∏ÿ√‚ X ¡¬«•
     public float stopXl;
 
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,7 @@ public class Background : MonoBehaviour
         playerRigid = GameObject.Find("Player").GetComponentInChildren<Rigidbody2D>();
         playerScr = GameObject.Find("Player").GetComponent<Player>();
         cameraTransform = Camera.main.transform;
-     
+      
     }
 
     // Update is called once per frame

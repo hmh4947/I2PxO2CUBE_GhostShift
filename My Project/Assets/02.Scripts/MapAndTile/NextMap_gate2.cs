@@ -1,34 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+//using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceneChangeArea : MonoBehaviour
+public class NextMap_gate2 : MonoBehaviour
 {
     public SceneManagerEx.Scenes scene;
+
 
     void OnTriggerEnter2D(Collider2D collider2D)
     {
         if (collider2D.gameObject.tag == "Player")
         {
-            Debug.Log("Ãæµ¹");
 
-            //GameObject.Find("Canvas").GetComponent<SceneFadeInOut>().Fade();
-            SceneManagerEx.Instance.LoadScene(scene);
-            SceneManagerEx.Instance.SetPlayerPositionAndCondition(new Vector2(-18, 0));
+            GameObject.Find("fadeout").GetComponent<SceneFadeInOut>().Fade2();
 
-            
+
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

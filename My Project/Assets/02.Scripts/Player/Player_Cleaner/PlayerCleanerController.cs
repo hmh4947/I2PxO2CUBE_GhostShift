@@ -95,7 +95,7 @@ public class PlayerCleanerController : PlayerController
     {
         if (!enabled) return;
         // Enemy타입의 객체와 충돌하게 된다면
-        if (collider.tag == "Enemy")
+        if (collider.CompareTag("Enemy"))
         {
             // 삼키기 중이라면 데미지 X
             if (isSwallowing)
@@ -111,7 +111,7 @@ public class PlayerCleanerController : PlayerController
                     // 적 객체 없애기
                     Destroy(collider.gameObject);
                     // 발사할 적 객체 추가
-                    swalloedEnemy.Enqueue(enemy.EnemyType);
+                    swalloedEnemy.Enqueue(enemy.enemyType);
                 }
                
             }
@@ -120,11 +120,49 @@ public class PlayerCleanerController : PlayerController
             {
                 Debug.Log("청소부 캐릭터 데미지 입기");
                 // 데미지 입기
-                healthScr.Damaged(1);
+                if (healthScr.Damaged(1))
+                {
+                    Vector2 knockBackVec;
+                    // 플레이어가 오른쪽으로 가고 있을 때
+                    if (rigid.velocity.x > 0.5f)
+                    {
+                        knockBackVec = new Vector2(-1.0f, 1.0f);
+                    }
+                    else if (rigid.velocity.x < -0.5f)
+                    {
+                        knockBackVec = new Vector2(1.0f, 1.0f);
+                    }
+                    else
+                    {
+                        if (collider.GetComponent<Rigidbody2D>().velocity.x >= 0)
+                        {
+                            knockBackVec = new Vector2(1.0f, 1.0f);
+                        }
+                        else
+                        {
+                            knockBackVec = new Vector2(-1.0f, 1.0f);
+                        }
+                    }
+                    StartCoroutine(KnockBack(knockBackVec));
+                }
+            }
+        }
+        // 총알과 충돌했을 경우
+        if (collider.CompareTag("Bullet"))
+        {
+            // 총알의 방향을 읽어오기 위해 스크립트 컴포넌트 얻어오기
+            if (collider.TryGetComponent<BulletController>(out BulletController bulletControllerScr))
+            {
+                Debug.Log($"{0}: 총알과 충돌하여 체력 달기", this);
+                // 총알의 진행 방향의 반대 방향으로 넉백
+                if (healthScr.Damaged(1))
+                    StartCoroutine(KnockBack(new Vector2(Mathf.Sign(collider.gameObject.GetComponent<Rigidbody2D>().velocity.x), 1.0f)));
+                Destroy(collider.gameObject);
             }
         }
 
-        
+
+
     }
  
     private void HandleMouseInput() {
@@ -145,9 +183,8 @@ public class PlayerCleanerController : PlayerController
             if (!isSwallowed /*|| !anim.GetCurrentAnimatorStateInfo(0).IsName("Fire")*/)
             {
                 // 삼키기
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButton(1))
                 {
-                    Debug.Log("삼키기 시도");
                     StartCoroutine(Swallow());
                 }
                 //
@@ -157,7 +194,6 @@ public class PlayerCleanerController : PlayerController
                     // 삼키는 중이 아닐때에만 삼키기 멈추기
                     if (!isSwallowing)
                     {
-                        Debug.Log("삼키기 중단");
                         anim.SetBool("isSwallowing", false);
                         StopCoroutine(Swallow());
                     }
@@ -198,7 +234,7 @@ public class PlayerCleanerController : PlayerController
         }
 
         //Physics2D.OverlapAreaAll : 가상의 직사각형을 만들어 추출하려는 반경 이내에 들어와 있는 콜라이더들을 배열 형태로반환하는 함수
-        Collider2D[] colliderArray = Physics2D.OverlapAreaAll(transform.position, transform.position + swallowRange);
+        Collider2D[] colliderArray = Physics2D.OverlapAreaAll(tr.position, tr.position + swallowRange);
         // 콜라이더 배열을 순환하면서
         for(int i = 0; i < colliderArray.Length; i++)
         {
@@ -218,7 +254,7 @@ public class PlayerCleanerController : PlayerController
                 {
                     // 더 이상 에너미가 없으면 반복문 종료
                     if (colliderArray[i] == null || isSwallowed) {
-                        Debug.Log($"enemy is null");
+                        isSwallowing = false;
                         break;
                     }
                     

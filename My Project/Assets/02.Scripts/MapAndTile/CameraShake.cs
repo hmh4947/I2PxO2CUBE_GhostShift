@@ -12,6 +12,7 @@ public class CameraShake : MonoBehaviour
     public float maxX;
     public float minY;
     public float maxY;
+    public Camera mainCamera;
 
     private static CameraShake instance;
     public static CameraShake Instance=>instance;
@@ -33,7 +34,8 @@ public class CameraShake : MonoBehaviour
         this.shakeIntensity = shakeIntensity;
         StopCoroutine("ShakeByPosition");
         StartCoroutine("ShakeByPosition");
-        instance = this;    
+        instance = this;
+       
     }
     private IEnumerator ShakeByPosition()
     {
@@ -44,8 +46,8 @@ public class CameraShake : MonoBehaviour
             Vector3 shakeOffset = Random.insideUnitSphere * shakeIntensity;
             Vector3 newPosition = originalPosition + shakeOffset;
 
-            newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
-            newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+            newPosition.x = Mathf.Clamp(newPosition.x, mainCamera.transform.position.x+minX, mainCamera.transform.position.x+ maxX);
+            newPosition.y = Mathf.Clamp(newPosition.y, mainCamera.transform.position.y+minY, mainCamera.transform.position.y+maxY);
             transform.position = newPosition;
             shakeTime -= Time.deltaTime;
             yield return null;
