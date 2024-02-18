@@ -271,7 +271,7 @@ public class PlayerGhostController : PlayerController
     private void OnTriggerEnter2D(Collider2D collider)
     {
         // 스크립트가 비활성화 중일 경우 return
-        if (!enabled) return;
+        if (!enabled || isSticking) return;
 
         // 적과 충돌했을 경우
         if (collider.CompareTag("Enemy"))

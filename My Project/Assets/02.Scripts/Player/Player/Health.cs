@@ -74,6 +74,10 @@ public class Health : MonoBehaviour
         if (!isInvincible)
         {
             HP -= damage;
+            if(HP <= 0)
+            {
+                SceneManagerEx.Instance.LoadScene(SceneManagerEx.Scenes.Title);
+            }
             StartCoroutine(Invincible());
             return true;
         }

@@ -52,15 +52,15 @@ public class Enemy : MonoBehaviour
     }
 
     // Enemy의 현재 상태
-    public State state = State.IDLE;
+    public State state;
     // 추적 범위
-    public Vector3 sightRange = new Vector3(10, 1, 0);
+    private Vector3 sightRange = new Vector3(10, 0.5f, 0);
     // 추적 속도
     public float traceSpeed = 1.5f;
 
 
 
-    void Start()
+    IEnumerator Start()
     {
         anim = GetComponent<Animator>();
         coll = GetComponent<CapsuleCollider2D>();
@@ -83,6 +83,10 @@ public class Enemy : MonoBehaviour
         // 상태에 따라 Enemy의 행동을 수행하는 코루틴 함수 호출
         StartCoroutine(EnemyAction());
 
+
+        yield return new WaitForSeconds(1.0f);
+
+        state = State.IDLE;
         // 이동 방향 랜덤 설정
         moveDir = Random.Range(0, 2) == 0 ? Vector2.left : Vector2.right;
         SetSpriteFlipX();
@@ -96,6 +100,7 @@ public class Enemy : MonoBehaviour
             canPossesUi.SetActive(false);
         }
         playerFoundUi.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -118,7 +123,7 @@ public class Enemy : MonoBehaviour
             }
 
 
-            if (CheckFront()) {
+            if (CheckFront() || CheckBottom()) {
                 state = State.IDLE;
                 moveDir *= -1;
                 waiting = true;
@@ -217,7 +222,28 @@ public class Enemy : MonoBehaviour
         anim.SetBool(hashWalk, true);
         rigid.velocity = moveDir;
     }
+    /// <summary>
+    /// 앞에 장애물을 체크하는 함수
+    /// </summary>
+    /// <returns>벽이 있으면 True, 없으면 False 반환</returns>
     public bool CheckFront()
+    {
+        Vector2 frontVec = new Vector2(rigid.position.x + moveDir.x, rigid.position.y-0.2f);
+        Debug.DrawRay(frontVec, moveDir * 0.4f, new Color(1, 0, 0));
+        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, moveDir, 0.4f, LayerMask.GetMask("Platform"));
+        rayHit = Physics2D.Raycast(frontVec, moveDir, 0.2f, LayerMask.GetMask("Platform"));
+        if (rayHit.collider != null)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+    /// <summary>
+    /// 바닥에 있는 장애물을 체크하는 함수
+    /// </summary>
+    /// <returns>바닥에 장애물이 있으면 true 없으면 false 반환</returns>
+    public bool CheckBottom()
     {
         Vector2 frontVec = new Vector2(rigid.position.x + moveDir.x, rigid.position.y);
         Debug.DrawRay(frontVec, Vector2.down, new Color(0, 1, 0));
@@ -226,12 +252,6 @@ public class Enemy : MonoBehaviour
         {
             return true;
         }
-        rayHit = Physics2D.Raycast(frontVec, moveDir, 0.2f, LayerMask.GetMask("Platform"));
-        if (rayHit.collider != null)
-        {
-            return true;
-        }
-        
         return false;
     }
     public bool CheckPlayerInSight()
@@ -248,7 +268,7 @@ public class Enemy : MonoBehaviour
             // null이면 continue;
             if (colliderArray[i] == null) continue;
             // 주위에 에너미가 있으면
-            if (colliderArray[i].tag == "Player")
+            if (colliderArray[i].CompareTag("Player"))
             {
                 return true;
             }
@@ -259,8 +279,8 @@ public class Enemy : MonoBehaviour
     {
         float distance = Vector2.Distance(playerTr.position, enemyTr.position);
         float dir = enemyTr.position.x - playerTr.position.x;
-
-        if (((Mathf.Sign(moveDir.x) == Mathf.Sign(dir))) || (CheckFront() && enemyType != EnemyType.NONE))
+        
+        if (((Mathf.Sign(moveDir.x) == Mathf.Sign(dir))) || (CheckFront() || (CheckBottom() && enemyType != EnemyType.NONE)))
         {
             moveDir *= -1;
         }
@@ -273,7 +293,7 @@ public class Enemy : MonoBehaviour
         float distance = Vector2.Distance(playerTr.position, enemyTr.position);
         float dir = enemyTr.position.x - playerTr.position.x;
 
-        if ((CheckPlayerInSight() && (Mathf.Sign(moveDir.x) != Mathf.Sign(dir)))|| CheckFront())
+        if ((CheckPlayerInSight() && (Mathf.Sign(moveDir.x) != Mathf.Sign(dir)))|| CheckFront() || CheckBottom())
         {
             moveDir *= -1;
         }
