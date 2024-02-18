@@ -191,10 +191,16 @@ public class SceneFadeInOut : MonoBehaviour
             playerObj.transform.position = new Vector2(-16, -3);
             coroutineControl = false;
         }
-        if (currentSceneName == "Stage1_Map3" || currentSceneName == "Stage1_Map6"|| currentSceneName == "Stage1_Map7")
+        if (currentSceneName == "Stage1_Map3" || currentSceneName == "Stage1_Map6")
         {
 
             playerObj.transform.position = new Vector2(-16, 5);
+            coroutineControl = false;
+        }
+        if(currentSceneName == "Stage1_Map7")
+        {
+
+            playerObj.transform.position = new Vector2(-16, 7);
             coroutineControl = false;
         }
         if (currentSceneName == "Stage1_Map5" ||  currentSceneName == "Stage1_Map8")
