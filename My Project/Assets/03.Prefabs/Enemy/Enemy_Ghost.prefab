@@ -389,7 +389,6 @@ MonoBehaviour:
   canPossesUi: {fileID: 579399495274326785}
   isDied: 0
   state: 1
-  sightRange: {x: 10, y: 1, z: 0}
   traceSpeed: 1.5
 --- !u!1 &4376298836580947138
 GameObject:

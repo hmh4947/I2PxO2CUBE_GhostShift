@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
     private readonly int hashDie = Animator.StringToHash("Die");
     // Enemy¿« ªÁ∏¡ ø©∫Œ
     [SerializeField]
-    private bool isDied;
+    public bool isDied;
 
     public enum State
     {
