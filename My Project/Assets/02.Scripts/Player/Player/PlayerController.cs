@@ -114,7 +114,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
         return playerToMouseVector;
     }
 
-    // 이동 방향에 따른 넉백 실행
+    /// <summary>
+    /// 넉백 함수
+    /// </summary>
+    /// <param name="dir">넉백 진행 방향 벡터</param>
+    /// <returns></returns>
     public virtual IEnumerator KnockBack(Vector2? dir = null)
     {
         GenerateEffects();
@@ -129,7 +133,11 @@ public class PlayerController : MonoBehaviour, IPlayerController
 
         isKnockBack = false;
     }
-    // 이펙트 생성 함수
+
+    /// <summary>
+    /// 이펙트 생성 함수
+    /// 이펙트는 0.2초 생성후 삭제
+    /// </summary>
     public virtual void GenerateEffects()
     {
         // 이펙트 게임 오브젝트 생성 및 카메라 쉐이크

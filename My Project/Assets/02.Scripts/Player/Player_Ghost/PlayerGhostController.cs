@@ -89,7 +89,9 @@ public class PlayerGhostController : PlayerController
     }
 
 
-    //기본 세팅
+    /// <summary>
+    /// 플레이어 스피드, 점프 파워, 대쉬 지속시간 등 플레이어 기본 능력치 설정 함수
+    /// </summary>
     public override void Init()
     {
         // 이동 속도 설정
@@ -122,24 +124,7 @@ public class PlayerGhostController : PlayerController
     // 플레이어 중력
     public override void Gravity()
     {
-/*        // 지면으로 박스 모양의 레이저를 쏴 지면에 닿았는지 체크
-        RaycastHit2D rayHit = Physics2D.BoxCast(tr.position, groundBoxSize, 0f, Vector2.down, groundCheckDistance, LayerMask.GetMask("Platform"));
-        if(rigid.velocity.y <= 0)
-        {
-            if (rayHit.collider != null)
-            {
-                isGrounded = true;
-                // 점프중이었다면 점프 상태 해제
-                if (isJumping) isJumping = false;
-                // 지면과 충돌했으면 추락 모션 해제
-                anim.SetBool(hashJump, false);
-                // 대쉬 가능 상태로 전이
-                isAbleDash = true;
-                return;
-            }
-        }*/
-       
-                //Landing Platform
+        //Landing Platform
         if (rigid.velocity.y < 0)
         {
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0, 1, 0));
@@ -212,7 +197,9 @@ public class PlayerGhostController : PlayerController
             spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
         }
     }
-    // 마우스 이벤트
+    /// <summary>
+    /// 마우스 이벤트에 따른 액션 설정
+    /// </summary>
     public void HandleMouseInput()
     {
         // 일시정지 메뉴 클릭할 시에 되는걸 방지
@@ -284,7 +271,7 @@ public class PlayerGhostController : PlayerController
     private void OnTriggerEnter2D(Collider2D collider)
     {
         // 스크립트가 비활성화 중일 경우 return
-        if (!enabled) return;
+        if (!enabled || isSticking) return;
 
         // 적과 충돌했을 경우
         if (collider.CompareTag("Enemy"))
@@ -367,8 +354,12 @@ public class PlayerGhostController : PlayerController
 
     }
 
-    // 적으로부터 변경할 플레이어 타입을 받아오기
-    public PlayerType GetChangePlayerType(EnemyType enemyType) // 인자로 적 타입(종류) 받아오기
+    /// <summary>
+    /// 적으로부터 플레이어 캐릭터를 변경할 EnemyType을 받아오는 함수
+    /// </summary>
+    /// <param name="enemyType">변경할 에너미 타입</param>
+    /// <returns>플레이어 타입 리턴</returns>
+    public PlayerType GetChangePlayerType(EnemyType enemyType)
     {
         PlayerType playerType = PlayerType.PLAYERGHOST;
         switch (enemyType)
