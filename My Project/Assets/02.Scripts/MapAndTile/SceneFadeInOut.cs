@@ -10,6 +10,7 @@ public class SceneFadeInOut : MonoBehaviour
 {
 
     private GameObject playerObj;
+    private Health healthScr;
     public Image Panel;
     float time = 0f;
     float frameTime = 1f;
@@ -31,6 +32,7 @@ public class SceneFadeInOut : MonoBehaviour
                 Destroy(this.gameObject);
         }
         playerObj = GameObject.Find("Player");
+        healthScr = playerObj.GetComponent<Health>();
     }
 
     void Strat()
@@ -73,6 +75,7 @@ public class SceneFadeInOut : MonoBehaviour
     IEnumerator FadeFlow()
     {
         Debug.Log("다음맵");
+        healthScr.isInvincible = true;
         //NextMap의 자식 오브젝트 Gate 찾기
         GameObject otherGameObject = GameObject.Find("NextMap");
         Transform GridTransform = otherGameObject.transform.Find("Grid");
@@ -142,8 +145,8 @@ public class SceneFadeInOut : MonoBehaviour
             yield return null;
         }
         Panel.gameObject.SetActive(false);
+        healthScr.isInvincible = false;
 
-      
 
         yield return null;
     }
@@ -151,7 +154,7 @@ public class SceneFadeInOut : MonoBehaviour
     //Stage1_Map4에서 갈래길을 처리하기위함
     IEnumerator FadeFlow2()
     {
-
+        healthScr.isInvincible = true;
         //SceneChangeAreaTwo의 자식 오브젝트 Gate 찾기
         GameObject otherGameObject = GameObject.Find("NextMap_gate2");
         Transform GridTransform = otherGameObject.transform.Find("Grid");
@@ -219,7 +222,7 @@ public class SceneFadeInOut : MonoBehaviour
         Panel.gameObject.SetActive(false);
 
 
-
+        healthScr.isInvincible = false;
         yield return null;
     }
     
@@ -229,6 +232,7 @@ public class SceneFadeInOut : MonoBehaviour
     IEnumerator FadeFlowReturnMap()
 
     {
+        healthScr.isInvincible = true;
         Debug.Log("이전맵");
         //ReturnMap의 자식 오브젝트 Gate 찾기
         GameObject otherGameObject = GameObject.Find("PreviousMap");
@@ -309,11 +313,12 @@ public class SceneFadeInOut : MonoBehaviour
         Panel.gameObject.SetActive(false);
 
 
-
+        healthScr.isInvincible = false;
         yield return null;
     }
     IEnumerator FadeFlowReturnMap2()
     {
+        healthScr.isInvincible = true;
         Debug.Log("이전맵");
         //ReturnMap의 자식 오브젝트 Gate 찾기
         GameObject otherGameObject = GameObject.Find("PreviousMap_gate2");
@@ -374,7 +379,7 @@ public class SceneFadeInOut : MonoBehaviour
         Panel.gameObject.SetActive(false);
 
 
-
+        healthScr.isInvincible = false;
         yield return null;
     }
 }
