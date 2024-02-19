@@ -111,17 +111,8 @@ public class SceneManagerEx : MonoBehaviour
 
     public void Update()
     {
-        if (playerGogglesControllerScr.IsInNVDModes)
-        {
-            return;
-        }
-        
+
     }
 
-    public void SetPlayerPositionAndCondition(Vector2 pos)
-    {
-        player.transform.position = pos;
-        playerScr.ChangePlayer(PlayerType.PLAYERGHOST);
-    }
     
 }

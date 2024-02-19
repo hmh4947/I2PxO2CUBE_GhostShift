@@ -16914,6 +16914,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NextMap
       objectReference: {fileID: 0}
+    - target: {fileID: 3915954059993466184, guid: dc49b963c6d4e0149aa6626cea4b2cd4, type: 3}
+      propertyPath: scene
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5402507738385685016, guid: dc49b963c6d4e0149aa6626cea4b2cd4, type: 3}
       propertyPath: scene
       value: 7
