@@ -5,13 +5,14 @@ using UnityEngine;
 public class Heart : MonoBehaviour
 {
     protected Health healthScr;
-  
+    
     // Start is called before the first frame update
     void Start()
     {
         GameObject player = GameObject.Find("Player");
         healthScr =player.GetComponent<Health>();
-      
+        
+       
     }
 
     // Update is called once per frame
