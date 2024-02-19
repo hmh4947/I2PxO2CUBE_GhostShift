@@ -115,31 +115,7 @@ public class SceneManagerEx : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            SetPlayerPositionAndCondition(playerBasePosition);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            LoadScene(Scenes.Tutorial);
-            SetPlayerPositionAndCondition(playerBasePosition);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            LoadScene(Scenes.PlayerShieldTutorial);
-            SetPlayerPositionAndCondition(playerBasePosition);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            LoadScene(Scenes.PlayerGogglesTutorial);
-            SetPlayerPositionAndCondition(playerBasePosition);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            LoadScene(Scenes.PlayerCleanerTutorial);
-            SetPlayerPositionAndCondition(playerBasePosition);
-        }
+        
     }
 
     public void SetPlayerPositionAndCondition(Vector2 pos)
